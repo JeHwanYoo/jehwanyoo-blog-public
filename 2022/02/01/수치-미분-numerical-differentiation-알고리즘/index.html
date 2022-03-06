@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="JeHwanYoo" />
+ 
+<meta name="subtitle" content="유제환의 프로그래밍 노트" />
+ 
+<meta name="description" content="프로그래밍 노트, 팁, 강의등을 게시하는 블로그입니다." />
+ 
+<meta name="keywords" content="Programming, C, C++, Java, JavaScript, Node.js, Python, Rust, Go, ETC..." />
+ <meta name="description" content="참고 도서 머신러닝을 위한 파이썬 한 조각(박성호, 2020) 정의 수치 해석학에서 수치 미분은 함수의 미분 값을 컴퓨터를 이용하여 근사치로 계산하는 방법을 뜻한다. 손으로 미분 값을 계산하기 힘들 때 컴퓨터의 도움을 받아 근사 값을 계산할 수 있다. 미분계수의 정의 미분계수 $f’(a)$는 $x&#x3D;a$에서의 접선의 기울기를 나타낸다. $f’(a) &#x3D; \li">
+<meta property="og:type" content="article">
+<meta property="og:title" content="수치 미분 (numerical differentiation) 알고리즘">
+<meta property="og:url" content="https://jehwanyoo.net/2022/02/01/%EC%88%98%EC%B9%98-%EB%AF%B8%EB%B6%84-numerical-differentiation-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98/index.html">
+<meta property="og:site_name" content="JeHwan PL Note">
+<meta property="og:description" content="참고 도서 머신러닝을 위한 파이썬 한 조각(박성호, 2020) 정의 수치 해석학에서 수치 미분은 함수의 미분 값을 컴퓨터를 이용하여 근사치로 계산하는 방법을 뜻한다. 손으로 미분 값을 계산하기 힘들 때 컴퓨터의 도움을 받아 근사 값을 계산할 수 있다. 미분계수의 정의 미분계수 $f’(a)$는 $x&#x3D;a$에서의 접선의 기울기를 나타낸다. $f’(a) &#x3D; \li">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:image" content="https://i.ibb.co/cNJL2jq/geogebra-export.png">
+<meta property="og:image" content="https://i.ibb.co/TYw8h75/2022-02-01-7-18-52.png">
+<meta property="article:published_time" content="2022-02-01T10:35:38.000Z">
+<meta property="article:modified_time" content="2022-03-06T07:58:31.580Z">
+<meta property="article:author" content="JeHwanYoo">
+<meta property="article:tag" content="Algorithms">
+<meta property="article:tag" content="Mathematics">
+<meta property="article:tag" content="Calculus">
+<meta property="article:tag" content="Analysis">
+<meta property="article:tag" content="Numerical Analysis">
+<meta property="article:tag" content="Numerical Differentiation">
+<meta property="article:tag" content="Numerical Derivative">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.ibb.co/cNJL2jq/geogebra-export.png"> <link rel="canonical" href="https://jehwanyoo.net/2022/02/01/수치-미분-numerical-differentiation-알고리즘/"/> 
+<title>수치 미분 (numerical differentiation) 알고리즘 | JeHwan PL Note</title>
+
+ 
+<link rel="icon" href="/favicon.ico" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+     
+<!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  
+
+<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/rss2.xml" title="JeHwan PL Note" type="application/rss+xml">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">JeHwan PL Note</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">JeHwan PL Note</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>  
+  <article class="post-wrap">
+    <header class="post-header">
+      <h1 class="post-title">수치 미분 (numerical differentiation) 알고리즘</h1>
+      
+      <div class="post-meta">
+         Author:
+        <a itemprop="author" rel="author" href="/">JeHwanYoo</a>
+         
+        <span class="post-time">
+          Date:
+          <a href="#"
+            >2월 1, 2022&nbsp;&nbsp;19:35:38</a
+          >
+        </span>
+         
+        <span class="post-category">
+          Category: 
+          <a href="/categories/Mathematics/">Mathematics</a>
+          
+        </span>
+        
+      </div>
+      
+    </header>
+
+    <div class="post-content"><h2 id="참고-도서"><a href="#참고-도서" class="headerlink" title="참고 도서"></a>참고 도서</h2><hr>
+<p><a target="_blank" rel="noopener" href="http://www.yes24.com/Product/Goods/87663679">머신러닝을 위한 파이썬 한 조각(박성호, 2020)</a></p>
+<h2 id="정의"><a href="#정의" class="headerlink" title="정의"></a>정의</h2><hr>
+<p>수치 해석학에서 수치 미분은 함수의 미분 값을 컴퓨터를 이용하여 근사치로 계산하는 방법을 뜻한다.</p>
+<p>손으로 미분 값을 계산하기 힘들 때 컴퓨터의 도움을 받아 근사 값을 계산할 수 있다.</p>
+<h2 id="미분계수의-정의"><a href="#미분계수의-정의" class="headerlink" title="미분계수의 정의"></a>미분계수의 정의</h2><hr>
+<p>미분계수 $f’(a)$는 $x=a$에서의 접선의 기울기를 나타낸다.</p>
+<p>$f’(a) = \lim_{b \rightarrow a}{\frac{f(b)-f(a)}{b-a}}$</p>
+<p>$b-a=h$라 하면 $b=a+h$가 되고 $b \rightarrow a$일 때 $h \rightarrow 0$이므로 다음과 같이 표현할 수 있다.</p>
+<p>$f’(a) = \lim_{h \rightarrow 0}{\frac{f(a+h)-f(a)}{h}}$</p>
+<h2 id="전향-차분과-중심-차분"><a href="#전향-차분과-중심-차분" class="headerlink" title="전향 차분과 중심 차분"></a>전향 차분과 중심 차분</h2><hr>
+<h3 id="전향-차분"><a href="#전향-차분" class="headerlink" title="전향 차분"></a>전향 차분</h3><p>$f’(x)=\lim_{\Delta x \to 0}{\frac{f(x+\Delta x)-f(x)}{\Delta x}}$</p>
+<h3 id="중심-차분"><a href="#중심-차분" class="headerlink" title="중심 차분"></a>중심 차분</h3><p>$f’(x) = \lim_{\Delta x \to 0}{\frac{f(x+\Delta x) - f(x-\Delta x)}{2\Delta x}}$</p>
+<aside>
+💡 수치 해석에서 오차를 줄이기 위해 일반적으로 중심 차분을 이용한다.
+
+</aside>
+
+<h2 id="근사치-설정"><a href="#근사치-설정" class="headerlink" title="근사치 설정"></a>근사치 설정</h2><hr>
+<p>$\Delta x$의 값은 사용하고자 하는 언어에서 언더플로우가 발생하지 않는 적당한 선에서 결정한다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dx = <span class="number">1e-5</span> <span class="comment">#(10^-5)</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="변수가-1개인-함수의-수치-미분"><a href="#변수가-1개인-함수의-수치-미분" class="headerlink" title="변수가 1개인 함수의 수치 미분"></a>변수가 1개인 함수의 수치 미분</h2><hr>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">simple_derivate</span>(<span class="params">f, x</span>):</span></span><br><span class="line"> dx = <span class="number">1e-5</span></span><br><span class="line"> <span class="keyword">return</span> (f(x+dx)-f(x-dx))/(<span class="number">2</span>*dx)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span>(<span class="params">x</span>):</span> <span class="comment"># x^2</span></span><br><span class="line">  <span class="keyword">return</span> x ** <span class="number">2</span> </span><br><span class="line"></span><br><span class="line">ret_val = simple_derivate(f, <span class="number">3.0</span>)</span><br><span class="line"><span class="built_in">print</span>(ret_val)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">6.000000000039306</span><br></pre></td></tr></table></figure>
+
+<h2 id="편미분-입력-변수가-2개-이상인-다변수-함수"><a href="#편미분-입력-변수가-2개-이상인-다변수-함수" class="headerlink" title="편미분 (입력 변수가 2개 이상인 다변수 함수)"></a>편미분 (입력 변수가 2개 이상인 다변수 함수)</h2><hr>
+<p>$f(x,y) = x^2 + xy + y^2$를 미분한다는 것은</p>
+<p>특정 변수를 제외한 나머지 변수를 상수 취급하여 미분을 진행한다.</p>
+<p>$\frac{\partial{f(x, y)}}{\partial{x}} = 2x + y$</p>
+<p>$\frac{\partial{f(x, y)}}{\partial{y}} = x+2y$</p>
+<center><img src='https://i.ibb.co/cNJL2jq/geogebra-export.png' width='200px' alt='곡면' /></center>
+<center><img src='https://i.ibb.co/TYw8h75/2022-02-01-7-18-52.png' width='200px' alt='접선의 기울기' /></center>
+
+<p>$\frac{\partial{z}}{\partial{x}}{(1,1) = 3}$은 $y=1$ 일 때 곡면의 절단면에서 접선의 기울기이다.</p>
+<h2 id="다변수-함수에-대한-수치-미분-코드"><a href="#다변수-함수에-대한-수치-미분-코드" class="headerlink" title="다변수 함수에 대한 수치 미분 코드"></a>다변수 함수에 대한 수치 미분 코드</h2><hr>
+<p>$f’(1.0, 2.0)$을 계산하기 위해서는</p>
+<p>$\to y=2.0$ 을 상수로 대입하여 $\frac{\partial{f(x, 2.0)}}{\partial{x}}$ 수행</p>
+<p>$\to x = 1.0$ 을 상수로 대입하여 $\frac{\partial{f(1.0, y)}}{\partial{y}}$ 수행</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">derivative</span>(<span class="params">f, x</span>):</span></span><br><span class="line">    dx = <span class="number">1e-5</span></span><br><span class="line">    grad = np.zeros_like(x)</span><br><span class="line">    </span><br><span class="line">    it = np.nditer(x, flags=[<span class="string">&#x27;multi_index&#x27;</span>], op_flags=[<span class="string">&#x27;readwrite&#x27;</span>])</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">not</span> it.finished:</span><br><span class="line">        idx = it.multi_index</span><br><span class="line">        </span><br><span class="line">        tmp_val = x[idx]</span><br><span class="line">        </span><br><span class="line">        x[idx] = tmp_val + dx</span><br><span class="line">        fx1 = f(x)</span><br><span class="line">        </span><br><span class="line">        x[idx] = tmp_val - dx</span><br><span class="line">        fx2 = f(x)</span><br><span class="line">        </span><br><span class="line">        grad[idx] = (fx1 - fx2) / (<span class="number">2</span> * dx)</span><br><span class="line">        </span><br><span class="line">        x[idx] = tmp_val</span><br><span class="line">        it.iternext()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> grad</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f2</span>(<span class="params">W</span>):</span></span><br><span class="line">  x, y = W</span><br><span class="line">  <span class="keyword">return</span> (x ** <span class="number">2</span> + x * y + y ** <span class="number">2</span>) <span class="comment"># x^2 + xy + y^2</span></span><br><span class="line"></span><br><span class="line">ret_val = derivative(f2, np.array([<span class="number">1.0</span>, <span class="number">2.0</span>]))</span><br><span class="line"><span class="built_in">print</span>(ret_val)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">4.</span> <span class="number">5.</span>]</span><br></pre></td></tr></table></figure>
+</div>
+
+    
+    <section class="post-copyright">
+      
+      <p class="copyright-item">
+        <span>Author:</span>
+        <span>JeHwanYoo</span>
+      </p>
+        
+      <p class="copyright-item">
+        <span>License:</span>
+        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+      </p>
+       
+    </section>
+    
+    <section class="post-tags">
+      <div>
+        <span>Tag(s):</span>
+        <span class="tag">
+           
+          <a href="/tags/Algorithms/"># Algorithms</a>
+          
+          <a href="/tags/Mathematics/"># Mathematics</a>
+          
+          <a href="/tags/Calculus/"># Calculus</a>
+          
+          <a href="/tags/Analysis/"># Analysis</a>
+          
+          <a href="/tags/Numerical-Analysis/"># Numerical Analysis</a>
+          
+          <a href="/tags/Numerical-Differentiation/"># Numerical Differentiation</a>
+          
+          <a href="/tags/Numerical-Derivative/"># Numerical Derivative</a>
+           
+        </span>
+      </div>
+      <div>
+        <a href="javascript:window.history.back();">back</a>
+        <span>· </span>
+        <a href="/">home</a>
+      </div>
+    </section>
+    <section class="post-nav">
+      
+      <a class="prev" rel="prev" href="/2022/02/02/NativeScript-MacOS-Android-%EA%B5%AC%EC%B6%95%ED%95%98%EA%B8%B0/"
+        >NativeScript + MacOS + Android 구축하기</a
+      >
+       
+      <a class="next" rel="next" href="/2022/02/01/%EB%8B%A4%EC%8B%9C-%EB%AF%B8%EB%B6%84-%EC%A0%81%EB%B6%84-1%EC%9E%A5-%EB%AF%B8%EB%B6%84%ED%8E%B8-%EC%B4%9D-%EC%A0%95%EB%A6%AC/"
+        >(다시 미분 적분) 1장 미분편 총 정리</a
+      >
+      
+    </section>
+    <section style="margin-top: 4rem">
+      <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jehwanyoo.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </section>
+  </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+  <div class="copyright">
+    <span>
+      © JeHwanYoo | Powered by
+      <a href="https://hexo.io" target="_blank">Hexo</a> &
+      <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">
+        Chic
+      </a>
+    </span>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

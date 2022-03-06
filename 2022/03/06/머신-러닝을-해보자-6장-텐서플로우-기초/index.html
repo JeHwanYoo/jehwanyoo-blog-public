@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="JeHwanYoo" />
+ 
+<meta name="subtitle" content="유제환의 프로그래밍 노트" />
+ 
+<meta name="description" content="프로그래밍 노트, 팁, 강의등을 게시하는 블로그입니다." />
+ 
+<meta name="keywords" content="Programming, C, C++, Java, JavaScript, Node.js, Python, Rust, Go, ETC..." />
+ <meta name="description" content="텐서란? (Tensor) 선형대수학에서 사용하는 수학적 대상을 텐서(Tensor)라고 한다. 스칼라, 벡터, 행렬, n-차원 배열등을 일반화(Generalization)한 개념이다. 19세기 미분 기하학에서 처음 도입하였으며, 물리학, 공학을 비롯한 다양한 학문에서 이용된다. 랭크 (Rank) 텐서에는 Rank라는 개념이 존재하며 텐서의 차원 수를 의미한다">
+<meta property="og:type" content="article">
+<meta property="og:title" content="머신 러닝을 해보자 6장 - 텐서플로우 기초">
+<meta property="og:url" content="https://jehwanyoo.net/2022/03/06/%EB%A8%B8%EC%8B%A0-%EB%9F%AC%EB%8B%9D%EC%9D%84-%ED%95%B4%EB%B3%B4%EC%9E%90-6%EC%9E%A5-%ED%85%90%EC%84%9C%ED%94%8C%EB%A1%9C%EC%9A%B0-%EA%B8%B0%EC%B4%88/index.html">
+<meta property="og:site_name" content="JeHwan PL Note">
+<meta property="og:description" content="텐서란? (Tensor) 선형대수학에서 사용하는 수학적 대상을 텐서(Tensor)라고 한다. 스칼라, 벡터, 행렬, n-차원 배열등을 일반화(Generalization)한 개념이다. 19세기 미분 기하학에서 처음 도입하였으며, 물리학, 공학을 비롯한 다양한 학문에서 이용된다. 랭크 (Rank) 텐서에는 Rank라는 개념이 존재하며 텐서의 차원 수를 의미한다">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:image" content="https://i.ibb.co/x6ZrrWg/6-2022-002.jpg">
+<meta property="og:image" content="https://i.ibb.co/5YZ6Gsk/2022-03-03-1-37-24.png">
+<meta property="article:published_time" content="2022-03-06T08:00:27.000Z">
+<meta property="article:modified_time" content="2022-03-06T08:13:25.350Z">
+<meta property="article:author" content="JeHwanYoo">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Deep Learning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.ibb.co/x6ZrrWg/6-2022-002.jpg"> <link rel="canonical" href="https://jehwanyoo.net/2022/03/06/머신-러닝을-해보자-6장-텐서플로우-기초/"/> 
+<title>머신 러닝을 해보자 6장 - 텐서플로우 기초 | JeHwan PL Note</title>
+
+ 
+<link rel="icon" href="/favicon.ico" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+     
+<!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  
+
+<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/rss2.xml" title="JeHwan PL Note" type="application/rss+xml">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">JeHwan PL Note</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">JeHwan PL Note</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>  
+  <article class="post-wrap">
+    <header class="post-header">
+      <h1 class="post-title">머신 러닝을 해보자 6장 - 텐서플로우 기초</h1>
+      
+      <div class="post-meta">
+         Author:
+        <a itemprop="author" rel="author" href="/">JeHwanYoo</a>
+         
+        <span class="post-time">
+          Date:
+          <a href="#"
+            >3월 6, 2022&nbsp;&nbsp;17:00:27</a
+          >
+        </span>
+         
+        <span class="post-category">
+          Category: 
+          <a href="/categories/AI/">AI</a>
+          
+        </span>
+        
+      </div>
+      
+    </header>
+
+    <div class="post-content"><h2 id="텐서란-Tensor"><a href="#텐서란-Tensor" class="headerlink" title="텐서란? (Tensor)"></a>텐서란? (Tensor)</h2><hr>
+<p>선형대수학에서 사용하는 수학적 대상을 텐서(Tensor)라고 한다.</p>
+<p>스칼라, 벡터, 행렬, n-차원 배열등을 일반화(Generalization)한 개념이다.</p>
+<p>19세기 미분 기하학에서 처음 도입하였으며, 물리학, 공학을 비롯한 다양한 학문에서 이용된다.</p>
+<h2 id="랭크-Rank"><a href="#랭크-Rank" class="headerlink" title="랭크 (Rank)"></a>랭크 (Rank)</h2><hr>
+<p>텐서에는 Rank라는 개념이 존재하며 텐서의 차원 수를 의미한다.</p>
+<p>Rank를 Order라고도 한다.</p>
+<p>낮은 Rank부터 연산이 정의되어 더 높은 Rank로 확장되기 때문이다.</p>
+<table>
+<thead>
+<tr>
+<th align="center">Rank</th>
+<th align="center">데이터 타입</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">0</td>
+<td align="center">스칼라 (0-order-tensor)</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">벡터 (1-order-tensor)</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">행렬 (2-order-tensor)</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">(3-order-tensor)</td>
+</tr>
+<tr>
+<td align="center">…</td>
+<td align="center">…</td>
+</tr>
+<tr>
+<td align="center">n</td>
+<td align="center">(n-order-tensor)</td>
+</tr>
+</tbody></table>
+<h2 id="Tensor-예제"><a href="#Tensor-예제" class="headerlink" title="Tensor 예제"></a>Tensor 예제</h2><hr>
+<p>Tensor를 실험하기 위해 머신 러닝 프레임워크인 Tensorflow를 사용해보자.</p>
+<p>아래는 Tensorflow + Keras로 Linear Function을 표현하였다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.layers <span class="keyword">import</span> Dense </span><br><span class="line"></span><br><span class="line">x = tf.constant([[<span class="number">10.</span>, <span class="number">20.</span>], [<span class="number">30.</span>, <span class="number">40.</span>], [<span class="number">50.</span>, <span class="number">60.</span>]])</span><br><span class="line"></span><br><span class="line">dense = Dense(units = <span class="number">1</span>) <span class="comment"># Linear Function</span></span><br><span class="line"></span><br><span class="line">y = dense(x) <span class="comment"># Initialize W &amp; Feed Forward</span></span><br><span class="line">W, b = dense.get_weights()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;y = x﹒<span class="subst">&#123;W&#125;</span> + <span class="subst">&#123;b&#125;</span>&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;x.shape: <span class="subst">&#123;x.shape&#125;</span> W.shape: <span class="subst">&#123;W.shape&#125;</span> B.shape: <span class="subst">&#123;b.shape&#125;</span>&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(y)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">y = x﹒[[0.08496201]</span><br><span class="line"> [0.19183493]] + [0.]</span><br><span class="line">x.shape: (3, 2) W.shape: (2, 1) B.shape: (1,)</span><br><span class="line">tf.Tensor(</span><br><span class="line">[[ 4.6863184]</span><br><span class="line"> [10.222258 ]</span><br><span class="line"> [15.758196 ]], shape=(3, 1), dtype=float32)</span><br></pre></td></tr></table></figure>
+
+<img src="https://i.ibb.co/x6ZrrWg/6-2022-002.jpg" alt="https://i.ibb.co/x6ZrrWg/6-2022-002.jpg" width="600">
+
+<p>머신 러닝에 등장하는 x(입력), W(가중치), b(바이어스) 모두 행렬 또는 벡터의 연산이며,</p>
+<p>다시 말해 텐서의 연산이라고 볼 수 있다.</p>
+<h2 id="상수-텐서-선언"><a href="#상수-텐서-선언" class="headerlink" title="상수 텐서 선언"></a>상수 텐서 선언</h2><hr>
+<p>상수 텐서는 <code>tf.constant</code> 함수로 선언할 수 있다.</p>
+<p>상수 텐서는 연산을 진행하는 동안 ‘텐서 객체의 값’이 변하지 않는다.</p>
+<blockquote>
+<p>a = tf.constant(10)을 생각해보자.</p>
+<p>여기서 바뀌지 않는 것은 tf.Tensor 객체이다. a는 지역 변수이므로 바뀔 수 있다.</p>
+<p>a가 tf.Tensor가 되는게 아니라 a는 레퍼런스 변수로써 tf.Tensor를 가리키고 있는 것이다. (포인터 개념)</p>
+<p>좀 더 자세히 알고 싶다면 포인터를 직접 사용하는 C언어나 C++ 언어를 접해보길 권장한다.</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="comment"># RANK-0</span></span><br><span class="line">a = tf.constant(<span class="number">10.</span>)</span><br><span class="line">b = tf.constant(-<span class="number">5.</span>)</span><br><span class="line">c = a + b</span><br><span class="line">d = a * b</span><br><span class="line">e = a - b</span><br><span class="line">f = a / b</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;rank-0&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;a&#x27;</span>, a)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;b&#x27;</span>, b)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;c&#x27;</span>, c)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;d&#x27;</span>, d)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;e&#x27;</span>, e)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;f&#x27;</span>, f)</span><br><span class="line"><span class="built_in">print</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment"># RANK-1</span></span><br><span class="line">a = tf.constant([<span class="number">5.</span>, -<span class="number">4.</span>])</span><br><span class="line">b = tf.constant([-<span class="number">2.</span>, -<span class="number">3.</span>])</span><br><span class="line">c = a + b</span><br><span class="line">d = a * b</span><br><span class="line">e = a - b</span><br><span class="line">f = a / b</span><br><span class="line">g = tf.tensordot(a, b, axes=<span class="number">1</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;rank-1&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;a&#x27;</span>, a)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;b&#x27;</span>, b)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;c&#x27;</span>, c)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;d&#x27;</span>, d)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;e&#x27;</span>, e)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;f&#x27;</span>, f)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;g&#x27;</span>, g)</span><br><span class="line"><span class="built_in">print</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment"># RANK-2</span></span><br><span class="line">a = tf.constant([[<span class="number">1.</span>, <span class="number">2.</span>], [<span class="number">3.</span>, <span class="number">4.</span>]])</span><br><span class="line">b = tf.constant([[<span class="number">5.</span>, <span class="number">6.</span>], [<span class="number">7.</span>, <span class="number">8.</span>]])</span><br><span class="line">c = a + b</span><br><span class="line">d = a * b <span class="comment"># 아다마르 프로덕트</span></span><br><span class="line">e = a - b</span><br><span class="line">f = a / b</span><br><span class="line">g = tf.linalg.matmul(a, b) <span class="comment"># 도트 프로덕트</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;rank-2&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;a&#x27;</span>, a)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;b&#x27;</span>, b)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;c&#x27;</span>, c)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;d&#x27;</span>, d)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;e&#x27;</span>, e)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;f&#x27;</span>, f)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;g&#x27;</span>, g)</span><br><span class="line"><span class="built_in">print</span>()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">rank-0</span><br><span class="line">a tf.Tensor(10.0, shape=(), dtype=float32)</span><br><span class="line">b tf.Tensor(-5.0, shape=(), dtype=float32)</span><br><span class="line">c tf.Tensor(5.0, shape=(), dtype=float32)</span><br><span class="line">d tf.Tensor(-50.0, shape=(), dtype=float32)</span><br><span class="line">e tf.Tensor(15.0, shape=(), dtype=float32)</span><br><span class="line">f tf.Tensor(-2.0, shape=(), dtype=float32)</span><br><span class="line"></span><br><span class="line">rank-1</span><br><span class="line">a tf.Tensor([ 5. -4.], shape=(2,), dtype=float32)</span><br><span class="line">b tf.Tensor([-2. -3.], shape=(2,), dtype=float32)</span><br><span class="line">c tf.Tensor([ 3. -7.], shape=(2,), dtype=float32)</span><br><span class="line">d tf.Tensor([-10.  12.], shape=(2,), dtype=float32)</span><br><span class="line">e tf.Tensor([ 7. -1.], shape=(2,), dtype=float32)</span><br><span class="line">f tf.Tensor([-2.5        1.3333334], shape=(2,), dtype=float32)</span><br><span class="line">g tf.Tensor(2.0, shape=(), dtype=float32)</span><br><span class="line"></span><br><span class="line">rank-2</span><br><span class="line">a tf.Tensor(</span><br><span class="line">[[1. 2.]</span><br><span class="line"> [3. 4.]], shape=(2, 2), dtype=float32)</span><br><span class="line">b tf.Tensor(</span><br><span class="line">[[5. 6.]</span><br><span class="line"> [7. 8.]], shape=(2, 2), dtype=float32)</span><br><span class="line">c tf.Tensor(</span><br><span class="line">[[ 6.  8.]</span><br><span class="line"> [10. 12.]], shape=(2, 2), dtype=float32)</span><br><span class="line">d tf.Tensor(</span><br><span class="line">[[ 5. 12.]</span><br><span class="line"> [21. 32.]], shape=(2, 2), dtype=float32)</span><br><span class="line">e tf.Tensor(</span><br><span class="line">[[-4. -4.]</span><br><span class="line"> [-4. -4.]], shape=(2, 2), dtype=float32)</span><br><span class="line">f tf.Tensor(</span><br><span class="line">[[0.2        0.33333334]</span><br><span class="line"> [0.42857143 0.5       ]], shape=(2, 2), dtype=float32)</span><br><span class="line">g tf.Tensor(</span><br><span class="line">[[19. 22.]</span><br><span class="line"> [43. 50.]], shape=(2, 2), dtype=float32)</span><br></pre></td></tr></table></figure>
+
+<p>Tensorflow의 Tensor는 numpy 호환 배열과, <code>.shape</code>, <code>.dtype</code>을 가지고 있다.</p>
+<p>Tensorflow 2.0부터 Session 방식을 사용하지 않기 떄문에, Tensor를 평가하기 위해 <code>.eval()</code> 대신 <code>.numpy()</code>를 사용한다.</p>
+<h2 id="초기화-함수"><a href="#초기화-함수" class="headerlink" title="초기화 함수"></a>초기화 함수</h2><hr>
+<p>초기화 함수를 이용하여 영백터, 영행렬, 단위행렬, 대각행렬, 난수텐서 등을 생성할 수 있다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">a = tf.zeros(<span class="number">2</span>) <span class="comment"># 2d O-vector</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;a&#x27;</span>, a)</span><br><span class="line"></span><br><span class="line">b = tf.ones((<span class="number">4</span>, <span class="number">4</span>)) <span class="comment"># 4x4 Matrix</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;b&#x27;</span>, b)</span><br><span class="line"></span><br><span class="line">c = tf.eye(<span class="number">4</span>) <span class="comment"># 4x4 Identify Matrix</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;c&#x27;</span>, c)</span><br><span class="line"></span><br><span class="line">d = tf.fill((<span class="number">3</span>, <span class="number">2</span>), value=<span class="number">5.</span>) <span class="comment"># 3x2 Matrix</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;d&#x27;</span>, d)</span><br><span class="line"></span><br><span class="line">e = tf.linalg.diag(tf.<span class="built_in">range</span>(<span class="number">1</span>, <span class="number">5</span>, <span class="number">1</span>)) <span class="comment"># Diagonal Matrix</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;e&#x27;</span>, e)</span><br><span class="line"></span><br><span class="line">f = tf.random.normal((<span class="number">2</span>, <span class="number">2</span>), mean=<span class="number">0</span>, stddev=<span class="number">1</span>) <span class="comment"># Normal Distribution</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;f&#x27;</span>, f)</span><br><span class="line"></span><br><span class="line">g = tf.random.uniform((<span class="number">2</span>, <span class="number">2</span>), minval=-<span class="number">2</span>, maxval=<span class="number">2</span>) <span class="comment"># Uniform Distribution</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;g&#x27;</span>, g)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">a tf.Tensor([0. 0.], shape=(2,), dtype=float32)</span><br><span class="line">b tf.Tensor(</span><br><span class="line">[[1. 1. 1. 1.]</span><br><span class="line"> [1. 1. 1. 1.]</span><br><span class="line"> [1. 1. 1. 1.]</span><br><span class="line"> [1. 1. 1. 1.]], shape=(4, 4), dtype=float32)</span><br><span class="line">c tf.Tensor(</span><br><span class="line">[[1. 0. 0. 0.]</span><br><span class="line"> [0. 1. 0. 0.]</span><br><span class="line"> [0. 0. 1. 0.]</span><br><span class="line"> [0. 0. 0. 1.]], shape=(4, 4), dtype=float32)</span><br><span class="line">d tf.Tensor(</span><br><span class="line">[[5. 5.]</span><br><span class="line"> [5. 5.]</span><br><span class="line"> [5. 5.]], shape=(3, 2), dtype=float32)</span><br><span class="line">e tf.Tensor(</span><br><span class="line">[[1 0 0 0]</span><br><span class="line"> [0 2 0 0]</span><br><span class="line"> [0 0 3 0]</span><br><span class="line"> [0 0 0 4]], shape=(4, 4), dtype=int32)</span><br><span class="line">f tf.Tensor(</span><br><span class="line">[[ 0.26831564 -1.0274279 ]</span><br><span class="line"> [-0.26385054 -2.047377  ]], shape=(2, 2), dtype=float32)</span><br><span class="line">g tf.Tensor(</span><br><span class="line">[[-1.0781832   1.899333  ]</span><br><span class="line"> [-0.43762493 -1.9079366 ]], shape=(2, 2), dtype=float32)</span><br></pre></td></tr></table></figure>
+
+<h2 id="텐서-형상-조작"><a href="#텐서-형상-조작" class="headerlink" title="텐서 형상 조작"></a>텐서 형상 조작</h2><hr>
+<p><code>tf.reshape</code> 함수를 이용하면 다른 형상의 텐서로 바꿀수 있다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">a = tf.constant([[<span class="number">1</span>, <span class="number">2</span>], [<span class="number">3</span>, <span class="number">4</span>], [<span class="number">5</span>, <span class="number">6</span>]])</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;a: <span class="subst">&#123;a&#125;</span>, a.shape: <span class="subst">&#123;a.shape&#125;</span>&#x27;</span>)</span><br><span class="line">b = tf.reshape(a, (<span class="number">6</span>, )) <span class="comment"># flatten</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;b: <span class="subst">&#123;b&#125;</span>, b.shape: <span class="subst">&#123;b.shape&#125;</span>&#x27;</span>)</span><br><span class="line">c = tf.reshape(b, (<span class="number">2</span>, <span class="number">3</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;c: <span class="subst">&#123;c&#125;</span>, c.shape: <span class="subst">&#123;c.shape&#125;</span>&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a: [[1 2]</span><br><span class="line"> [3 4]</span><br><span class="line"> [5 6]], a.shape: (3, 2)</span><br><span class="line">b: [1 2 3 4 5 6], b.shape: (6,)</span><br><span class="line">c: [[1 2 3]</span><br><span class="line"> [4 5 6]], c.shape: (2, 3)</span><br></pre></td></tr></table></figure>
+
+<h2 id="브로드캐스팅"><a href="#브로드캐스팅" class="headerlink" title="브로드캐스팅"></a>브로드캐스팅</h2><hr>
+<p>브로드캐스팅은 numpy에서 도입된 개념으로 행렬과 서로 다른 크기의 벡터를 더할 때 쓰인다.</p>
+<p>본래 선형대수에서 정의되지 않지만 벡터를 브로드캐스트(확산)하여 계산할 수 있는 형태로 만든 것이다.</p>
+<img src="https://i.ibb.co/5YZ6Gsk/2022-03-03-1-37-24.png" alt="https://i.ibb.co/5YZ6Gsk/2022-03-03-1-37-24.png" width="500" />
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">a = tf.ones((<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;a&#x27;</span>, a)</span><br><span class="line"></span><br><span class="line">b = tf.ones(<span class="number">1</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;b&#x27;</span>, b)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;a+b&#x27;</span>, a + b)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">a tf.Tensor(</span><br><span class="line">[[1. 1.]</span><br><span class="line"> [1. 1.]], shape=(2, 2), dtype=float32)</span><br><span class="line">b tf.Tensor([1.], shape=(1,), dtype=float32)</span><br><span class="line">a+b tf.Tensor(</span><br><span class="line">[[2. 2.]</span><br><span class="line"> [2. 2.]], shape=(2, 2), dtype=float32)</span><br></pre></td></tr></table></figure>
+
+<h2 id="텐서-변수"><a href="#텐서-변수" class="headerlink" title="텐서 변수"></a>텐서 변수</h2><hr>
+<p><code>tf.Variable</code> 객체는 <code>tf.Tensor</code>를 담고있는 변수 역할을 하는 객체이다.</p>
+<p><code>.assign()</code> 함수를 통해 다른 <code>tf.Tensor</code>로 배정할 수 있다.</p>
+<blockquote>
+<p>공학적인 측면에서 생각해보자.</p>
+<p>a = a = tf.Variable(tf.constant([1., 2.]))의 경우 레퍼런스 구조가 a -&gt; tf.Variable -&gt; tf.Tensor 된다.</p>
+<p>tf.Variable이 변수 처럼 동작하는 이유는 tf.Variable의 레퍼런스를 교체할 수 있기 때문이다.</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">a = tf.constant([<span class="number">1.</span>, <span class="number">2.</span>])</span><br><span class="line">v_a = tf.Variable(a)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(v_a)</span><br><span class="line"></span><br><span class="line">v_a.assign([<span class="number">3.</span>, <span class="number">4.</span>])</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(v_a)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;tf.Variable &#x27;Variable:0&#x27; shape=(2,) dtype=float32, numpy=array([1., 2.], dtype=float32)&gt;</span><br><span class="line">&lt;tf.Variable &#x27;Variable:0&#x27; shape=(2,) dtype=float32, numpy=array([3., 4.], dtype=float32)&gt;</span><br></pre></td></tr></table></figure>
+
+<p>머신 러닝에서 업데이트 되는 가중치를 표현할 수 있다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">w_init = tf.transpose(tf.constant([[<span class="number">1.</span>, <span class="number">2.</span>]]))</span><br><span class="line">W = tf.Variable(w_init)</span><br><span class="line">x = tf.constant([[<span class="number">2.</span>, <span class="number">3.</span>]])</span><br><span class="line"></span><br><span class="line">y = tf.linalg.matmul(x, W)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(y)</span><br><span class="line"></span><br><span class="line">w_add = tf.constant([<span class="number">1.</span>])</span><br><span class="line">W.assign(W + w_add) <span class="comment"># 각 가중치 값에 +1</span></span><br><span class="line"></span><br><span class="line">y = tf.linalg.matmul(x, W)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(y)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tf.Tensor([[8.]], shape=(1, 1), dtype=float32)</span><br><span class="line">tf.Tensor([[13.]], shape=(1, 1), dtype=float32)</span><br></pre></td></tr></table></figure>
+</div>
+
+    
+    <section class="post-copyright">
+      
+      <p class="copyright-item">
+        <span>Author:</span>
+        <span>JeHwanYoo</span>
+      </p>
+        
+      <p class="copyright-item">
+        <span>License:</span>
+        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+      </p>
+       
+    </section>
+    
+    <section class="post-tags">
+      <div>
+        <span>Tag(s):</span>
+        <span class="tag">
+           
+          <a href="/tags/Machine-Learning/"># Machine Learning</a>
+          
+          <a href="/tags/AI/"># AI</a>
+          
+          <a href="/tags/Deep-Learning/"># Deep Learning</a>
+           
+        </span>
+      </div>
+      <div>
+        <a href="javascript:window.history.back();">back</a>
+        <span>· </span>
+        <a href="/">home</a>
+      </div>
+    </section>
+    <section class="post-nav">
+       
+      <a class="next" rel="next" href="/2022/03/04/%EB%B0%B0%EC%97%B4-90%EB%8F%84-%ED%9A%8C%EC%A0%84-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98-%EC%8B%9C%EA%B3%84-%EB%B0%98%EC%8B%9C%EA%B3%84/"
+        >배열 90도 회전 알고리즘 (시계, 반시계)</a
+      >
+      
+    </section>
+    <section style="margin-top: 4rem">
+      <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jehwanyoo.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </section>
+  </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+  <div class="copyright">
+    <span>
+      © JeHwanYoo | Powered by
+      <a href="https://hexo.io" target="_blank">Hexo</a> &
+      <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">
+        Chic
+      </a>
+    </span>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

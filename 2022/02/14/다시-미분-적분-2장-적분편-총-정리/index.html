@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="JeHwanYoo" />
+ 
+<meta name="subtitle" content="유제환의 프로그래밍 노트" />
+ 
+<meta name="description" content="프로그래밍 노트, 팁, 강의등을 게시하는 블로그입니다." />
+ 
+<meta name="keywords" content="Programming, C, C++, Java, JavaScript, Node.js, Python, Rust, Go, ETC..." />
+ <meta name="description" content="1. 적분의 두가지 의미  (1) 구분 구적법(區分求積法) (2) 미분의 역연산  2. 부정적분 공식 $$(1)\ \int{x^n}dx &#x3D; \frac{1}{n+1}{x}^{n+1} + C\ (n \neq-1)$$ $$(2)\ \int{\cos{x}}dx &#x3D; \sin{x} + C$$ $$(3)\ \int{\sin{x}}dx &#x3D; -\cos{x} + C$$ $$">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(다시 미분 적분) 2장 적분편 총 정리">
+<meta property="og:url" content="https://jehwanyoo.net/2022/02/14/%EB%8B%A4%EC%8B%9C-%EB%AF%B8%EB%B6%84-%EC%A0%81%EB%B6%84-2%EC%9E%A5-%EC%A0%81%EB%B6%84%ED%8E%B8-%EC%B4%9D-%EC%A0%95%EB%A6%AC/index.html">
+<meta property="og:site_name" content="JeHwan PL Note">
+<meta property="og:description" content="1. 적분의 두가지 의미  (1) 구분 구적법(區分求積法) (2) 미분의 역연산  2. 부정적분 공식 $$(1)\ \int{x^n}dx &#x3D; \frac{1}{n+1}{x}^{n+1} + C\ (n \neq-1)$$ $$(2)\ \int{\cos{x}}dx &#x3D; \sin{x} + C$$ $$(3)\ \int{\sin{x}}dx &#x3D; -\cos{x} + C$$ $$">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:image" content="https://i.ibb.co/VHqF8b5/001.jpg">
+<meta property="og:image" content="https://i.ibb.co/wwRTfS1/002.jpg">
+<meta property="og:image" content="https://i.ibb.co/rQKtpJX/003.jpg">
+<meta property="og:image" content="https://i.ibb.co/dW2Nnn7/004.jpg">
+<meta property="article:published_time" content="2022-02-14T08:10:00.000Z">
+<meta property="article:modified_time" content="2022-03-06T07:58:31.580Z">
+<meta property="article:author" content="JeHwanYoo">
+<meta property="article:tag" content="Mathematics">
+<meta property="article:tag" content="Integral">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.ibb.co/VHqF8b5/001.jpg"> <link rel="canonical" href="https://jehwanyoo.net/2022/02/14/다시-미분-적분-2장-적분편-총-정리/"/> 
+<title>(다시 미분 적분) 2장 적분편 총 정리 | JeHwan PL Note</title>
+
+ 
+<link rel="icon" href="/favicon.ico" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+     
+<!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  
+
+<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/rss2.xml" title="JeHwan PL Note" type="application/rss+xml">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">JeHwan PL Note</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">JeHwan PL Note</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>  
+  <article class="post-wrap">
+    <header class="post-header">
+      <h1 class="post-title">(다시 미분 적분) 2장 적분편 총 정리</h1>
+      
+      <div class="post-meta">
+         Author:
+        <a itemprop="author" rel="author" href="/">JeHwanYoo</a>
+         
+        <span class="post-time">
+          Date:
+          <a href="#"
+            >2월 14, 2022&nbsp;&nbsp;17:10:00</a
+          >
+        </span>
+         
+        <span class="post-category">
+          Category: 
+          <a href="/categories/Mathematics/">Mathematics</a>
+          
+        </span>
+        
+      </div>
+      
+    </header>
+
+    <div class="post-content"><h2 id="1-적분의-두가지-의미"><a href="#1-적분의-두가지-의미" class="headerlink" title="1. 적분의 두가지 의미"></a>1. 적분의 두가지 의미</h2><hr>
+<blockquote>
+<p>(1) 구분 구적법(區分求積法)</p>
+<p>(2) 미분의 역연산</p>
+</blockquote>
+<h2 id="2-부정적분-공식"><a href="#2-부정적분-공식" class="headerlink" title="2. 부정적분 공식"></a>2. 부정적분 공식</h2><hr>
+<p>$$<br>(1)\ \int{x^n}dx = \frac{1}{n+1}{x}^{n+1} + C\ (n \neq-1)<br>$$</p>
+<p>$$<br>(2)\ \int{\cos{x}}dx = \sin{x} + C<br>$$</p>
+<p>$$<br>(3)\ \int{\sin{x}}dx = -\cos{x} + C<br>$$</p>
+<p>$$<br>(4)\ \int{\frac{1}{\cos^2x}}dx = \tan x + C<br>$$</p>
+<p>$$<br>(5)\ \int{e^x}dx = e^x + C<br>$$</p>
+<p>$$<br>(6)\ \int{a^x}dx = \frac{1}{\log{a}}{a}^{x} + C\ (a &gt; 0이면서\ a \neq 1)<br>$$</p>
+<p>$$<br>(7)\ \int{\frac{1}{x}}dx = \log {|x|}+ C<br>$$</p>
+<h2 id="3-원시-함수의-정의"><a href="#3-원시-함수의-정의" class="headerlink" title="3. 원시 함수의 정의"></a>3. 원시 함수의 정의</h2><hr>
+<p>함수 $f(x)$에 대하여</p>
+<p>$$<br>F’(x)=f(x)<br>$$</p>
+<p>를 만족하는 함수 $F(x)$를 $f(x)$의 원시 함수 라고 한다.</p>
+<h2 id="4-정적분의-정의"><a href="#4-정적분의-정의" class="headerlink" title="4. 정적분의 정의"></a>4. 정적분의 정의</h2><hr>
+<p>$f(x)$의 원시함수 $F(x)$에 대해</p>
+<p>$$<br>F(b)-F(a)<br>$$</p>
+<p>의 계산을 ‘$f(x)$를 피적분 함수로 하는 $x=a$ 부터 $x = b$ 까지의 정적분’이라 부르고</p>
+<p>$$<br>\int_{a}^{b}{f(x)dx}=[F(x)]_{a}^{b} = F(b)-F(a)<br>$$</p>
+<p>로 표기한다.</p>
+<p><img src="https://i.ibb.co/VHqF8b5/001.jpg" alt="https://i.ibb.co/VHqF8b5/001.jpg"></p>
+<h2 id="5-정적분의-기본-공식"><a href="#5-정적분의-기본-공식" class="headerlink" title="5. 정적분의 기본 공식"></a>5. 정적분의 기본 공식</h2><hr>
+<p>$$<br>\int_{a}^{b}{f(x)dx} + \int_{b}^{c}{f(x)dx} = \int_{a}^{c}{f(x)dx}<br>$$</p>
+<p>$$<br>-\int_{a}^{b}{f(x)dx} = \int_{b}^{a}{f(x)dx}<br>$$</p>
+<h2 id="6-선형성-Linearity"><a href="#6-선형성-Linearity" class="headerlink" title="6. 선형성 (Linearity)"></a>6. 선형성 (Linearity)</h2><hr>
+<p>(1), (2)의 성질이 모두 성립하면 그 함수는 선형성을 가진다.</p>
+<p>$$<br>(1)\ f(p+q) = f(p)+f(q)<br>$$</p>
+<p>$$<br>(2)\ f(kp) = kf(p)<br>$$</p>
+<p>요약하면</p>
+<p>$$<br>f(kp+lq)=kf(p)+lf(q)<br>$$</p>
+<h2 id="7-미분의-선형성"><a href="#7-미분의-선형성" class="headerlink" title="7. 미분의 선형성"></a>7. 미분의 선형성</h2><hr>
+<p>$$<br>\{kf(x)+lg(x)\}’ = kf’(x)+lg’(x)<br>$$</p>
+<h2 id="8-부정적분의-선형성"><a href="#8-부정적분의-선형성" class="headerlink" title="8. 부정적분의 선형성"></a>8. 부정적분의 선형성</h2><hr>
+<p>$$<br>\int\{kf(x)+lg(x)\}dx=k\int{f(x)dx}+l\int{g(x)dx}<br>$$</p>
+<h2 id="9-치환-적분법-공식"><a href="#9-치환-적분법-공식" class="headerlink" title="9. 치환 적분법 공식"></a>9. 치환 적분법 공식</h2><hr>
+<p>$x=g(t)$라 하면</p>
+<p>$$<br>\int{f(x)dx}=\int{f(g(t))g’(t)dt}<br>$$</p>
+<p><img src="https://i.ibb.co/wwRTfS1/002.jpg" alt="https://i.ibb.co/wwRTfS1/002.jpg"></p>
+<p>$$<br>I’(t) = \{F(g(t))\}’= F’(g(t))\cdot g’(t) = f(g(t)) \cdot g’(t)<br>$$</p>
+<h2 id="10-sqrt-r-2-x-2-꼴의-정적분"><a href="#10-sqrt-r-2-x-2-꼴의-정적분" class="headerlink" title="10. $\sqrt{r^2-x^2}$꼴의 정적분"></a>10. $\sqrt{r^2-x^2}$꼴의 정적분</h2><hr>
+<p>$$<br>\int_{0}^{r}{\sqrt{r^2-x^2}dx}\ = \frac{r^2\pi}{4}<br>$$</p>
+<p><img src="https://i.ibb.co/rQKtpJX/003.jpg" alt="https://i.ibb.co/rQKtpJX/003.jpg"></p>
+<p>원의 넓이의 $\frac{1}{4}$</p>
+<h2 id="11-1-x-2-꼴의-정적분"><a href="#11-1-x-2-꼴의-정적분" class="headerlink" title="11. $1+x^2$꼴의 정적분"></a>11. $1+x^2$꼴의 정적분</h2><hr>
+<p><img src="https://i.ibb.co/dW2Nnn7/004.jpg" alt="https://i.ibb.co/dW2Nnn7/004.jpg"></p>
+<p>$x = \tan\theta$ 꼴로 치환하여</p>
+<p>$\ x: 0 \to 1$을</p>
+<p> $\theta: 0 \to \frac{\pi}{4}$으로 적분</p>
+<p>$$<br>S = \int_{0}^{1}{\frac{1}{1+x^2}dx}= \int_{0}^{\frac{\pi}{4}}{\frac{1}{1+\tan^2\theta}\frac{1}{\cos^2\theta}{d\theta}}<br>$$</p>
+<p>$1+\tan^2\theta = \frac{1}{\cos^2\theta}$ 이므로</p>
+<p>$$<br>S =\int_{0}^{\frac{\pi}{4}}{\frac{1}{\frac{1}{\cos^2\theta}}\frac{1}{\cos^2\theta}{d\theta}} = \int_{0}^{\frac{\pi}{4}}{1d\theta} = \left[ \theta \right]_{0}^{\frac{\pi}{4}}=\frac{\pi}{4}<br>$$</p>
+<h2 id="12-정적분을-이용해-부피를-구하는-방법"><a href="#12-정적분을-이용해-부피를-구하는-방법" class="headerlink" title="12. 정적분을 이용해 부피를 구하는 방법"></a>12. 정적분을 이용해 부피를 구하는 방법</h2><hr>
+<p>$x$축에 수직인 평면이 만드는 단면의 넓이가 $S(x)$인 입체 도형의 $a \leq x \leq b$인 부분의 부피 $V$는 다음 정적분으로 구할 수 있다.</p>
+<p>$$<br>V = \int_{a}^{b}{S(x)dx}<br>$$</p>
+<h2 id="13-x-축을-중심으로-회전시킨-회전체의-부피를-구하는-방법"><a href="#13-x-축을-중심으로-회전시킨-회전체의-부피를-구하는-방법" class="headerlink" title="13.  $x$축을 중심으로 회전시킨 회전체의 부피를 구하는 방법"></a>13.  $x$축을 중심으로 회전시킨 회전체의 부피를 구하는 방법</h2><hr>
+<p>$y = f(x),\ x= a,\ x=b\ (a&lt;b)$ 그리고 $x$축으로 둘러싸인 부분을 $x$축을 중심으로 한 번 회전시켜 만들어지는 입체 도형(회전체)의 부피 $V$는 다음 정적분으로 구할 수 있다.</p>
+<p>$$<br>V = \pi\int_{a}^{b}f^2(x)dx<br>$$</p>
+</div>
+
+    
+    <section class="post-copyright">
+      
+      <p class="copyright-item">
+        <span>Author:</span>
+        <span>JeHwanYoo</span>
+      </p>
+        
+      <p class="copyright-item">
+        <span>License:</span>
+        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+      </p>
+       
+    </section>
+    
+    <section class="post-tags">
+      <div>
+        <span>Tag(s):</span>
+        <span class="tag">
+           
+          <a href="/tags/Mathematics/"># Mathematics</a>
+          
+          <a href="/tags/Integral/"># Integral</a>
+           
+        </span>
+      </div>
+      <div>
+        <a href="javascript:window.history.back();">back</a>
+        <span>· </span>
+        <a href="/">home</a>
+      </div>
+    </section>
+    <section class="post-nav">
+      
+      <a class="prev" rel="prev" href="/2022/02/14/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-%EB%93%B1%EA%B5%A3%EA%B8%B8/"
+        >(프로그래머스) 등굣길</a
+      >
+       
+      <a class="next" rel="next" href="/2022/02/11/%ED%8C%8C%EC%9D%B4%EC%8D%AC-%EC%B4%88%EB%B3%B4%EB%A5%BC-%EB%B2%97%EC%96%B4%EB%82%98%EA%B8%B0-%EC%9C%84%ED%95%9C-%EA%B0%80%EC%9D%B4%EB%93%9C%EB%9D%BC%EC%9D%B8/"
+        >파이썬 초보를 벗어나기 위한 가이드라인</a
+      >
+      
+    </section>
+    <section style="margin-top: 4rem">
+      <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jehwanyoo.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </section>
+  </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+  <div class="copyright">
+    <span>
+      © JeHwanYoo | Powered by
+      <a href="https://hexo.io" target="_blank">Hexo</a> &
+      <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">
+        Chic
+      </a>
+    </span>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

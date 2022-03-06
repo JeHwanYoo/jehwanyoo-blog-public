@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="JeHwanYoo" />
+ 
+<meta name="subtitle" content="유제환의 프로그래밍 노트" />
+ 
+<meta name="description" content="프로그래밍 노트, 팁, 강의등을 게시하는 블로그입니다." />
+ 
+<meta name="keywords" content="Programming, C, C++, Java, JavaScript, Node.js, Python, Rust, Go, ETC..." />
+ <meta name="description" content="링크 SELECT모든 레코드 조회하기 1SELECT * FROM ANIMAL_INS ORDER BY ANIMAL_ID ASC  역순 정렬하기 1SELECT NAME, DATETIME FROM ANIMAL_INS ORDER BY ANIMAL_ID DESC  아픈 동물 찾기 1SELECT ANIMAL_ID, NAME FROM ANIMAL_INS WHERE IN">
+<meta property="og:type" content="article">
+<meta property="og:title" content="프로그래머스 SQL 고득점 KIT 모든 정답">
+<meta property="og:url" content="https://jehwanyoo.net/2022/02/24/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-SQL-%EA%B3%A0%EB%93%9D%EC%A0%90-KIT-%EB%AA%A8%EB%93%A0-%EC%A0%95%EB%8B%B5/index.html">
+<meta property="og:site_name" content="JeHwan PL Note">
+<meta property="og:description" content="링크 SELECT모든 레코드 조회하기 1SELECT * FROM ANIMAL_INS ORDER BY ANIMAL_ID ASC  역순 정렬하기 1SELECT NAME, DATETIME FROM ANIMAL_INS ORDER BY ANIMAL_ID DESC  아픈 동물 찾기 1SELECT ANIMAL_ID, NAME FROM ANIMAL_INS WHERE IN">
+<meta property="og:locale" content="ko_KR">
+<meta property="article:published_time" content="2022-02-24T06:13:26.000Z">
+<meta property="article:modified_time" content="2022-03-06T07:58:31.580Z">
+<meta property="article:author" content="JeHwanYoo">
+<meta property="article:tag" content="Database">
+<meta property="article:tag" content="SQL">
+<meta name="twitter:card" content="summary"> <link rel="canonical" href="https://jehwanyoo.net/2022/02/24/프로그래머스-sql-고득점-kit-모든-정답/"/> 
+<title>프로그래머스 SQL 고득점 KIT 모든 정답 | JeHwan PL Note</title>
+
+ 
+<link rel="icon" href="/favicon.ico" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+     
+<!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  
+
+<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/rss2.xml" title="JeHwan PL Note" type="application/rss+xml">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">JeHwan PL Note</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">JeHwan PL Note</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>  
+  <article class="post-wrap">
+    <header class="post-header">
+      <h1 class="post-title">프로그래머스 SQL 고득점 KIT 모든 정답</h1>
+      
+      <div class="post-meta">
+         Author:
+        <a itemprop="author" rel="author" href="/">JeHwanYoo</a>
+         
+        <span class="post-time">
+          Date:
+          <a href="#"
+            >2월 24, 2022&nbsp;&nbsp;15:13:26</a
+          >
+        </span>
+         
+        <span class="post-category">
+          Category: 
+          <a href="/categories/Database/">Database</a>
+          
+        </span>
+        
+      </div>
+      
+    </header>
+
+    <div class="post-content"><p><a target="_blank" rel="noopener" href="https://programmers.co.kr/learn/challenges?tab=sql_practice_kit">링크</a></p>
+<h2 id="SELECT"><a href="#SELECT" class="headerlink" title="SELECT"></a>SELECT</h2><p>모든 레코드 조회하기</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> ANIMAL_INS <span class="keyword">ORDER</span> <span class="keyword">BY</span> ANIMAL_ID <span class="keyword">ASC</span></span><br></pre></td></tr></table></figure>
+
+<p>역순 정렬하기</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> NAME, DATETIME <span class="keyword">FROM</span> ANIMAL_INS <span class="keyword">ORDER</span> <span class="keyword">BY</span> ANIMAL_ID <span class="keyword">DESC</span></span><br></pre></td></tr></table></figure>
+
+<p>아픈 동물 찾기</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> ANIMAL_ID, NAME <span class="keyword">FROM</span> ANIMAL_INS <span class="keyword">WHERE</span> INTAKE_CONDITION <span class="operator">=</span> <span class="string">&#x27;Sick&#x27;</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> ANIMAL_ID <span class="keyword">ASC</span></span><br></pre></td></tr></table></figure>
+
+<p>어린 동물 찾기</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> ANIMAL_ID, NAME <span class="keyword">FROM</span> ANIMAL_INS <span class="keyword">WHERE</span> INTAKE_CONDITION <span class="operator">!=</span> <span class="string">&#x27;Aged&#x27;</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> ANIMAL_ID <span class="keyword">ASC</span></span><br></pre></td></tr></table></figure>
+
+<p>동물의 아이디와 이름</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> ANIMAL_ID, NAME <span class="keyword">FROM</span> ANIMAL_INS <span class="keyword">ORDER</span> <span class="keyword">BY</span> ANIMAL_ID <span class="keyword">ASC</span></span><br></pre></td></tr></table></figure>
+
+<p>여러 기준으로 정렬하기</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> ANIMAL_ID, NAME, DATETIME <span class="keyword">FROM</span> ANIMAL_INS <span class="keyword">ORDER</span> <span class="keyword">BY</span> NAME <span class="keyword">ASC</span>, DATETIME <span class="keyword">DESC</span></span><br></pre></td></tr></table></figure>
+
+<p>상위 n개 레코드</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> NAME <span class="keyword">FROM</span> ANIMAL_INS <span class="keyword">ORDER</span> <span class="keyword">BY</span> DATETIME <span class="keyword">ASC</span> LIMIT <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="SUM-MAX-MIN"><a href="#SUM-MAX-MIN" class="headerlink" title="SUM, MAX, MIN"></a>SUM, MAX, MIN</h2><p>최댓값 구하기</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="built_in">MAX</span>(DATETIME) <span class="keyword">FROM</span> ANIMAL_INS</span><br></pre></td></tr></table></figure>
+
+<p>최솟값 구하기</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="built_in">MIN</span>(DATETIME) <span class="keyword">FROM</span> ANIMAL_INS</span><br></pre></td></tr></table></figure>
+
+<p>동물 수 구하기</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(ANIMAL_ID) <span class="keyword">FROM</span> ANIMAL_INS</span><br></pre></td></tr></table></figure>
+
+<p>중복 제거하기</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(<span class="keyword">DISTINCT</span> NAME) <span class="keyword">FROM</span> ANIMAL_INS</span><br></pre></td></tr></table></figure>
+
+<h2 id="GROUP-BY"><a href="#GROUP-BY" class="headerlink" title="GROUP BY"></a>GROUP BY</h2><p>고양이와 개는 몇 마리 있을까</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> ANIMAL_TYPE, <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">FROM</span> ANIMAL_INS <span class="keyword">WHERE</span> ANIMAL_TYPE <span class="operator">=</span> <span class="string">&#x27;Cat&#x27;</span> <span class="keyword">or</span> ANIMAL_TYPE <span class="operator">=</span> <span class="string">&#x27;Dog&#x27;</span> <span class="keyword">GROUP</span> <span class="keyword">BY</span> ANIMAL_TYPE <span class="keyword">ORDER</span> <span class="keyword">BY</span> ANIMAL_TYPE <span class="keyword">ASC</span></span><br></pre></td></tr></table></figure>
+
+<p>동명 동물 수 찾기</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> NAME, <span class="built_in">COUNT</span>(NAME) <span class="keyword">FROM</span> ANIMAL_INS <span class="keyword">GROUP</span> <span class="keyword">BY</span> NAME <span class="keyword">HAVING</span> <span class="built_in">COUNT</span>(NAME) <span class="operator">&gt;=</span> <span class="number">2</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> NAME <span class="keyword">ASC</span></span><br></pre></td></tr></table></figure>
+
+<p>입양 시각 구하기(1)</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 코드를 입력하세요</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">HOUR</span>(DATETIME), <span class="built_in">COUNT</span>(<span class="keyword">HOUR</span>(DATETIME)) <span class="keyword">FROM</span> ANIMAL_OUTS <span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="keyword">HOUR</span>(DATETIME) <span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="keyword">HOUR</span>(DATETIME)</span><br></pre></td></tr></table></figure>
+
+<p>입양 시각 구하기(2)</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> <span class="keyword">RECURSIVE</span> CTE <span class="keyword">AS</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> <span class="number">0</span> <span class="keyword">AS</span> N</span><br><span class="line">    <span class="keyword">UNION</span> <span class="keyword">ALL</span></span><br><span class="line">    <span class="keyword">SELECT</span> N <span class="operator">+</span> <span class="number">1</span> <span class="keyword">FROM</span> CTE</span><br><span class="line">    <span class="keyword">WHERE</span> N <span class="operator">&lt;</span> <span class="number">23</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> N,</span><br><span class="line">(<span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">FROM</span> ANIMAL_OUTS <span class="keyword">WHERE</span> <span class="keyword">HOUR</span>(DATETIME) <span class="operator">=</span> N)</span><br><span class="line"><span class="keyword">FROM</span> CTE</span><br></pre></td></tr></table></figure>
+
+<h2 id="ISNULL"><a href="#ISNULL" class="headerlink" title="ISNULL"></a>ISNULL</h2><p>이름이 없는 동물의 아이디</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> ANIMAL_ID <span class="keyword">FROM</span> ANIMAL_INS <span class="keyword">WHERE</span> NAME <span class="keyword">IS</span> <span class="keyword">NULL</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> ANIMAL_ID <span class="keyword">ASC</span></span><br></pre></td></tr></table></figure>
+
+<p>이름이 있는 동물의 아이디</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> ANIMAL_ID <span class="keyword">FROM</span> ANIMAL_INS <span class="keyword">WHERE</span> NAME <span class="keyword">IS</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> ANIMAL_ID <span class="keyword">ASC</span></span><br></pre></td></tr></table></figure>
+
+<p>NULL 처리하기</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> ANIMAL_TYPE, IFNULL(NAME, <span class="string">&#x27;No name&#x27;</span>), SEX_UPON_INTAKE <span class="keyword">FROM</span> ANIMAL_INS <span class="keyword">ORDER</span> <span class="keyword">BY</span> ANIMAL_ID <span class="keyword">ASC</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="JOIN"><a href="#JOIN" class="headerlink" title="JOIN"></a>JOIN</h2><p>없어진 기록 찾기</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> ANIMAL_ID, ANIMAL_OUTS.NAME</span><br><span class="line"><span class="keyword">FROM</span> ANIMAL_OUTS <span class="keyword">LEFT</span> <span class="keyword">OUTER</span> <span class="keyword">JOIN</span> ANIMAL_INS</span><br><span class="line"><span class="keyword">USING</span> (ANIMAL_ID)</span><br><span class="line"><span class="keyword">WHERE</span> ANIMAL_INS.NAME <span class="keyword">IS</span> <span class="keyword">NULL</span> <span class="keyword">AND</span> ANIMAL_OUTS.NAME <span class="keyword">IS</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span></span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> ANIMAL_ID <span class="keyword">ASC</span></span><br></pre></td></tr></table></figure>
+
+<p>있었는데요 없었습니다</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> ANIMAL_ID, ANIMAL_INS.NAME </span><br><span class="line"><span class="keyword">FROM</span> ANIMAL_INS <span class="keyword">JOIN</span> ANIMAL_OUTS </span><br><span class="line"><span class="keyword">USING</span>(ANIMAL_ID) </span><br><span class="line"><span class="keyword">WHERE</span> ANIMAL_INS.DATETIME <span class="operator">&gt;</span> ANIMAL_OUTS.DATETIME </span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> ANIMAL_INS.DATETIME <span class="keyword">ASC</span></span><br></pre></td></tr></table></figure>
+
+<p>오랜 기간 보호한 동물(1)</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> ANIMAL_INS.NAME, ANIMAL_INS.DATETIME </span><br><span class="line"><span class="keyword">FROM</span> ANIMAL_INS <span class="keyword">LEFT</span> <span class="keyword">OUTER</span> <span class="keyword">JOIN</span> ANIMAL_OUTS <span class="keyword">USING</span>(ANIMAL_ID)</span><br><span class="line"><span class="keyword">WHERE</span> ANIMAL_OUTS.DATETIME <span class="keyword">IS</span> <span class="keyword">NULL</span></span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> ANIMAL_INS.DATETIME <span class="keyword">ASC</span></span><br><span class="line">LIMIT <span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<p>보호소에서 중성화한 동물</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> ANIMAL_ID, ANIMAL_INS.ANIMAL_TYPE, ANIMAL_INS.NAME </span><br><span class="line"><span class="keyword">FROM</span> ANIMAL_INS <span class="keyword">JOIN</span> ANIMAL_OUTS <span class="keyword">USING</span>(ANIMAL_ID)</span><br><span class="line"><span class="keyword">WHERE</span> ANIMAL_INS.SEX_UPON_INTAKE <span class="keyword">LIKE</span> <span class="string">&#x27;Intact%&#x27;</span> </span><br><span class="line"><span class="keyword">AND</span> (ANIMAL_OUTS.SEX_UPON_OUTCOME <span class="keyword">LIKE</span> <span class="string">&#x27;Spayed%&#x27;</span></span><br><span class="line"><span class="keyword">OR</span> ANIMAL_OUTS.SEX_UPON_OUTCOME <span class="keyword">LIKE</span> <span class="string">&#x27;Neutered%&#x27;</span>)</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> ANIMAL_ID <span class="keyword">ASC</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="STRING-DATE"><a href="#STRING-DATE" class="headerlink" title="STRING, DATE"></a>STRING, DATE</h2><p>루시와 엘라 찾기</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> ANIMAL_ID, NAME, SEX_UPON_INTAKE </span><br><span class="line"><span class="keyword">FROM</span> ANIMAL_INS </span><br><span class="line"><span class="keyword">WHERE</span> NAME <span class="keyword">IN</span> (<span class="string">&#x27;Lucy&#x27;</span>, <span class="string">&#x27;Ella&#x27;</span>, <span class="string">&#x27;Pickle&#x27;</span>, <span class="string">&#x27;Rogan&#x27;</span>, <span class="string">&#x27;Sabrina&#x27;</span>, <span class="string">&#x27;Mitty&#x27;</span>)</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> ANIMAL_ID <span class="keyword">ASC</span></span><br></pre></td></tr></table></figure>
+
+<p>이름에 el이 들어가는 동물 찾기</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> ANIMAL_ID, NAME <span class="keyword">FROM</span> ANIMAL_INS <span class="keyword">WHERE</span> NAME <span class="keyword">LIKE</span> <span class="string">&#x27;%el%&#x27;</span> <span class="keyword">and</span> ANIMAL_TYPE <span class="operator">=</span> <span class="string">&#x27;Dog&#x27;</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> NAME <span class="keyword">ASC</span></span><br></pre></td></tr></table></figure>
+
+<p>중성화 여부 파악하기</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> ANIMAL_ID, NAME, IF(SEX_UPON_INTAKE <span class="keyword">LIKE</span> <span class="string">&#x27;Neutered%&#x27;</span> <span class="keyword">or</span> SEX_UPON_INTAKE <span class="keyword">LIKE</span> <span class="string">&#x27;Spayed%&#x27;</span>, <span class="string">&#x27;O&#x27;</span>, <span class="string">&#x27;X&#x27;</span>) <span class="keyword">FROM</span> ANIMAL_INS <span class="keyword">ORDER</span> <span class="keyword">BY</span> ANIMAL_ID <span class="keyword">ASC</span></span><br></pre></td></tr></table></figure>
+
+<p>오랜 기간 보호한 동물(2)</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> ANIMAL_ID, ANIMAL_INS.NAME <span class="keyword">FROM</span> ANIMAL_INS <span class="keyword">JOIN</span> ANIMAL_OUTS <span class="keyword">USING</span>(ANIMAL_ID) <span class="keyword">ORDER</span> <span class="keyword">BY</span> (ANIMAL_OUTS.DATETIME <span class="operator">-</span> ANIMAL_INS.DATETIME) <span class="keyword">DESC</span> LIMIT <span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p>DATETIME에서 DATE로 형 변환</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> ANIMAL_ID, NAME, DATE_FORMAT(DATETIME, <span class="string">&#x27;%Y-%m-%d&#x27;</span>) <span class="keyword">FROM</span> ANIMAL_INS <span class="keyword">ORDER</span> <span class="keyword">BY</span> ANIMAL_ID <span class="keyword">ASC</span></span><br></pre></td></tr></table></figure>
+</div>
+
+    
+    <section class="post-copyright">
+      
+      <p class="copyright-item">
+        <span>Author:</span>
+        <span>JeHwanYoo</span>
+      </p>
+        
+      <p class="copyright-item">
+        <span>License:</span>
+        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+      </p>
+       
+    </section>
+    
+    <section class="post-tags">
+      <div>
+        <span>Tag(s):</span>
+        <span class="tag">
+           
+          <a href="/tags/Database/"># Database</a>
+          
+          <a href="/tags/SQL/"># SQL</a>
+           
+        </span>
+      </div>
+      <div>
+        <a href="javascript:window.history.back();">back</a>
+        <span>· </span>
+        <a href="/">home</a>
+      </div>
+    </section>
+    <section class="post-nav">
+      
+      <a class="prev" rel="prev" href="/2022/02/24/%EC%BD%94%EB%94%A9%ED%85%8C%EC%8A%A4%ED%8A%B8%EB%A5%BC-%EC%9C%84%ED%95%9C-SQL-%EC%8B%A0%EC%86%8D-%EC%A0%95%EB%A6%AC/"
+        >코딩테스트를 위한 SQL 간단 정리</a
+      >
+       
+      <a class="next" rel="next" href="/2022/02/19/0-1-Knapsack-Algorithm/"
+        >0-1 Knapsack Algorithm</a
+      >
+      
+    </section>
+    <section style="margin-top: 4rem">
+      <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jehwanyoo.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </section>
+  </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+  <div class="copyright">
+    <span>
+      © JeHwanYoo | Powered by
+      <a href="https://hexo.io" target="_blank">Hexo</a> &
+      <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">
+        Chic
+      </a>
+    </span>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

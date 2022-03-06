@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="JeHwanYoo" />
+ 
+<meta name="subtitle" content="유제환의 프로그래밍 노트" />
+ 
+<meta name="description" content="프로그래밍 노트, 팁, 강의등을 게시하는 블로그입니다." />
+ 
+<meta name="keywords" content="Programming, C, C++, Java, JavaScript, Node.js, Python, Rust, Go, ETC..." />
+ <meta name="description" content="문제https:&#x2F;&#x2F;programmers.co.kr&#x2F;learn&#x2F;courses&#x2F;30&#x2F;lessons&#x2F;12952 알고리즘 유도체스판은 2차원 배열로 되어있다. 퀸들끼리 서로 간섭하지 않고 총 N개의 말을 체스판에 놓아야한다. 1줄부터 N줄까지 차례대로 퀸을 규칙대로 놓으면 정답을 구할 수 있다. 백트래킹DFS를 진행하면서 가려고하는 노드의 유망성을 판단하여 전진할">
+<meta property="og:type" content="article">
+<meta property="og:title" content="N-Queen 문제 (백트래킹)">
+<meta property="og:url" content="https://jehwanyoo.net/2022/01/26/N-Queen-%EB%AC%B8%EC%A0%9C-%EB%B0%B1%ED%8A%B8%EB%9E%98%ED%82%B9/index.html">
+<meta property="og:site_name" content="JeHwan PL Note">
+<meta property="og:description" content="문제https:&#x2F;&#x2F;programmers.co.kr&#x2F;learn&#x2F;courses&#x2F;30&#x2F;lessons&#x2F;12952 알고리즘 유도체스판은 2차원 배열로 되어있다. 퀸들끼리 서로 간섭하지 않고 총 N개의 말을 체스판에 놓아야한다. 1줄부터 N줄까지 차례대로 퀸을 규칙대로 놓으면 정답을 구할 수 있다. 백트래킹DFS를 진행하면서 가려고하는 노드의 유망성을 판단하여 전진할">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:image" content="https://i.ibb.co/Ht04tkS/Untitled.png">
+<meta property="og:image" content="https://i.ibb.co/XfQ8vXS/Untitled-1.png">
+<meta property="og:image" content="https://i.ibb.co/Y7DG70F/Untitled-2.png">
+<meta property="og:image" content="https://i.ibb.co/Lt77Mj2/Untitled-3.png">
+<meta property="article:published_time" content="2022-01-26T14:09:08.000Z">
+<meta property="article:modified_time" content="2022-03-06T07:58:31.580Z">
+<meta property="article:author" content="JeHwanYoo">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Algorithms">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.ibb.co/Ht04tkS/Untitled.png"> <link rel="canonical" href="https://jehwanyoo.net/2022/01/26/n-queen-문제-백트래킹/"/> 
+<title>N-Queen 문제 (백트래킹) | JeHwan PL Note</title>
+
+ 
+<link rel="icon" href="/favicon.ico" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+     
+<!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  
+
+<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/rss2.xml" title="JeHwan PL Note" type="application/rss+xml">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">JeHwan PL Note</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">JeHwan PL Note</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>  
+  <article class="post-wrap">
+    <header class="post-header">
+      <h1 class="post-title">N-Queen 문제 (백트래킹)</h1>
+      
+      <div class="post-meta">
+         Author:
+        <a itemprop="author" rel="author" href="/">JeHwanYoo</a>
+         
+        <span class="post-time">
+          Date:
+          <a href="#"
+            >1월 26, 2022&nbsp;&nbsp;23:09:08</a
+          >
+        </span>
+         
+        <span class="post-category">
+          Category: 
+          <a href="/categories/Algorithms/">Algorithms</a>
+          
+        </span>
+        
+      </div>
+      
+    </header>
+
+    <div class="post-content"><h2 id="문제"><a href="#문제" class="headerlink" title="문제"></a>문제</h2><p><a target="_blank" rel="noopener" href="https://programmers.co.kr/learn/courses/30/lessons/12952">https://programmers.co.kr/learn/courses/30/lessons/12952</a></p>
+<h2 id="알고리즘-유도"><a href="#알고리즘-유도" class="headerlink" title="알고리즘 유도"></a>알고리즘 유도</h2><p>체스판은 2차원 배열로 되어있다.</p>
+<p>퀸들끼리 서로 간섭하지 않고 총 N개의 말을 체스판에 놓아야한다.</p>
+<p>1줄부터 N줄까지 차례대로 퀸을 규칙대로 놓으면 정답을 구할 수 있다.<br><img src="https://i.ibb.co/Ht04tkS/Untitled.png" alt="nqueen1"></p>
+<h3 id="백트래킹"><a href="#백트래킹" class="headerlink" title="백트래킹"></a>백트래킹</h3><p>DFS를 진행하면서 가려고하는 노드의 유망성을 판단하여 전진할지 후퇴할지 결정하는 알고리즘이다.</p>
+<p>1줄부터 퀸을 계속 놓는다. 그리고 더이상 퀸을 놓을 수 없으면 후퇴한다. (유망하지 않기 때문이다.)</p>
+<p>만약 N번째 줄까지 퀸을 문제없이 놓았다면 정답으로 취급하고 count에 1을 더한다.</p>
+<p><img src="https://i.ibb.co/XfQ8vXS/Untitled-1.png" alt="nqueen2"><br><img src="https://i.ibb.co/Y7DG70F/Untitled-2.png" alt="nqueen3"></p>
+<h3 id="가지치기-pruning-조건"><a href="#가지치기-pruning-조건" class="headerlink" title="가지치기(pruning) 조건"></a>가지치기(pruning) 조건</h3><ol>
+<li>같은 열(column)에 위치한다.</li>
+<li>대각선에 위치한다.</li>
+</ol>
+<p>1번 조건은 간단하지만 2번 조건은 좀 생각해 봐야 한다.</p>
+<aside>
+💡 한 줄씩 진행하므로 같은 행에 놓는 경우는 존재하지 않는다.
+
+</aside>
+
+<h3 id="대각선-판단"><a href="#대각선-판단" class="headerlink" title="대각선 판단"></a>대각선 판단</h3><p><img src="https://i.ibb.co/Lt77Mj2/Untitled-3.png" alt="nqueen4"></p>
+<p>퀸들이 서로 대각선 위치에 존재할 경우,</p>
+<p>직각 이등변 삼각형을 그릴 수 있다.</p>
+<p>즉, 밑변과 높이의 길이가 같다는 뜻이다.</p>
+<h2 id="코드"><a href="#코드" class="headerlink" title="코드"></a>코드</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">nqueen</span>(<span class="params">row, pos, n</span>):</span></span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line">    <span class="keyword">if</span> row == n:  <span class="comment"># 정답을 찾았을 경우</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">for</span> col <span class="keyword">in</span> <span class="built_in">range</span>(n):  <span class="comment"># 첫번째 열부터 마지막 열까지 탐색</span></span><br><span class="line">            pos[row] = col</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(row):  <span class="comment"># 유망성 판단</span></span><br><span class="line">                <span class="keyword">if</span> pos[i] == pos[row]:  <span class="comment"># 같은 열</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                <span class="keyword">elif</span> <span class="built_in">abs</span>(i - row) == <span class="built_in">abs</span>(pos[i] - pos[row]):  <span class="comment"># 대각선</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">else</span>:  <span class="comment"># 유망할 경우 다음 행으로 진행</span></span><br><span class="line">                count += nqueen(row + <span class="number">1</span>, pos, n)</span><br><span class="line">    <span class="keyword">return</span> count</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">solution</span>(<span class="params">n</span>):</span></span><br><span class="line">    <span class="keyword">return</span> nqueen(<span class="number">0</span>, [<span class="number">0</span>] * n, n)</span><br></pre></td></tr></table></figure>
+
+<p>일반적으로 알려진 수도 코드(pseudo code)로 푸는 방법이다.</p>
+<h2 id="N-Queen-백트래킹-최적화"><a href="#N-Queen-백트래킹-최적화" class="headerlink" title="N-Queen 백트래킹 최적화"></a>N-Queen 백트래킹 최적화</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">nqueen</span>(<span class="params">row, pos, visited, n</span>):</span></span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line">    <span class="keyword">if</span> row == n:  <span class="comment"># 정답을 찾았을 경우</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">for</span> col <span class="keyword">in</span> <span class="built_in">range</span>(n):  <span class="comment"># 첫번째 열부터 마지막 열까지 탐색</span></span><br><span class="line">            <span class="keyword">if</span> visited[col]:  <span class="comment"># 이미 같은 열에 체스말이 놓여있으면 탐색하지 않음</span></span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            pos[row] = col</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(row):  <span class="comment"># 유망성 판단</span></span><br><span class="line">                <span class="keyword">if</span> <span class="built_in">abs</span>(i - row) == <span class="built_in">abs</span>(pos[i] - pos[row]):  <span class="comment"># 대각선</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">else</span>:  <span class="comment"># 유망할 경우 다음 행으로 진행</span></span><br><span class="line">                visited[col] = <span class="literal">True</span></span><br><span class="line">                count += nqueen(row + <span class="number">1</span>, pos, visited, n)</span><br><span class="line">                visited[col] = <span class="literal">False</span></span><br><span class="line">        <span class="keyword">return</span> count</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">solution</span>(<span class="params">n</span>):</span></span><br><span class="line">    <span class="keyword">return</span> nqueen(<span class="number">0</span>, [<span class="number">0</span>] * n, [<span class="literal">False</span>] * n, n)</span><br></pre></td></tr></table></figure>
+
+<p>같은 열에 존재하는 경우 $O(1)$만에 유망성을 판단하도록 수정했다.</p>
+<p>반복문을 도는 횟수가 크게 감소했다.</p>
+<h2 id="비고"><a href="#비고" class="headerlink" title="비고"></a>비고</h2><p><a target="_blank" rel="noopener" href="https://www.acmicpc.net/problem/9663">백준</a>에서 통과하려면 pypy3를 사용해야한다. (시간 초과 문제)</p>
+<p>백트래킹 문제는 파이썬이 굉장히 불리하다.</p>
+</div>
+
+    
+    <section class="post-copyright">
+      
+      <p class="copyright-item">
+        <span>Author:</span>
+        <span>JeHwanYoo</span>
+      </p>
+        
+      <p class="copyright-item">
+        <span>License:</span>
+        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+      </p>
+       
+    </section>
+    
+    <section class="post-tags">
+      <div>
+        <span>Tag(s):</span>
+        <span class="tag">
+           
+          <a href="/tags/Python/"># Python</a>
+          
+          <a href="/tags/Algorithms/"># Algorithms</a>
+           
+        </span>
+      </div>
+      <div>
+        <a href="javascript:window.history.back();">back</a>
+        <span>· </span>
+        <a href="/">home</a>
+      </div>
+    </section>
+    <section class="post-nav">
+      
+      <a class="prev" rel="prev" href="/2022/02/01/%EB%8B%A4%EC%8B%9C-%EB%AF%B8%EB%B6%84-%EC%A0%81%EB%B6%84-1%EC%9E%A5-%EB%AF%B8%EB%B6%84%ED%8E%B8-%EC%B4%9D-%EC%A0%95%EB%A6%AC/"
+        >(다시 미분 적분) 1장 미분편 총 정리</a
+      >
+       
+      <a class="next" rel="next" href="/2022/01/24/%EB%B9%A0%EB%A5%B8-%EA%B1%B0%EB%93%AD%EC%A0%9C%EA%B3%B1-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98-Fast-Power-Algorithm/"
+        >빠른 거듭제곱 알고리즘 (Fast Power Algorithm)</a
+      >
+      
+    </section>
+    <section style="margin-top: 4rem">
+      <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jehwanyoo.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </section>
+  </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+  <div class="copyright">
+    <span>
+      © JeHwanYoo | Powered by
+      <a href="https://hexo.io" target="_blank">Hexo</a> &
+      <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">
+        Chic
+      </a>
+    </span>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

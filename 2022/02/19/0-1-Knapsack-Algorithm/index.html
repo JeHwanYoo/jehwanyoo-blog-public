@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="JeHwanYoo" />
+ 
+<meta name="subtitle" content="유제환의 프로그래밍 노트" />
+ 
+<meta name="description" content="프로그래밍 노트, 팁, 강의등을 게시하는 블로그입니다." />
+ 
+<meta name="keywords" content="Programming, C, C++, Java, JavaScript, Node.js, Python, Rust, Go, ETC..." />
+ <meta name="description" content="알고리즘 분류 동적 프로그래밍  0-1 KN 문제 정의$n$ : 아이템의 개수 $w_i$ : $i$ 번째 아이템의 무게 $p_i$ :  $i$ 번째 아이템의 이익 $W$ : 가방에 넣을 수 있는 최대 무게 $D[i][w]$ : 최대 무게가 $w(0&lt;w\leq W)$일 때, i까지 넣었을 때 최대 이익 $D[n-1][W]$ : $W$만큼 담을 수 있는">
+<meta property="og:type" content="article">
+<meta property="og:title" content="0-1 Knapsack Algorithm">
+<meta property="og:url" content="https://jehwanyoo.net/2022/02/19/0-1-Knapsack-Algorithm/index.html">
+<meta property="og:site_name" content="JeHwan PL Note">
+<meta property="og:description" content="알고리즘 분류 동적 프로그래밍  0-1 KN 문제 정의$n$ : 아이템의 개수 $w_i$ : $i$ 번째 아이템의 무게 $p_i$ :  $i$ 번째 아이템의 이익 $W$ : 가방에 넣을 수 있는 최대 무게 $D[i][w]$ : 최대 무게가 $w(0&lt;w\leq W)$일 때, i까지 넣었을 때 최대 이익 $D[n-1][W]$ : $W$만큼 담을 수 있는">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:image" content="https://i.ibb.co/yX9r3L5/2022-02-19-6-29-36.png">
+<meta property="article:published_time" content="2022-02-19T10:14:01.000Z">
+<meta property="article:modified_time" content="2022-03-06T07:58:31.580Z">
+<meta property="article:author" content="JeHwanYoo">
+<meta property="article:tag" content="Algorithms">
+<meta property="article:tag" content="Dynamic Programming">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.ibb.co/yX9r3L5/2022-02-19-6-29-36.png"> <link rel="canonical" href="https://jehwanyoo.net/2022/02/19/0-1-knapsack-algorithm/"/> 
+<title>0-1 Knapsack Algorithm | JeHwan PL Note</title>
+
+ 
+<link rel="icon" href="/favicon.ico" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+     
+<!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  
+
+<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/rss2.xml" title="JeHwan PL Note" type="application/rss+xml">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">JeHwan PL Note</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">JeHwan PL Note</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>  
+  <article class="post-wrap">
+    <header class="post-header">
+      <h1 class="post-title">0-1 Knapsack Algorithm</h1>
+      
+      <div class="post-meta">
+         Author:
+        <a itemprop="author" rel="author" href="/">JeHwanYoo</a>
+         
+        <span class="post-time">
+          Date:
+          <a href="#"
+            >2월 19, 2022&nbsp;&nbsp;19:14:01</a
+          >
+        </span>
+         
+        <span class="post-category">
+          Category: 
+          <a href="/categories/Algorithms/">Algorithms</a>
+          
+        </span>
+        
+      </div>
+      
+    </header>
+
+    <div class="post-content"><h2 id="알고리즘-분류"><a href="#알고리즘-분류" class="headerlink" title="알고리즘 분류"></a>알고리즘 분류</h2><ul>
+<li>동적 프로그래밍</li>
+</ul>
+<h2 id="0-1-KN-문제-정의"><a href="#0-1-KN-문제-정의" class="headerlink" title="0-1 KN 문제 정의"></a>0-1 KN 문제 정의</h2><p>$n$ : 아이템의 개수</p>
+<p>$w_i$ : $i$ 번째 아이템의 무게</p>
+<p>$p_i$ :  $i$ 번째 아이템의 이익</p>
+<p>$W$ : 가방에 넣을 수 있는 최대 무게</p>
+<p>$D[i][w]$ : 최대 무게가 $w(0&lt;w\leq W)$일 때, i까지 넣었을 때 최대 이익</p>
+<p>$D[n-1][W]$ : $W$만큼 담을 수 있는 가방에, n개의 아이템을 넣었을 때 최대 이익</p>
+<h2 id="0-1-KN-문제-점화식"><a href="#0-1-KN-문제-점화식" class="headerlink" title="0-1 KN 문제 점화식"></a>0-1 KN 문제 점화식</h2><p>$i$ 번째 아이템을 가방에 넣을 수 있는가?</p>
+<ul>
+<li><p>넣을 수 있는 경우 $(w_i \leq w)$</p>
+<p>  $$<br>  D[i][w] = max(D[i-1][w-w_i] + p_i,\ D[i-1][w])<br>  $$</p>
+<ul>
+<li>‘넣는다’ $(D[i-1][w-w_i] + p_i)$</li>
+<li>‘넣지 않는다’ $(D[i-1][w])$</li>
+<li>두개의 경우 중 이익이 큰 방향으로 선택한다.</li>
+</ul>
+</li>
+<li><p>넣을 수 없는 경우 (넣지 않는다)</p>
+<p>  $$<br>  D[i][w] = D[i-1][w]<br>  $$</p>
+</li>
+</ul>
+<h2 id="0-1-KN-타뷸레이션"><a href="#0-1-KN-타뷸레이션" class="headerlink" title="0-1 KN 타뷸레이션"></a>0-1 KN 타뷸레이션</h2><p><img src="https://i.ibb.co/yX9r3L5/2022-02-19-6-29-36.png" alt="https://i.ibb.co/yX9r3L5/2022-02-19-6-29-36.png"></p>
+<h2 id="0-1-KN-관련-문제"><a href="#0-1-KN-관련-문제" class="headerlink" title="0-1 KN 관련 문제"></a>0-1 KN 관련 문제</h2><p><a target="_blank" rel="noopener" href="https://www.acmicpc.net/problem/12865">백준 12865번 - 평범한 배낭</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">N, W = <span class="built_in">map</span>(<span class="built_in">int</span>, <span class="built_in">input</span>().split())</span><br><span class="line">weights = [<span class="number">0</span>] *N</span><br><span class="line">profits = [<span class="number">0</span>]* N</span><br><span class="line">D = [[<span class="number">0</span>] * (W + <span class="number">1</span>) <span class="keyword">for</span> __ <span class="keyword">in</span> <span class="built_in">range</span>(N)]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(N):</span><br><span class="line">    w, p = <span class="built_in">map</span>(<span class="built_in">int</span>, <span class="built_in">input</span>().split())</span><br><span class="line">    weights[i] = w</span><br><span class="line">    profits[i] = p</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(N):</span><br><span class="line">    <span class="keyword">for</span> w <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, W + <span class="number">1</span>):</span><br><span class="line">        <span class="keyword">if</span> weights[i] &lt;= w:</span><br><span class="line">            D[i][w] = <span class="built_in">max</span>(D[i-<span class="number">1</span>][w-weights[i]] + profits[i], D[i-<span class="number">1</span>][w])</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            D[i][w] = D[i-<span class="number">1</span>][w]</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(D[N-<span class="number">1</span>][W])</span><br></pre></td></tr></table></figure>
+</div>
+
+    
+    <section class="post-copyright">
+      
+      <p class="copyright-item">
+        <span>Author:</span>
+        <span>JeHwanYoo</span>
+      </p>
+        
+      <p class="copyright-item">
+        <span>License:</span>
+        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+      </p>
+       
+    </section>
+    
+    <section class="post-tags">
+      <div>
+        <span>Tag(s):</span>
+        <span class="tag">
+           
+          <a href="/tags/Algorithms/"># Algorithms</a>
+          
+          <a href="/tags/Dynamic-Programming/"># Dynamic Programming</a>
+           
+        </span>
+      </div>
+      <div>
+        <a href="javascript:window.history.back();">back</a>
+        <span>· </span>
+        <a href="/">home</a>
+      </div>
+    </section>
+    <section class="post-nav">
+      
+      <a class="prev" rel="prev" href="/2022/02/24/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-SQL-%EA%B3%A0%EB%93%9D%EC%A0%90-KIT-%EB%AA%A8%EB%93%A0-%EC%A0%95%EB%8B%B5/"
+        >프로그래머스 SQL 고득점 KIT 모든 정답</a
+      >
+       
+      <a class="next" rel="next" href="/2022/02/19/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-%ED%81%B0-%EC%88%98-%EB%A7%8C%EB%93%A4%EA%B8%B0-1/"
+        >(프로그래머스) 큰 수 만들기</a
+      >
+      
+    </section>
+    <section style="margin-top: 4rem">
+      <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jehwanyoo.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </section>
+  </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+  <div class="copyright">
+    <span>
+      © JeHwanYoo | Powered by
+      <a href="https://hexo.io" target="_blank">Hexo</a> &
+      <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">
+        Chic
+      </a>
+    </span>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

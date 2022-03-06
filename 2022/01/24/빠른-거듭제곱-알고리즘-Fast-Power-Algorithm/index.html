@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="JeHwanYoo" />
+ 
+<meta name="subtitle" content="유제환의 프로그래밍 노트" />
+ 
+<meta name="description" content="프로그래밍 노트, 팁, 강의등을 게시하는 블로그입니다." />
+ 
+<meta name="keywords" content="Programming, C, C++, Java, JavaScript, Node.js, Python, Rust, Go, ETC..." />
+ <meta name="description" content="알고리즘 분류 분할 정복 (Divide and Quanquer)  점화식 알고리즘 유도$2^{17}$을 점화식1의 정의에 따라 이진 트리로 나타내보자.  점화식대로라면 하위 문제를 전부 풀어야할거 같지만 그렇지 않다.  이 문제는 중복 문제가 존재하기 때문에 동적 계획법으로 풀어도 된다. 그러나 같은 레벨에 존재하는 문제들이 모두 같은 문제이기 때문에, 오">
+<meta property="og:type" content="article">
+<meta property="og:title" content="빠른 거듭제곱 알고리즘 (Fast Power Algorithm)">
+<meta property="og:url" content="https://jehwanyoo.net/2022/01/24/%EB%B9%A0%EB%A5%B8-%EA%B1%B0%EB%93%AD%EC%A0%9C%EA%B3%B1-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98-Fast-Power-Algorithm/index.html">
+<meta property="og:site_name" content="JeHwan PL Note">
+<meta property="og:description" content="알고리즘 분류 분할 정복 (Divide and Quanquer)  점화식 알고리즘 유도$2^{17}$을 점화식1의 정의에 따라 이진 트리로 나타내보자.  점화식대로라면 하위 문제를 전부 풀어야할거 같지만 그렇지 않다.  이 문제는 중복 문제가 존재하기 때문에 동적 계획법으로 풀어도 된다. 그러나 같은 레벨에 존재하는 문제들이 모두 같은 문제이기 때문에, 오">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:image" content="https://i.ibb.co/rpJ0DZH/2022-01-24-10-27-51.png">
+<meta property="og:image" content="https://i.ibb.co/3Tkq3Sd/001.jpg">
+<meta property="og:image" content="https://i.ibb.co/xhy1K9f/002.jpg">
+<meta property="og:image" content="https://i.ibb.co/26c2PfS/003.jpg">
+<meta property="og:image" content="https://i.ibb.co/1LmsySx/004.jpg">
+<meta property="article:published_time" content="2022-01-24T13:24:00.000Z">
+<meta property="article:modified_time" content="2022-03-06T07:58:31.580Z">
+<meta property="article:author" content="JeHwanYoo">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Algorithms">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.ibb.co/rpJ0DZH/2022-01-24-10-27-51.png"> <link rel="canonical" href="https://jehwanyoo.net/2022/01/24/빠른-거듭제곱-알고리즘-fast-power-algorithm/"/> 
+<title>빠른 거듭제곱 알고리즘 (Fast Power Algorithm) | JeHwan PL Note</title>
+
+ 
+<link rel="icon" href="/favicon.ico" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+     
+<!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  
+
+<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/rss2.xml" title="JeHwan PL Note" type="application/rss+xml">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">JeHwan PL Note</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">JeHwan PL Note</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>  
+  <article class="post-wrap">
+    <header class="post-header">
+      <h1 class="post-title">빠른 거듭제곱 알고리즘 (Fast Power Algorithm)</h1>
+      
+      <div class="post-meta">
+         Author:
+        <a itemprop="author" rel="author" href="/">JeHwanYoo</a>
+         
+        <span class="post-time">
+          Date:
+          <a href="#"
+            >1월 24, 2022&nbsp;&nbsp;22:24:00</a
+          >
+        </span>
+         
+        <span class="post-category">
+          Category: 
+          <a href="/categories/Algorithms/">Algorithms</a>
+          
+        </span>
+        
+      </div>
+      
+    </header>
+
+    <div class="post-content"><h2 id="알고리즘-분류"><a href="#알고리즘-분류" class="headerlink" title="알고리즘 분류"></a>알고리즘 분류</h2><ul>
+<li>분할 정복 (Divide and Quanquer)</li>
+</ul>
+<h2 id="점화식"><a href="#점화식" class="headerlink" title="점화식"></a>점화식</h2><p><img src="https://i.ibb.co/rpJ0DZH/2022-01-24-10-27-51.png" alt="a"></p>
+<h2 id="알고리즘-유도"><a href="#알고리즘-유도" class="headerlink" title="알고리즘 유도"></a>알고리즘 유도</h2><p>$2^{17}$을 점화식1의 정의에 따라 이진 트리로 나타내보자.</p>
+<p><img src="https://i.ibb.co/3Tkq3Sd/001.jpg" alt="https://i.ibb.co/3Tkq3Sd/001.jpg"></p>
+<p>점화식대로라면 하위 문제를 전부 풀어야할거 같지만 그렇지 않다.</p>
+<p><img src="https://i.ibb.co/xhy1K9f/002.jpg" alt="https://i.ibb.co/xhy1K9f/002.jpg"></p>
+<p>이 문제는 중복 문제가 존재하기 때문에 동적 계획법으로 풀어도 된다.</p>
+<p>그러나 같은 레벨에 존재하는 문제들이 모두 같은 문제이기 때문에,</p>
+<p>오른쪽 서브 트리는 사실 계산하지 않아도 된다.</p>
+<p>트리의 구조상 <code>memoization</code>을 사용하면 오히려 낭비가 될 수 있다.</p>
+<p><img src="https://i.ibb.co/26c2PfS/003.jpg" alt="https://i.ibb.co/26c2PfS/003.jpg"></p>
+<p>$n$번 수행해야하는 연산이 약 $log_2{n}$번 정도로 감소한 것을 알 수 있다.</p>
+<h2 id="소스코드"><a href="#소스코드" class="headerlink" title="소스코드"></a>소스코드</h2><h3 id="방법1-재귀-함수"><a href="#방법1-재귀-함수" class="headerlink" title="방법1. 재귀 함수"></a>방법1. 재귀 함수</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fast_power</span>(<span class="params">a, x</span>):</span></span><br><span class="line">    <span class="keyword">if</span> x == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">elif</span> x == <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> a</span><br><span class="line"></span><br><span class="line">    y = fast_power(a, x &gt;&gt; <span class="number">1</span>)  <span class="comment"># 좌측 서브트리만 계산하면 된다.</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> x &amp; <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> y * y * a</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> y * y</span><br></pre></td></tr></table></figure>
+
+<p>위에서 정의한 그대로 풀어나가는 방법이다.</p>
+<blockquote>
+<p><code>n // 2</code> 와 <code>n &gt;&gt; 1</code> 은 같다. (후자가 더 빠른 방법)</p>
+</blockquote>
+<h3 id="방법2-반복문"><a href="#방법2-반복문" class="headerlink" title="방법2. 반복문"></a>방법2. 반복문</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fast_power</span>(<span class="params">a, x</span>):</span></span><br><span class="line">    <span class="keyword">if</span> x == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">elif</span> x == <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> a</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        r = <span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> x:</span><br><span class="line">            <span class="keyword">if</span> x &amp; <span class="number">1</span>:</span><br><span class="line">                r *= a</span><br><span class="line">            a *= a</span><br><span class="line">            x &gt;&gt;= <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> r</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.ibb.co/1LmsySx/004.jpg" alt="https://i.ibb.co/1LmsySx/004.jpg"></p>
+<p>결국 레벨이 진행되다보면 $x = 1$에서 $f(?,0)$꼴이 나오는데,</p>
+<p>이것들은 모두 1로 소거되고, 결국 남는 것은 이미 평가된 거듭제곱들의 곱이다.</p>
+<p>만약 어떤 레벨 $i (i&gt;=1)$의 $x$ 값이 홀수라면,</p>
+<p>그 레벨에서 곱해지는 거듭제곱의 기대 값은 $2^{2^{i-1}}$이다.</p>
+<p>이 값을 만들기 위해 각 레벨마다 밑($a$)의 곱을 누적하였다가,</p>
+<p>홀수 레벨을 만나면 $r$에 곱한다.</p>
+<h2 id="파이썬-pow보다-빠른가"><a href="#파이썬-pow보다-빠른가" class="headerlink" title="파이썬 pow보다 빠른가?"></a>파이썬 pow보다 빠른가?</h2><h3 id="벤치마크-fast-pow-python-pow"><a href="#벤치마크-fast-pow-python-pow" class="headerlink" title="벤치마크 (fast pow, python pow, **)"></a>벤치마크 (fast pow, python pow, **)</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">start_time = time.time()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10000</span>):</span><br><span class="line">    fast_power(<span class="number">2</span>, i)</span><br><span class="line"></span><br><span class="line">end_time = time.time()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;My FastPow: <span class="subst">&#123;end_time - start_time&#125;</span> sec&#x27;</span>)</span><br><span class="line"></span><br><span class="line">start_time = time.time()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10000</span>):</span><br><span class="line">    <span class="built_in">pow</span>(<span class="number">2</span>, i)</span><br><span class="line"></span><br><span class="line">end_time = time.time()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;Python Pow: <span class="subst">&#123;end_time - start_time&#125;</span> sec&#x27;</span>)</span><br><span class="line"></span><br><span class="line">start_time = time.time()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10000</span>):</span><br><span class="line">    <span class="number">2</span> ** i</span><br><span class="line"></span><br><span class="line">end_time = time.time()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;** Pow: <span class="subst">&#123;end_time - start_time&#125;</span> sec&#x27;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">My FastPow: 0.09695100784301758 sec</span><br><span class="line">Python Pow: 0.07985901832580566 sec</span><br><span class="line">** Pow: 0.0790097713470459 sec</span><br></pre></td></tr></table></figure>
+
+<p>파이썬의 pow가 내장 함수이다보니 훨씬 최적화가 더 잘 된 느낌이다.</p>
+<p>파이썬 성능 향상을 위해서는 내장 함수를 잘 알아야겠다.</p>
+</div>
+
+    
+    <section class="post-copyright">
+      
+      <p class="copyright-item">
+        <span>Author:</span>
+        <span>JeHwanYoo</span>
+      </p>
+        
+      <p class="copyright-item">
+        <span>License:</span>
+        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+      </p>
+       
+    </section>
+    
+    <section class="post-tags">
+      <div>
+        <span>Tag(s):</span>
+        <span class="tag">
+           
+          <a href="/tags/Python/"># Python</a>
+          
+          <a href="/tags/Algorithms/"># Algorithms</a>
+           
+        </span>
+      </div>
+      <div>
+        <a href="javascript:window.history.back();">back</a>
+        <span>· </span>
+        <a href="/">home</a>
+      </div>
+    </section>
+    <section class="post-nav">
+      
+      <a class="prev" rel="prev" href="/2022/01/26/N-Queen-%EB%AC%B8%EC%A0%9C-%EB%B0%B1%ED%8A%B8%EB%9E%98%ED%82%B9/"
+        >N-Queen 문제 (백트래킹)</a
+      >
+       
+      <a class="next" rel="next" href="/2022/01/24/%EC%9C%A0%EC%A0%84-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98-%EC%A7%84%ED%99%94%ED%95%98%EB%8A%94-%EB%AC%B8%EC%9E%90%EC%97%B4/"
+        >(유전 알고리즘) 진화하는 문자열</a
+      >
+      
+    </section>
+    <section style="margin-top: 4rem">
+      <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jehwanyoo.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </section>
+  </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+  <div class="copyright">
+    <span>
+      © JeHwanYoo | Powered by
+      <a href="https://hexo.io" target="_blank">Hexo</a> &
+      <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">
+        Chic
+      </a>
+    </span>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

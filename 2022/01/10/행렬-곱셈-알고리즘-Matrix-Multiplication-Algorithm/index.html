@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="JeHwanYoo" />
+ 
+<meta name="subtitle" content="유제환의 프로그래밍 노트" />
+ 
+<meta name="description" content="프로그래밍 노트, 팁, 강의등을 게시하는 블로그입니다." />
+ 
+<meta name="keywords" content="Programming, C, C++, Java, JavaScript, Node.js, Python, Rust, Go, ETC..." />
+ <meta name="description" content="알고리즘 유도과정 행렬의 곱셈은 다음과 같은 성질을 같는다.  행렬 A와 행렬 B가 곱해진다면 A의 열의 크기와 B의 행의 크기가 같다. 행렬 A가 N x M의 크기를 가지고 행렬 B가 M x K의 크기를 갖는다면 A x B &#x3D; C의 크기는 N x K이다.   행렬은 2차원 배열로 나타낼 수 있기 때문에 행(row)과 열(column)을 인덱스로 사용 할">
+<meta property="og:type" content="article">
+<meta property="og:title" content="행렬 곱셈 알고리즘(Matrix Multiplication Algorithm)">
+<meta property="og:url" content="https://jehwanyoo.net/2022/01/10/%ED%96%89%EB%A0%AC-%EA%B3%B1%EC%85%88-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98-Matrix-Multiplication-Algorithm/index.html">
+<meta property="og:site_name" content="JeHwan PL Note">
+<meta property="og:description" content="알고리즘 유도과정 행렬의 곱셈은 다음과 같은 성질을 같는다.  행렬 A와 행렬 B가 곱해진다면 A의 열의 크기와 B의 행의 크기가 같다. 행렬 A가 N x M의 크기를 가지고 행렬 B가 M x K의 크기를 갖는다면 A x B &#x3D; C의 크기는 N x K이다.   행렬은 2차원 배열로 나타낼 수 있기 때문에 행(row)과 열(column)을 인덱스로 사용 할">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:image" content="https://i.ibb.co/wRBg92W/002.jpg">
+<meta property="og:image" content="https://i.ibb.co/R4YVHqW/003.jpg">
+<meta property="og:image" content="https://i.ibb.co/kmd74FQ/005.jpg">
+<meta property="og:image" content="https://i.ibb.co/nk1XmgD/006.jpg">
+<meta property="article:published_time" content="2022-01-10T06:16:35.000Z">
+<meta property="article:modified_time" content="2022-03-06T07:58:31.580Z">
+<meta property="article:author" content="JeHwanYoo">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Algorithms">
+<meta property="article:tag" content="Linear Algebra">
+<meta property="article:tag" content="Matrix">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.ibb.co/wRBg92W/002.jpg"> <link rel="canonical" href="https://jehwanyoo.net/2022/01/10/행렬-곱셈-알고리즘-matrix-multiplication-algorithm/"/> 
+<title>행렬 곱셈 알고리즘(Matrix Multiplication Algorithm) | JeHwan PL Note</title>
+
+ 
+<link rel="icon" href="/favicon.ico" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+     
+<!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  
+
+<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/rss2.xml" title="JeHwan PL Note" type="application/rss+xml">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">JeHwan PL Note</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">JeHwan PL Note</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>  
+  <article class="post-wrap">
+    <header class="post-header">
+      <h1 class="post-title">행렬 곱셈 알고리즘(Matrix Multiplication Algorithm)</h1>
+      
+      <div class="post-meta">
+         Author:
+        <a itemprop="author" rel="author" href="/">JeHwanYoo</a>
+         
+        <span class="post-time">
+          Date:
+          <a href="#"
+            >1월 10, 2022&nbsp;&nbsp;15:16:35</a
+          >
+        </span>
+         
+        <span class="post-category">
+          Category: 
+          <a href="/categories/Algorithms/">Algorithms</a>
+          
+        </span>
+        
+      </div>
+      
+    </header>
+
+    <div class="post-content"><h2 id="알고리즘-유도과정"><a href="#알고리즘-유도과정" class="headerlink" title="알고리즘 유도과정"></a>알고리즘 유도과정</h2><p><img src="https://i.ibb.co/wRBg92W/002.jpg" alt="행렬 곱셈 알고리즘 유도 과정.002.jpeg"></p>
+<p>행렬의 곱셈은 다음과 같은 성질을 같는다.</p>
+<ul>
+<li>행렬 A와 행렬 B가 곱해진다면 A의 열의 크기와 B의 행의 크기가 같다.</li>
+<li>행렬 A가 N x M의 크기를 가지고 행렬 B가 M x K의 크기를 갖는다면 A x B = C의 크기는 N x K이다.</li>
+</ul>
+<p><img src="https://i.ibb.co/R4YVHqW/003.jpg" alt="행렬 곱셈 알고리즘 유도 과정.003.jpeg"></p>
+<p>행렬은 2차원 배열로 나타낼 수 있기 때문에 행(row)과 열(column)을 인덱스로 사용 할 수 있다.</p>
+<p>이것을 1차원으로 나타내면 행렬 C를 수열이라고 생각 할 수 있다.</p>
+<p><img src="https://i.ibb.co/kmd74FQ/005.jpg" alt="행렬 곱셈 알고리즘 유도 과정.003.jpeg"></p>
+<p>각 수열의 항은 위 처럼 계산되며 이것이 바로 행렬을 곱하는 과정이다.</p>
+<p>상수 N, M, K는 햇갈리지 않게 대문자로 표기했다.</p>
+<p>그리고 인덱스 변수 i, j, k는 소문자로 표기했다.</p>
+<p>규칙을 살펴보면, 하나의 항을 계산하기 위해 곱셈이 M번 반복된다는 것을 알 수 있다. (인덱스 k)</p>
+<p>다음으로 하나의 행을 모두 계산하기 위해 K번 반복된다는 것을 알 수 있다. (인덱스 j)</p>
+<p>마지막으로 모든 행을 계산하기 위해 N번 반복된다는 것을 알 수 있다. (인덱스 i)</p>
+<p><img src="https://i.ibb.co/nk1XmgD/006.jpg" alt="행렬 곱셈 알고리즘 유도 과정.005.jpeg"></p>
+<p>따라서 수열 $C_{ij}$의 일반항은 위와 같이 구할 수 있다.</p>
+<p>이를 그대로 코드로 옮기면 행렬 곱의 계산 알고리즘이 된다.</p>
+<h2 id="행렬-곱셈-문제-백준-2740번"><a href="#행렬-곱셈-문제-백준-2740번" class="headerlink" title="행렬 곱셈 문제 (백준 2740번)"></a><a target="_blank" rel="noopener" href="https://www.acmicpc.net/problem/2740">행렬 곱셈 문제</a> (백준 2740번)</h2><h3 id="문제"><a href="#문제" class="headerlink" title="문제"></a>문제</h3><p>N<em>M크기의 행렬 A와 M</em>K크기의 행렬 B가 주어졌을 때, 두 행렬을 곱하는 프로그램을 작성하시오.</p>
+<h3 id="입력"><a href="#입력" class="headerlink" title="입력"></a>입력</h3><p>첫째 줄에 행렬 A의 크기 N 과 M이 주어진다. 둘째 줄부터 N개의 줄에 행렬 A의 원소 M개가 순서대로 주어진다. 그 다음 줄에는 행렬 B의 크기 M과 K가 주어진다. 이어서 M개의 줄에 행렬 B의 원소 K개가 차례대로 주어진다. N과 M, 그리고 K는 100보다 작거나 같고, 행렬의 원소는 절댓값이 100보다 작거나 같은 정수이다.</p>
+<h3 id="출력"><a href="#출력" class="headerlink" title="출력"></a>출력</h3><p>첫째 줄부터 N개의 줄에 행렬 A와 B를 곱한 행렬을 출력한다. 행렬의 각 원소는 공백으로 구분한다.</p>
+<h3 id="코드"><a href="#코드" class="headerlink" title="코드"></a>코드</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">N, M = <span class="built_in">map</span>(<span class="built_in">int</span>, <span class="built_in">input</span>().split())</span><br><span class="line">K = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># N x M | M x K matrix</span></span><br><span class="line">A, B = [], []</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(N):</span><br><span class="line">    A.append(<span class="built_in">list</span>(<span class="built_in">map</span>(<span class="built_in">int</span>, <span class="built_in">input</span>().split())))</span><br><span class="line"></span><br><span class="line">M, K = <span class="built_in">map</span>(<span class="built_in">int</span>, <span class="built_in">input</span>().split())</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(M):</span><br><span class="line">    B.append(<span class="built_in">list</span>(<span class="built_in">map</span>(<span class="built_in">int</span>, <span class="built_in">input</span>().split())))</span><br><span class="line"></span><br><span class="line"><span class="comment"># N x K matrix</span></span><br><span class="line">C = [[<span class="number">0</span>] * K <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(N)]</span><br><span class="line"></span><br><span class="line"><span class="comment"># C[i][j] = A[i][k_0] * A[k_0][j] + A[i][k_1] * A[k_1][j] + ... + A[i][k_m-1] * A[k_m-1][j]</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(N):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(K):</span><br><span class="line">        <span class="keyword">for</span> k <span class="keyword">in</span> <span class="built_in">range</span>(M):</span><br><span class="line">            C[i][j] += A[i][k] * B[k][j]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(N):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(K):</span><br><span class="line">        <span class="built_in">print</span>(C[i][j], end=<span class="string">&quot; &quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="복잡도-분석"><a href="#복잡도-분석" class="headerlink" title="복잡도 분석"></a>복잡도 분석</h3><p>일반적으로 루프가 한번 중첩 될때마다 $O(n)$ 만큼의 시간 복잡도를 갖는다.</p>
+<p>따라서 약 $O(n^3)$의 복잡도를 갖는다고 할 수 있다.</p>
+</div>
+
+    
+    <section class="post-copyright">
+      
+      <p class="copyright-item">
+        <span>Author:</span>
+        <span>JeHwanYoo</span>
+      </p>
+        
+      <p class="copyright-item">
+        <span>License:</span>
+        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+      </p>
+       
+    </section>
+    
+    <section class="post-tags">
+      <div>
+        <span>Tag(s):</span>
+        <span class="tag">
+           
+          <a href="/tags/Python/"># Python</a>
+          
+          <a href="/tags/Algorithms/"># Algorithms</a>
+          
+          <a href="/tags/Linear-Algebra/"># Linear Algebra</a>
+          
+          <a href="/tags/Matrix/"># Matrix</a>
+           
+        </span>
+      </div>
+      <div>
+        <a href="javascript:window.history.back();">back</a>
+        <span>· </span>
+        <a href="/">home</a>
+      </div>
+    </section>
+    <section class="post-nav">
+      
+      <a class="prev" rel="prev" href="/2022/01/15/%EB%8F%84%ED%95%A8%EC%88%98%EC%9D%98-%EC%88%98%EC%B9%98-%EA%B3%84%EC%82%B0-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98/"
+        >도함수의 수치 계산 알고리즘</a
+      >
+       
+      <a class="next" rel="next" href="/2022/01/05/NPX-Node-Package-eXecute/"
+        >NPX (Node Package eXecute)</a
+      >
+      
+    </section>
+    <section style="margin-top: 4rem">
+      <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jehwanyoo.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </section>
+  </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+  <div class="copyright">
+    <span>
+      © JeHwanYoo | Powered by
+      <a href="https://hexo.io" target="_blank">Hexo</a> &
+      <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">
+        Chic
+      </a>
+    </span>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

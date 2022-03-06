@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="JeHwanYoo" />
+ 
+<meta name="subtitle" content="유제환의 프로그래밍 노트" />
+ 
+<meta name="description" content="프로그래밍 노트, 팁, 강의등을 게시하는 블로그입니다." />
+ 
+<meta name="keywords" content="Programming, C, C++, Java, JavaScript, Node.js, Python, Rust, Go, ETC..." />
+ <meta name="description" content="실습 환경 MacBook Air (M1, 2020) macOS Monterey 12.1  전제 조건 리눅스 커맨드에 친숙함. 파이썬에 대해 어느정도 이해하고 있음. macOS에 구축하고 싶음.  macOS에서 파이썬 설치macOS는 기본적으로 python2가 설치되어 있다. python3를 설치하기 위해서는 brew 명령어로 설치하면 된다. 우선 HomeB">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[macOS] 파이썬 실습 환경 완벽 구축 가이드 (python3, pyenv, virtualenv, autoenv)">
+<meta property="og:url" content="https://jehwanyoo.net/2021/12/30/macOS-%ED%8C%8C%EC%9D%B4%EC%8D%AC-%EC%8B%A4%ED%96%89%ED%99%98%EA%B2%BD-%EA%B5%AC%EC%B6%95/index.html">
+<meta property="og:site_name" content="JeHwan PL Note">
+<meta property="og:description" content="실습 환경 MacBook Air (M1, 2020) macOS Monterey 12.1  전제 조건 리눅스 커맨드에 친숙함. 파이썬에 대해 어느정도 이해하고 있음. macOS에 구축하고 싶음.  macOS에서 파이썬 설치macOS는 기본적으로 python2가 설치되어 있다. python3를 설치하기 위해서는 brew 명령어로 설치하면 된다. 우선 HomeB">
+<meta property="og:locale" content="ko_KR">
+<meta property="article:published_time" content="2021-12-30T09:49:05.000Z">
+<meta property="article:modified_time" content="2022-03-06T07:58:31.580Z">
+<meta property="article:author" content="JeHwanYoo">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="pyenv">
+<meta property="article:tag" content="virtualenv">
+<meta property="article:tag" content="autoenv">
+<meta name="twitter:card" content="summary"> <link rel="canonical" href="https://jehwanyoo.net/2021/12/30/macos-파이썬-실행환경-구축/"/> 
+<title>[macOS] 파이썬 실습 환경 완벽 구축 가이드 (python3, pyenv, virtualenv, autoenv) | JeHwan PL Note</title>
+
+ 
+<link rel="icon" href="/favicon.ico" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+     
+<!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  
+
+<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/rss2.xml" title="JeHwan PL Note" type="application/rss+xml">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">JeHwan PL Note</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">JeHwan PL Note</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>  
+  <article class="post-wrap">
+    <header class="post-header">
+      <h1 class="post-title">[macOS] 파이썬 실습 환경 완벽 구축 가이드 (python3, pyenv, virtualenv, autoenv)</h1>
+      
+      <div class="post-meta">
+         Author:
+        <a itemprop="author" rel="author" href="/">JeHwanYoo</a>
+         
+        <span class="post-time">
+          Date:
+          <a href="#"
+            >12월 30, 2021&nbsp;&nbsp;18:49:05</a
+          >
+        </span>
+         
+        <span class="post-category">
+          Category: 
+          <a href="/categories/Python/">Python</a>
+          
+        </span>
+        
+      </div>
+      
+    </header>
+
+    <div class="post-content"><h2 id="실습-환경"><a href="#실습-환경" class="headerlink" title="실습 환경"></a>실습 환경</h2><ul>
+<li>MacBook Air (M1, 2020)</li>
+<li>macOS Monterey 12.1</li>
+</ul>
+<h2 id="전제-조건"><a href="#전제-조건" class="headerlink" title="전제 조건"></a>전제 조건</h2><ul>
+<li>리눅스 커맨드에 친숙함.</li>
+<li>파이썬에 대해 어느정도 이해하고 있음.</li>
+<li>macOS에 구축하고 싶음.</li>
+</ul>
+<h2 id="macOS에서-파이썬-설치"><a href="#macOS에서-파이썬-설치" class="headerlink" title="macOS에서 파이썬 설치"></a>macOS에서 파이썬 설치</h2><p>macOS는 기본적으로 python2가 설치되어 있다.</p>
+<p>python3를 설치하기 위해서는 <code>brew</code> 명령어로 설치하면 된다.</p>
+<p>우선 HomeBrew에서 python3의 버전이 몇 인지 검색해보자.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">% brew info python3</span><br><span class="line"></span><br><span class="line">python@3.9: stable 3.9.9 (bottled)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>stable 버전의 파이썬 3.9.x이 설치된다는 것을 알 수 있다.</p>
+<p>우선 3.9.x 버전의 파이썬을 설치해보자.</p>
+<aside>
+💡 다른 버전의 파이썬은 brew search python3로 검색해보면 찾을 수 있다.
+</aside>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">% brew install python3</span><br><span class="line">% python3 --version</span><br><span class="line"></span><br><span class="line">Python 3.9.9</span><br></pre></td></tr></table></figure>
+
+<h2 id="pyenv-파이썬-버전-관리-도구"><a href="#pyenv-파이썬-버전-관리-도구" class="headerlink" title="pyenv - 파이썬 버전 관리 도구"></a>pyenv - 파이썬 버전 관리 도구</h2><p>최신 버전의 파이썬은 3.10.1 이다.</p>
+<p>물론 <code>brew install python@3.10</code>으로 설치할 수 있지만,</p>
+<p>파이썬만을 위한 전문적인 버전 관리 도구를 사용하고자 한다.</p>
+<p>pyenv는 Node.js의 nvm이나 n 패키지와 비슷한 프로그램이다.</p>
+<p>자, 한번 pyenv를 설치해보자.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">% brew install pyenv</span><br></pre></td></tr></table></figure>
+
+<p>설치가 완료되었으면 설치 가능한 파이썬 버전을 확인해보자.</p>
+<p>그냥 출력하면 너무 많으니, 3.10.x 버전만 나오게 해보자</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">% pyenv install --list | grep 3.10.</span><br><span class="line"></span><br><span class="line">3.10.0</span><br><span class="line">3.10-dev</span><br><span class="line">3.10.1</span><br><span class="line">miniconda-3.10.1</span><br><span class="line">miniconda3-3.10.1</span><br></pre></td></tr></table></figure>
+
+<p>이중에서 3.10.1 버전을 설치하자.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">% pyenv install 3.10.1</span><br></pre></td></tr></table></figure>
+
+<aside>
+💡 miniconda처럼 특수한 환경에서 사용하기 좋도록, 누군가에 의해 튜닝된 배포판을 다운 받을 수도 있다.
+</aside>
+
+<p>정상적으로 설치되었는지 확인해보자.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 현재 pyenv로 설치된 파이썬 버전 목록</span></span><br><span class="line">% pyenv versions</span><br><span class="line"></span><br><span class="line">* system (<span class="built_in">set</span> by /Users/yoojehwan/.pyenv/version)</span><br><span class="line">  3.10.1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 현재 파이썬 버전</span></span><br><span class="line">% python3 --version</span><br><span class="line"></span><br><span class="line">Python 3.9.9</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>pyenv로 설치가 되었으나 선택이 되어 있지 않은 모습이다.</p>
+<p>여기서 알 수 있는 점은 system은 brew로 설치한 버전이라는 것이다.</p>
+<p>system을 3.10.1로 변경해보자.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">% pyenv global 3.10.1</span><br><span class="line">% pyenv version</span><br><span class="line"></span><br><span class="line">3.10.1 (<span class="built_in">set</span> by /Users/yoojehwan/.pyenv/version)</span><br><span class="line"></span><br><span class="line">% python3 --version</span><br><span class="line"></span><br><span class="line">Python 3.9.9</span><br></pre></td></tr></table></figure>
+
+<p>pyenv상에서 설정은 변경되었으나, 여전히 커맨드 python3는 업데이트 되지 않았다.</p>
+<p>아직 환경 변수가 설정되지 않았기 때문이다.</p>
+<p>.zshrc에 환경 변수를 설정해줘야한다.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">% <span class="built_in">echo</span> <span class="string">&#x27;eval &quot;$(pyenv init --path)&quot;&#x27;</span> &gt;&gt; ~/.zshrc</span><br><span class="line">% <span class="built_in">echo</span> <span class="string">&#x27;eval &quot;$(pyenv init -)&quot;&#x27;</span> &gt;&gt; ~/.zshrc</span><br></pre></td></tr></table></figure>
+
+<p>위 커맨드를 입력하면 스트림을 통해 환경 변수가 .zshrc에 입력된다.</p>
+<p>.zshrc를 다시 불러오자.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">% <span class="built_in">source</span> ~/.zshrc</span><br><span class="line">% python3 --version</span><br><span class="line"></span><br><span class="line">Python 3.10.1</span><br></pre></td></tr></table></figure>
+
+<p>정상적으로 파이썬 버전이 변경되었다.</p>
+<p>앞으로는 <code>pyenv global [version]</code> 커맨드로 변경하면 즉시 반영된다.</p>
+<p>또한 <code>python</code>에 대한 alias도 되었을 것이다.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">% python --version</span><br><span class="line"></span><br><span class="line">Python 3.10.1</span><br></pre></td></tr></table></figure>
+
+<h2 id="pyenv-virtualenv-pyenv-virtulenv-플러그인"><a href="#pyenv-virtualenv-pyenv-virtulenv-플러그인" class="headerlink" title="pyenv-virtualenv - pyenv virtulenv 플러그인"></a>pyenv-virtualenv - pyenv virtulenv 플러그인</h2><p>위에서 잠깐 언급된 miniconda처럼 자신만의 가상 환경을 세팅해두고 버전 스위칭을 하고 싶으면 어떻게 해야할까?</p>
+<p>pyenv를 위해 제작된 virtualenv 플러그인을 설치하면 된다.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">% brew install pyenv-virtualenv</span><br></pre></td></tr></table></figure>
+
+<p>역시 환경 변수 설정이 필요하다.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">% <span class="built_in">echo</span> <span class="string">&#x27;eval &quot;$(pyenv virtualenv-init -)&quot;&#x27;</span> &gt;&gt; ~/.zshrc</span><br><span class="line">% <span class="built_in">source</span> ~/.zshrc</span><br></pre></td></tr></table></figure>
+
+<p>우선 전역에 numpy라는 패키지를 설치한 적 없으니 해당 커맨드를 입력해보자.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">% python -c <span class="string">&#x27;import numpy&#x27;</span></span><br><span class="line"></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;&lt;string&gt;&quot;</span>, line 1, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">ModuleNotFoundError: No module named <span class="string">&#x27;numpy&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>numpy를 찾을 수 없다. (당연히 설치를 안했으니…)</p>
+<p>그렇다면 numpy가 기본적으로 설치되어 있는 가상환경을 만들어보자.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">% pyenv virtualenv myvenv <span class="comment"># 생성</span></span><br><span class="line">% pyenv versions <span class="comment"># 확인</span></span><br><span class="line"></span><br><span class="line">  system</span><br><span class="line">* 3.10.1 (<span class="built_in">set</span> by /Users/yoojehwan/.pyenv/version)</span><br><span class="line">  3.10.1/envs/myvenv</span><br><span class="line">  myvenv</span><br></pre></td></tr></table></figure>
+
+<p>그렇다. 플러그인으로 생성한 가상 환경을 하나의 버전으로 취급하는 것이다.</p>
+<p>따라서 버전 스위칭 방법을 그대로 해주면 된다.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">% pyenv global myvenv</span><br><span class="line"><span class="comment"># 또는</span></span><br><span class="line">% pyenv global 3.10.1/envs/myvenv</span><br></pre></td></tr></table></figure>
+
+<p>이제 넘파이를 설치해보자.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">% pip install numpy</span><br><span class="line">% pip list | grep numpy</span><br><span class="line"></span><br><span class="line">numpy      1.21.5</span><br></pre></td></tr></table></figure>
+
+<p>넘파이가 설치되었다.</p>
+<p>그리고 정말 가상 환경에만 설치되었는지 확인하기 위해 3.10.1 버전으로 스위칭한다.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">% pyenv global 3.10.1</span><br><span class="line">% pip list | grep numpy</span><br></pre></td></tr></table></figure>
+
+<p>아무것도 뜨지 않는다면 성공이다.</p>
+<p>이제 분리된 가상 환경을 만드는데 성공했다.</p>
+<p>이제 감이 좀 오는가?</p>
+<blockquote>
+<p>왜 activate, deactivate를 사용하지 않는지는 <a target="_blank" rel="noopener" href="https://github.com/pyenv/pyenv-virtualenv/issues/135">여기</a>를 참고하라.<br>앞으로 삭제될 기능이다!!</p>
+</blockquote>
+<h2 id="autoenv-가상-환경-자동-스위칭"><a href="#autoenv-가상-환경-자동-스위칭" class="headerlink" title="autoenv - 가상 환경 자동 스위칭"></a>autoenv - 가상 환경 자동 스위칭</h2><p>필요할때마다 pyenv global 혹은 pyenv local을 이용하여</p>
+<p>일일이 파이썬 버전을 스위칭하는 일은 매우 귀찮은 일이다.</p>
+<p>autoenv를 설치하면 자동적으로 가상환경을 스위칭 할 수 있다.</p>
+<p>설치와 함께 환경 변수까지 설정해준다.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">% brew install autoenv <span class="comment"># virtualenv 자동 실행</span></span><br><span class="line">% <span class="built_in">echo</span> <span class="string">&#x27;source /opt/homebrew/opt/autoenv/activate.sh&#x27;</span> &gt;&gt; ~/.zshrc</span><br></pre></td></tr></table></figure>
+
+<p>이제 어떤 프로젝트 하나가 있다고 가정하고 디렉터리를 만든 뒤 <code>.env</code> 파일을 생성하자.<br>그리고 중요한 것이 <code>.env</code> 파일의 내용은 <code>pyenv local [venv_name]</code>이 되야한다.<br>이유는 아래의 주석을 잘 읽어보시길!</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">% pyenv global 3.10.1 <span class="comment"># 확실하게 기본 버전으로 설정해두고...</span></span><br><span class="line">% mkdir myproject</span><br><span class="line">% <span class="built_in">echo</span> <span class="string">&#x27;pyenv local myvenv&#x27;</span> &gt; myproject/.env</span><br><span class="line">% <span class="built_in">cd</span> myproject <span class="comment"># 바뀌는지 확인해보자.</span></span><br><span class="line"></span><br><span class="line">autoenv:</span><br><span class="line">autoenv: WARNING:</span><br><span class="line">autoenv: This is the first time you are about to <span class="built_in">source</span> /Users/yoojehwan/Documents/Python/myproject/.env:</span><br><span class="line">autoenv:</span><br><span class="line">autoenv:   --- (begin contents) ---------------------------------------</span><br><span class="line">autoenv:     pyenv <span class="built_in">local</span> myvenv$</span><br><span class="line">autoenv:     $</span><br><span class="line">autoenv:</span><br><span class="line">autoenv:   --- (end contents) -----------------------------------------</span><br><span class="line">autoenv:</span><br><span class="line">autoenv: Are you sure you want to allow this? (y/N) y</span><br><span class="line"></span><br><span class="line"><span class="comment"># 처음 실행하면 위와 같은 문구가 뜬다 y를 누르고 엔터!</span></span><br><span class="line"></span><br><span class="line">% ls -al</span><br><span class="line"></span><br><span class="line">drwxr-xr-x  4 yoojehwan  staff  128 12 30 20:17 .</span><br><span class="line">drwxr-xr-x  6 yoojehwan  staff  192 12 30 20:08 ..</span><br><span class="line">-rw-r--r--  1 yoojehwan  staff   20 12 30 20:16 .env</span><br><span class="line">-rw-r--r--  1 yoojehwan  staff    7 12 30 20:17 .python-version</span><br><span class="line"></span><br><span class="line"><span class="comment"># .python-version이라는 파일이 새로 생성되었다.</span></span><br><span class="line"><span class="comment"># 해당 디렉토리에서만 가상환경을 적용하기 위해서이다. (global이 아닌 local 명령어를 사용한 이유)</span></span><br><span class="line"></span><br><span class="line">% pyenv version</span><br><span class="line"></span><br><span class="line">myvenv (<span class="built_in">set</span> by /Users/yoojehwan/Documents/Python/myproject/.python-version)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 아주 정상적으로 동작한다.</span></span><br><span class="line"><span class="comment"># 한번 디렉토리를 벗어나보자.</span></span><br><span class="line"></span><br><span class="line">% <span class="built_in">cd</span> ..</span><br><span class="line">% pyenv version</span><br><span class="line"></span><br><span class="line">3.10.1 (<span class="built_in">set</span> by /Users/yoojehwan/.pyenv/version)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 다시 전역(global) 설정으로 복귀했다.</span></span><br><span class="line"><span class="comment"># 이렇게 관리하면 전역 오염을 예방할 수 있다!</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<aside>
+💡 autoenv는 굳이 파이썬 뿐만 아니라 다른 환경에서도 유용하게 사용될 수 있다.
+</aside>
+
+<h2 id="간단하게-요약-한방에-설치"><a href="#간단하게-요약-한방에-설치" class="headerlink" title="간단하게 요약 (한방에 설치)"></a>간단하게 요약 (한방에 설치)</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">brew install pyenv <span class="comment"># pyenv 설치</span></span><br><span class="line">brew install pyenv-virtualenv <span class="comment"># pyenv virtualenv 플러그인</span></span><br><span class="line">brew install autoenv <span class="comment"># virtualenv 자동 실행</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 환경변수 설정</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;eval &quot;$(pyenv init --path)&quot;&#x27;</span> &gt;&gt; ~/.zshrc</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;eval &quot;$(pyenv init -)&quot;&#x27;</span> &gt;&gt; ~/.zshrc</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;eval &quot;$(pyenv virtualenv-init -)&quot;&#x27;</span> &gt;&gt; ~/.zshrc</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;source /opt/homebrew/opt/autoenv/activate.sh&#x27;</span> &gt;&gt; ~/.zshrc</span><br></pre></td></tr></table></figure>
+
+<p>즐거운 파이썬 하시길!</p>
+</div>
+
+    
+    <section class="post-copyright">
+      
+      <p class="copyright-item">
+        <span>Author:</span>
+        <span>JeHwanYoo</span>
+      </p>
+        
+      <p class="copyright-item">
+        <span>License:</span>
+        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+      </p>
+       
+    </section>
+    
+    <section class="post-tags">
+      <div>
+        <span>Tag(s):</span>
+        <span class="tag">
+           
+          <a href="/tags/Python/"># Python</a>
+          
+          <a href="/tags/pyenv/"># pyenv</a>
+          
+          <a href="/tags/virtualenv/"># virtualenv</a>
+          
+          <a href="/tags/autoenv/"># autoenv</a>
+           
+        </span>
+      </div>
+      <div>
+        <a href="javascript:window.history.back();">back</a>
+        <span>· </span>
+        <a href="/">home</a>
+      </div>
+    </section>
+    <section class="post-nav">
+      
+      <a class="prev" rel="prev" href="/2022/01/04/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-%EC%B2%B4%EC%9C%A1%EB%B3%B5/"
+        >[프로그래머스] 체육복</a
+      >
+       
+      <a class="next" rel="next" href="/2021/12/30/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-%EC%99%84%EC%A3%BC%ED%95%98%EC%A7%80-%EB%AA%BB%ED%95%9C-%EC%84%A0%EC%88%98/"
+        >[프로그래머스] 완주하지 못한 선수</a
+      >
+      
+    </section>
+    <section style="margin-top: 4rem">
+      <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jehwanyoo.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </section>
+  </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+  <div class="copyright">
+    <span>
+      © JeHwanYoo | Powered by
+      <a href="https://hexo.io" target="_blank">Hexo</a> &
+      <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">
+        Chic
+      </a>
+    </span>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

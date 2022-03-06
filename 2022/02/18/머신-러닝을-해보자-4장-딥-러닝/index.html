@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="JeHwanYoo" />
+ 
+<meta name="subtitle" content="유제환의 프로그래밍 노트" />
+ 
+<meta name="description" content="프로그래밍 노트, 팁, 강의등을 게시하는 블로그입니다." />
+ 
+<meta name="keywords" content="Programming, C, C++, Java, JavaScript, Node.js, Python, Rust, Go, ETC..." />
+ <meta name="description" content="머신 러닝을 해보자 4장 (2022 스터디)  from ssusercdf17c   딥 러닝과 퍼셉트론 퍼셉트론(perceptron)은 인공신경망의 한 종류로서, 1957년에 코넬 항공 연구소(Cornell Aeronautical Lab)의 프랑크 로젠블라트 (Frank Rosenblatt)에 의해 고안되었다. - 위키피디">
+<meta property="og:type" content="article">
+<meta property="og:title" content="머신 러닝을 해보자 4장 - 딥 러닝">
+<meta property="og:url" content="https://jehwanyoo.net/2022/02/18/%EB%A8%B8%EC%8B%A0-%EB%9F%AC%EB%8B%9D%EC%9D%84-%ED%95%B4%EB%B3%B4%EC%9E%90-4%EC%9E%A5-%EB%94%A5-%EB%9F%AC%EB%8B%9D/index.html">
+<meta property="og:site_name" content="JeHwan PL Note">
+<meta property="og:description" content="머신 러닝을 해보자 4장 (2022 스터디)  from ssusercdf17c   딥 러닝과 퍼셉트론 퍼셉트론(perceptron)은 인공신경망의 한 종류로서, 1957년에 코넬 항공 연구소(Cornell Aeronautical Lab)의 프랑크 로젠블라트 (Frank Rosenblatt)에 의해 고안되었다. - 위키피디">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:image" content="https://i.ibb.co/f4STsnG/4-2022-007.jpg">
+<meta property="article:published_time" content="2022-02-18T06:29:46.000Z">
+<meta property="article:modified_time" content="2022-03-06T07:58:31.580Z">
+<meta property="article:author" content="JeHwanYoo">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Deep Learning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.ibb.co/f4STsnG/4-2022-007.jpg"> <link rel="canonical" href="https://jehwanyoo.net/2022/02/18/머신-러닝을-해보자-4장-딥-러닝/"/> 
+<title>머신 러닝을 해보자 4장 - 딥 러닝 | JeHwan PL Note</title>
+
+ 
+<link rel="icon" href="/favicon.ico" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+     
+<!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  
+
+<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/rss2.xml" title="JeHwan PL Note" type="application/rss+xml">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">JeHwan PL Note</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">JeHwan PL Note</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>  
+  <article class="post-wrap">
+    <header class="post-header">
+      <h1 class="post-title">머신 러닝을 해보자 4장 - 딥 러닝</h1>
+      
+      <div class="post-meta">
+         Author:
+        <a itemprop="author" rel="author" href="/">JeHwanYoo</a>
+         
+        <span class="post-time">
+          Date:
+          <a href="#"
+            >2월 18, 2022&nbsp;&nbsp;15:29:46</a
+          >
+        </span>
+         
+        <span class="post-category">
+          Category: 
+          <a href="/categories/AI/">AI</a>
+          
+        </span>
+        
+      </div>
+      
+    </header>
+
+    <div class="post-content"><iframe src="//www.slideshare.net/slideshow/embed_code/key/4YGpdjps6QFMf3" width="595" height="485" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe> <div style="margin-bottom:5px"> <strong> <a href="//www.slideshare.net/ssusercdf17c/4-2022-251197873" title="머신 러닝을 해보자 4장 (2022 스터디)" target="_blank">머신 러닝을 해보자 4장 (2022 스터디)</a> </strong> from <strong><a href="//www.slideshare.net/ssusercdf17c" target="_blank">ssusercdf17c</a></strong> </div>
+
+<h2 id="딥-러닝과-퍼셉트론"><a href="#딥-러닝과-퍼셉트론" class="headerlink" title="딥 러닝과 퍼셉트론"></a>딥 러닝과 퍼셉트론</h2><blockquote>
+<p>퍼셉트론(perceptron)은 인공신경망의 한 종류로서, 1957년에 코넬 항공 연구소(Cornell Aeronautical Lab)의 프랑크 로젠블라트 (Frank Rosenblatt)에 의해 고안되었다. - 위키피디아</p>
+</blockquote>
+<p>딥 러닝은 머신 러닝의 하위 범주에 속하며 머신 러닝으로 해결하기 복잡한 문제를 해결할 수 있다.</p>
+<p>1969년 출판된 마빈 민스키의 저서 “퍼셉트론즈”에서 단층 퍼셉트론 문제의 한계를 지적했다.</p>
+<p>이 문제는 1980년 즈음이 되서야 다층 레이어 네트워크 구조가 발명되어 해결되었으며 딥러닝의 시초가 된다.</p>
+<p>딥 러닝에 등장하는 다층 레이어 네트워크 구조는 마치 인간의 시냅스와 유사하며, 이 때문에 인공신경망(ANN)이라고 부른다.</p>
+<h2 id="소스코드"><a href="#소스코드" class="headerlink" title="소스코드"></a>소스코드</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ANN</span>:</span> </span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, layers</span>):</span></span><br><span class="line">    self.W = []</span><br><span class="line">    self.b = []</span><br><span class="line">    <span class="keyword">for</span> x_nodes, h_nodes <span class="keyword">in</span> layers:</span><br><span class="line">      self.add_layer(x_nodes, h_nodes)</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">add_layer</span>(<span class="params">self, x_nodes, h_nodes</span>):</span></span><br><span class="line">    self.W.append(np.random.rand(x_nodes, h_nodes))</span><br><span class="line">    self.b.append(np.random.rand(h_nodes))</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">feed_forward</span>(<span class="params">self</span>):</span></span><br><span class="line">    delta = <span class="number">1e-7</span></span><br><span class="line">    a = self.x</span><br><span class="line">    <span class="keyword">for</span> i, w <span class="keyword">in</span> <span class="built_in">enumerate</span>(self.W):</span><br><span class="line">      b = self.b[i]</span><br><span class="line">      z = np.dot(a, w) + b</span><br><span class="line">      a = self.activate(z)</span><br><span class="line">    y = a</span><br><span class="line">    <span class="keyword">return</span> -np.<span class="built_in">sum</span>(self.t*np.log(y + delta) + (<span class="number">1</span>-self.t) * np.log((<span class="number">1</span> - y) + delta))</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">train</span>(<span class="params">self, x, t, epochs=<span class="number">1</span>, learning_rate=<span class="number">1e-2</span>, activate=<span class="literal">None</span>, debug_step=<span class="literal">None</span></span>):</span></span><br><span class="line">    self.x = x</span><br><span class="line">    self.t = t</span><br><span class="line">    self.activate = activate <span class="keyword">or</span> ANN.sigmoid</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> debug_step:</span><br><span class="line">        debug_step = <span class="built_in">int</span>(epochs * <span class="number">0.1</span>)</span><br><span class="line">    f = <span class="keyword">lambda</span> x: self.feed_forward()</span><br><span class="line">    <span class="keyword">for</span> step <span class="keyword">in</span> <span class="built_in">range</span>(epochs):</span><br><span class="line">      <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(self.W)):</span><br><span class="line">        self.W[i] -= learning_rate * ANN.derivative(f, self.W[i])</span><br><span class="line">        self.b[i] -= learning_rate * ANN.derivative(f, self.b[i])</span><br><span class="line">      <span class="keyword">if</span> step % debug_step == <span class="number">0</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;step = &#x27;</span>, step, <span class="string">&#x27;loss value = &#x27;</span>, self.feed_forward())</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">predict</span>(<span class="params">self, input_data</span>):</span></span><br><span class="line">    a = input_data</span><br><span class="line">    <span class="keyword">for</span> i, w <span class="keyword">in</span> <span class="built_in">enumerate</span>(self.W):</span><br><span class="line">      b = self.b[i]</span><br><span class="line">      z = np.dot(a, w) + b</span><br><span class="line">      a = self.activate(z)</span><br><span class="line">    <span class="keyword">return</span> a</span><br><span class="line"></span><br><span class="line"><span class="meta">  @staticmethod</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">derivative</span>(<span class="params">f, x, dx=<span class="number">1e-5</span></span>):</span></span><br><span class="line">    grad = np.zeros_like(x)</span><br><span class="line">    it = np.nditer(x, flags=[<span class="string">&#x27;multi_index&#x27;</span>], op_flags=[<span class="string">&#x27;readwrite&#x27;</span>])</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">not</span> it.finished:</span><br><span class="line">        idx = it.multi_index</span><br><span class="line">        tmp_val = x[idx]</span><br><span class="line">        x[idx] = tmp_val + dx</span><br><span class="line">        fx1 = f(x)</span><br><span class="line">        x[idx] = tmp_val - dx</span><br><span class="line">        fx2 = f(x)</span><br><span class="line">        grad[idx] = (fx1 - fx2) / (<span class="number">2</span> * dx)</span><br><span class="line">        x[idx] = tmp_val</span><br><span class="line">        it.iternext()</span><br><span class="line">    <span class="keyword">return</span> grad</span><br><span class="line"></span><br><span class="line"><span class="meta">  @staticmethod</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">sigmoid</span>(<span class="params">z</span>):</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span> / (<span class="number">1</span>+np.exp(z))</span><br></pre></td></tr></table></figure>
+
+<h2 id="XOR-문제-해결"><a href="#XOR-문제-해결" class="headerlink" title="XOR 문제 해결"></a>XOR 문제 해결</h2><center> <img src="https://i.ibb.co/f4STsnG/4-2022-007.jpg" alt="xor with deep learning" width="600" /> </center>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">xdata = np.array([[<span class="number">0</span>, <span class="number">0</span>],[<span class="number">0</span>, <span class="number">1</span>],[<span class="number">1</span>, <span class="number">0</span>],[<span class="number">1</span>, <span class="number">1</span>]]).reshape(<span class="number">4</span>,<span class="number">2</span>)</span><br><span class="line">tdata = np.array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>]).reshape(<span class="number">4</span>,<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">xor_model = ANN([(<span class="number">2</span>, <span class="number">2</span>), (<span class="number">2</span>, <span class="number">1</span>)])</span><br><span class="line">xor_model.train(xdata, tdata, epochs=<span class="number">30001</span>)</span><br><span class="line"></span><br><span class="line">test_data = np.array([[<span class="number">0</span>, <span class="number">0</span>],[<span class="number">0</span>, <span class="number">1</span>],[<span class="number">1</span>, <span class="number">0</span>],[<span class="number">1</span>, <span class="number">1</span>]])</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> test_data:</span><br><span class="line">  y = xor_model.predict(x)</span><br><span class="line">  <span class="keyword">if</span> y &gt;= <span class="number">0.5</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;<span class="subst">&#123;x&#125;</span> = 1&#x27;</span>)</span><br><span class="line">  <span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;<span class="subst">&#123;x&#125;</span> = 0&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">step =  0 loss value =  2.835243992618905</span><br><span class="line">step =  3000 loss value =  2.6522861520968903</span><br><span class="line">step =  6000 loss value =  2.1730020821222085</span><br><span class="line">step =  9000 loss value =  1.7215880605383187</span><br><span class="line">step =  12000 loss value =  0.6008394493810707</span><br><span class="line">step =  15000 loss value =  0.24859044596202917</span><br><span class="line">step =  18000 loss value =  0.14805128453811897</span><br><span class="line">step =  21000 loss value =  0.10387565328910175</span><br><span class="line">step =  24000 loss value =  0.0795236416934344</span><br><span class="line">step =  27000 loss value =  0.06422180128812002</span><br><span class="line">step =  30000 loss value =  0.05376022277921273</span><br><span class="line">[0 0] = 0</span><br><span class="line">[0 1] = 1</span><br><span class="line">[1 0] = 1</span><br><span class="line">[1 1] = 0</span><br></pre></td></tr></table></figure>
+</div>
+
+    
+    <section class="post-copyright">
+      
+      <p class="copyright-item">
+        <span>Author:</span>
+        <span>JeHwanYoo</span>
+      </p>
+        
+      <p class="copyright-item">
+        <span>License:</span>
+        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+      </p>
+       
+    </section>
+    
+    <section class="post-tags">
+      <div>
+        <span>Tag(s):</span>
+        <span class="tag">
+           
+          <a href="/tags/Machine-Learning/"># Machine Learning</a>
+          
+          <a href="/tags/AI/"># AI</a>
+          
+          <a href="/tags/Deep-Learning/"># Deep Learning</a>
+           
+        </span>
+      </div>
+      <div>
+        <a href="javascript:window.history.back();">back</a>
+        <span>· </span>
+        <a href="/">home</a>
+      </div>
+    </section>
+    <section class="post-nav">
+      
+      <a class="prev" rel="prev" href="/2022/02/19/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-%ED%81%B0-%EC%88%98-%EB%A7%8C%EB%93%A4%EA%B8%B0-1/"
+        >(프로그래머스) 큰 수 만들기</a
+      >
+       
+      <a class="next" rel="next" href="/2022/02/17/%EB%A8%B8%EC%8B%A0-%EB%9F%AC%EB%8B%9D%EC%97%90-%ED%95%84%EC%9A%94%ED%95%9C-%EC%84%A0%ED%98%95%EB%8C%80%EC%88%98-%EA%B8%B0%EC%B4%88-%EC%A7%80%EC%8B%9D/"
+        >머신 러닝에 필요한 선형대수 기초 지식</a
+      >
+      
+    </section>
+    <section style="margin-top: 4rem">
+      <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jehwanyoo.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </section>
+  </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+  <div class="copyright">
+    <span>
+      © JeHwanYoo | Powered by
+      <a href="https://hexo.io" target="_blank">Hexo</a> &
+      <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">
+        Chic
+      </a>
+    </span>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

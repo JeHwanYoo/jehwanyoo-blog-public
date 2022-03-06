@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="JeHwanYoo" />
+ 
+<meta name="subtitle" content="유제환의 프로그래밍 노트" />
+ 
+<meta name="description" content="프로그래밍 노트, 팁, 강의등을 게시하는 블로그입니다." />
+ 
+<meta name="keywords" content="Programming, C, C++, Java, JavaScript, Node.js, Python, Rust, Go, ETC..." />
+ <meta name="description" content="프로그래밍 노트, 팁, 강의등을 게시하는 블로그입니다.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="tag">
+<meta property="og:url" content="https://jehwanyoo.net/tag/index.html">
+<meta property="og:site_name" content="JeHwan PL Note">
+<meta property="og:description" content="프로그래밍 노트, 팁, 강의등을 게시하는 블로그입니다.">
+<meta property="og:locale" content="ko_KR">
+<meta property="article:published_time" content="2022-03-06T07:58:31.580Z">
+<meta property="article:modified_time" content="2022-03-06T07:58:31.580Z">
+<meta property="article:author" content="JeHwanYoo">
+<meta property="article:tag" content="Programming, C, C++, Java, JavaScript, Node.js, Python, Rust, Go, ETC...">
+<meta name="twitter:card" content="summary"> <link rel="canonical" href="https://jehwanyoo.net/tag/"/> 
+<title>tag | JeHwan PL Note</title>
+
+ 
+<link rel="icon" href="/favicon.ico" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+     
+<!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  
+
+<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/rss2.xml" title="JeHwan PL Note" type="application/rss+xml">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">JeHwan PL Note</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">JeHwan PL Note</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            
+
+    <div class="container">
+        <div class="post-wrap tags">
+            <h2 class="post-title">-&nbsp;Tag Cloud&nbsp;-</h2>
+
+            <div class="tag-cloud-tags">
+                
+                    <a href="/tags/Python/">Python<small>(26)</small></a>
+                
+                    <a href="/tags/Algorithms/">Algorithms<small>(42)</small></a>
+                
+                    <a href="/tags/JavaScript/">JavaScript<small>(5)</small></a>
+                
+                    <a href="/tags/Dynamic-Programming/">Dynamic Programming<small>(5)</small></a>
+                
+                    <a href="/tags/DOM-API/">DOM API<small>(1)</small></a>
+                
+                    <a href="/tags/Design-Pattern/">Design Pattern<small>(3)</small></a>
+                
+                    <a href="/tags/MVC/">MVC<small>(1)</small></a>
+                
+                    <a href="/tags/MVVM/">MVVM<small>(1)</small></a>
+                
+                    <a href="/tags/Node-js/">Node.js<small>(5)</small></a>
+                
+                    <a href="/tags/Maintenance/">Maintenance<small>(1)</small></a>
+                
+                    <a href="/tags/Versioning/">Versioning<small>(2)</small></a>
+                
+                    <a href="/tags/LICENSE/">LICENSE<small>(1)</small></a>
+                
+                    <a href="/tags/NPM/">NPM<small>(1)</small></a>
+                
+                    <a href="/tags/NPX/">NPX<small>(1)</small></a>
+                
+                    <a href="/tags/NativeScript/">NativeScript<small>(2)</small></a>
+                
+                    <a href="/tags/Vue-js/">Vue.js<small>(1)</small></a>
+                
+                    <a href="/tags/macOS/">macOS<small>(2)</small></a>
+                
+                    <a href="/tags/Android/">Android<small>(2)</small></a>
+                
+                    <a href="/tags/Operating-System/">Operating System<small>(2)</small></a>
+                
+                    <a href="/tags/System-Call/">System Call<small>(2)</small></a>
+                
+                    <a href="/tags/unistd-h/">unistd.h<small>(1)</small></a>
+                
+                    <a href="/tags/fork/">fork<small>(1)</small></a>
+                
+                    <a href="/tags/wait/">wait<small>(1)</small></a>
+                
+                    <a href="/tags/exec/">exec<small>(1)</small></a>
+                
+                    <a href="/tags/dup/">dup<small>(1)</small></a>
+                
+                    <a href="/tags/dup2/">dup2<small>(1)</small></a>
+                
+                    <a href="/tags/pipe/">pipe<small>(1)</small></a>
+                
+                    <a href="/tags/Software-Engineering/">Software Engineering<small>(2)</small></a>
+                
+                    <a href="/tags/Ubuntu/">Ubuntu<small>(1)</small></a>
+                
+                    <a href="/tags/Unity/">Unity<small>(2)</small></a>
+                
+                    <a href="/tags/Bolt/">Bolt<small>(2)</small></a>
+                
+                    <a href="/tags/XV6/">XV6<small>(1)</small></a>
+                
+                    <a href="/tags/Kernel/">Kernel<small>(1)</small></a>
+                
+                    <a href="/tags/NGINX/">NGINX<small>(4)</small></a>
+                
+                    <a href="/tags/PHP/">PHP<small>(1)</small></a>
+                
+                    <a href="/tags/MariaDB/">MariaDB<small>(1)</small></a>
+                
+                    <a href="/tags/PHPMyAdmin/">PHPMyAdmin<small>(1)</small></a>
+                
+                    <a href="/tags/pyenv/">pyenv<small>(1)</small></a>
+                
+                    <a href="/tags/virtualenv/">virtualenv<small>(1)</small></a>
+                
+                    <a href="/tags/autoenv/">autoenv<small>(1)</small></a>
+                
+                    <a href="/tags/ASeries/">ASeries<small>(14)</small></a>
+                
+                    <a href="/tags/Counting-Sort/">Counting Sort<small>(1)</small></a>
+                
+                    <a href="/tags/Database/">Database<small>(3)</small></a>
+                
+                    <a href="/tags/Query-Language/">Query Language<small>(1)</small></a>
+                
+                    <a href="/tags/Relational-Algebra/">Relational Algebra<small>(1)</small></a>
+                
+                    <a href="/tags/Mathematics/">Mathematics<small>(10)</small></a>
+                
+                    <a href="/tags/Calculus/">Calculus<small>(3)</small></a>
+                
+                    <a href="/tags/Analysis/">Analysis<small>(2)</small></a>
+                
+                    <a href="/tags/Trigonometric-Function/">Trigonometric Function<small>(1)</small></a>
+                
+                    <a href="/tags/Exponential-Function/">Exponential Function<small>(1)</small></a>
+                
+                    <a href="/tags/Log-Function/">Log Function<small>(1)</small></a>
+                
+                    <a href="/tags/Natural-logarithm/">Natural logarithm<small>(1)</small></a>
+                
+                    <a href="/tags/Integral/">Integral<small>(1)</small></a>
+                
+                    <a href="/tags/Dijkstra-Algorithm/">Dijkstra Algorithm<small>(1)</small></a>
+                
+                    <a href="/tags/Testing/">Testing<small>(1)</small></a>
+                
+                    <a href="/tags/Sequence/">Sequence<small>(1)</small></a>
+                
+                    <a href="/tags/Linear-Algebra/">Linear Algebra<small>(3)</small></a>
+                
+                    <a href="/tags/Machine-Learning/">Machine Learning<small>(6)</small></a>
+                
+                    <a href="/tags/Vector/">Vector<small>(1)</small></a>
+                
+                    <a href="/tags/Matrix/">Matrix<small>(2)</small></a>
+                
+                    <a href="/tags/Linear-Function/">Linear Function<small>(2)</small></a>
+                
+                    <a href="/tags/AI/">AI<small>(7)</small></a>
+                
+                    <a href="/tags/Linear-Regression/">Linear Regression<small>(2)</small></a>
+                
+                    <a href="/tags/Logistic-Regression/">Logistic Regression<small>(1)</small></a>
+                
+                    <a href="/tags/Classification/">Classification<small>(1)</small></a>
+                
+                    <a href="/tags/Numeric-Derivative/">Numeric Derivative<small>(2)</small></a>
+                
+                    <a href="/tags/Deep-Learning/">Deep Learning<small>(3)</small></a>
+                
+                    <a href="/tags/Programming-Language/">Programming Language<small>(1)</small></a>
+                
+                    <a href="/tags/Imperative-Language/">Imperative Language<small>(1)</small></a>
+                
+                    <a href="/tags/Declarative-Language/">Declarative Language<small>(1)</small></a>
+                
+                    <a href="/tags/Procedural-Language/">Procedural Language<small>(1)</small></a>
+                
+                    <a href="/tags/Functional-Programming/">Functional Programming<small>(2)</small></a>
+                
+                    <a href="/tags/Rotate/">Rotate<small>(1)</small></a>
+                
+                    <a href="/tags/Bit-Mask/">Bit Mask<small>(1)</small></a>
+                
+                    <a href="/tags/Affine-Function/">Affine Function<small>(1)</small></a>
+                
+                    <a href="/tags/Prime-Number/">Prime Number<small>(2)</small></a>
+                
+                    <a href="/tags/Factorization/">Factorization<small>(1)</small></a>
+                
+                    <a href="/tags/Numerical-Analysis/">Numerical Analysis<small>(1)</small></a>
+                
+                    <a href="/tags/Numerical-Differentiation/">Numerical Differentiation<small>(1)</small></a>
+                
+                    <a href="/tags/Numerical-Derivative/">Numerical Derivative<small>(1)</small></a>
+                
+                    <a href="/tags/Divisor/">Divisor<small>(2)</small></a>
+                
+                    <a href="/tags/Eratosthenes-Sieve/">Eratosthenes Sieve<small>(1)</small></a>
+                
+                    <a href="/tags/Back-Propagation/">Back-Propagation<small>(1)</small></a>
+                
+                    <a href="/tags/Mnist/">Mnist<small>(1)</small></a>
+                
+                    <a href="/tags/Graph-Algorithm/">Graph Algorithm<small>(2)</small></a>
+                
+                    <a href="/tags/Topology-Sort/">Topology Sort<small>(1)</small></a>
+                
+                    <a href="/tags/Union-Find-Algorithm/">Union-Find Algorithm<small>(1)</small></a>
+                
+                    <a href="/tags/Euclidean-Algorithm/">Euclidean Algorithm<small>(1)</small></a>
+                
+                    <a href="/tags/Binary-Search/">Binary Search<small>(2)</small></a>
+                
+                    <a href="/tags/Bisect/">Bisect<small>(1)</small></a>
+                
+                    <a href="/tags/JQuery/">JQuery<small>(1)</small></a>
+                
+                    <a href="/tags/Blog/">Blog<small>(1)</small></a>
+                
+                    <a href="/tags/Github-Pages/">Github Pages<small>(1)</small></a>
+                
+                    <a href="/tags/REST-API/">REST API<small>(1)</small></a>
+                
+                    <a href="/tags/SQL/">SQL<small>(2)</small></a>
+                
+                    <a href="/tags/MST/">MST<small>(1)</small></a>
+                
+                    <a href="/tags/Kruskal-Algorithm/">Kruskal Algorithm<small>(1)</small></a>
+                
+                    <a href="/tags/TOEIC/">TOEIC<small>(11)</small></a>
+                
+                    <a href="/tags/grammar/">grammar<small>(11)</small></a>
+                
+                    <a href="/tags/Guideline/">Guideline<small>(1)</small></a>
+                
+                    <a href="/tags/PEP-8/">PEP-8<small>(1)</small></a>
+                
+                    <a href="/tags/Sort/">Sort<small>(2)</small></a>
+                
+                    <a href="/tags/Heap/">Heap<small>(1)</small></a>
+                
+                    <a href="/tags/DFS/">DFS<small>(2)</small></a>
+                
+                    <a href="/tags/Back-Tracking/">Back Tracking<small>(1)</small></a>
+                
+                    <a href="/tags/Hash/">Hash<small>(2)</small></a>
+                
+                    <a href="/tags/Dinamic-Programming/">Dinamic Programming<small>(1)</small></a>
+                
+                    <a href="/tags/Greedy/">Greedy<small>(2)</small></a>
+                
+                    <a href="/tags/Stack/">Stack<small>(1)</small></a>
+                
+                    <a href="/tags/Network/">Network<small>(1)</small></a>
+                
+                    <a href="/tags/Proxy/">Proxy<small>(1)</small></a>
+                
+                    <a href="/tags/Floyd-Warshall-Algorithm/">Floyd Warshall Algorithm<small>(1)</small></a>
+                
+            </div>
+        </div>
+    </div>
+
+
+        </div>
+        <footer id="footer" class="footer">
+  <div class="copyright">
+    <span>
+      © JeHwanYoo | Powered by
+      <a href="https://hexo.io" target="_blank">Hexo</a> &
+      <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">
+        Chic
+      </a>
+    </span>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

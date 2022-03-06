@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="JeHwanYoo" />
+ 
+<meta name="subtitle" content="유제환의 프로그래밍 노트" />
+ 
+<meta name="description" content="프로그래밍 노트, 팁, 강의등을 게시하는 블로그입니다." />
+ 
+<meta name="keywords" content="Programming, C, C++, Java, JavaScript, Node.js, Python, Rust, Go, ETC..." />
+ <meta name="description" content="프로그래밍 노트, 팁, 강의등을 게시하는 블로그입니다.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="AI Study">
+<meta property="og:url" content="https://jehwanyoo.net/ai-study/index.html">
+<meta property="og:site_name" content="JeHwan PL Note">
+<meta property="og:description" content="프로그래밍 노트, 팁, 강의등을 게시하는 블로그입니다.">
+<meta property="og:locale" content="ko_KR">
+<meta property="article:published_time" content="2022-03-06T07:58:31.580Z">
+<meta property="article:modified_time" content="2022-03-06T07:58:31.580Z">
+<meta property="article:author" content="JeHwanYoo">
+<meta property="article:tag" content="Programming, C, C++, Java, JavaScript, Node.js, Python, Rust, Go, ETC...">
+<meta name="twitter:card" content="summary"> <link rel="canonical" href="https://jehwanyoo.net/ai-study/"/> 
+<title>AI Study | JeHwan PL Note</title>
+
+ 
+<link rel="icon" href="/favicon.ico" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+     
+<!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  
+
+<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/rss2.xml" title="JeHwan PL Note" type="application/rss+xml">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">JeHwan PL Note</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">JeHwan PL Note</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            
+
+<div class="container">
+  <div class="post-wrap categories">
+    <h2 class="post-title">-&nbsp;AI Study&nbsp;-</h2>
+    <div class="categories-card">
+                               
+      <div class="card-item">
+        <div class="categories">
+          <a href="/categories/Mathematics/">
+            <h3>
+              <i class="iconfont icon-category" style="padding-right: 3px"></i>
+              Mathematics
+            </h3>
+          </a>
+            
+          <article class="archive-item">
+            <a class="archive-item-link" href="/2022/03/03/%EC%84%A0%ED%98%95-linear-%EC%9D%B4%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80/"
+              >선형(linear)이란 무엇인가?</a
+            >
+          </article>
+             
+          <article class="archive-item">
+            <a class="archive-item-link" href="/2022/02/17/%EB%A8%B8%EC%8B%A0-%EB%9F%AC%EB%8B%9D%EC%97%90-%ED%95%84%EC%9A%94%ED%95%9C-%EC%84%A0%ED%98%95%EB%8C%80%EC%88%98-%EA%B8%B0%EC%B4%88-%EC%A7%80%EC%8B%9D/"
+              >머신 러닝에 필요한 선형대수 기초 지식</a
+            >
+          </article>
+             
+          <article class="archive-item">
+            <a class="archive-item-link" href="/2022/02/14/%EB%8B%A4%EC%8B%9C-%EB%AF%B8%EB%B6%84-%EC%A0%81%EB%B6%84-2%EC%9E%A5-%EC%A0%81%EB%B6%84%ED%8E%B8-%EC%B4%9D-%EC%A0%95%EB%A6%AC/"
+              >(다시 미분 적분) 2장 적분편 총 정리</a
+            >
+          </article>
+             
+          <article class="archive-item">
+            <a class="archive-item-link" href="/2022/02/01/%EC%88%98%EC%B9%98-%EB%AF%B8%EB%B6%84-numerical-differentiation-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98/"
+              >수치 미분 (numerical differentiation) 알고리즘</a
+            >
+          </article>
+             
+          <article class="archive-item">
+            <a class="archive-item-link" href="/2022/02/01/%EB%8B%A4%EC%8B%9C-%EB%AF%B8%EB%B6%84-%EC%A0%81%EB%B6%84-1%EC%9E%A5-%EB%AF%B8%EB%B6%84%ED%8E%B8-%EC%B4%9D-%EC%A0%95%EB%A6%AC/"
+              >(다시 미분 적분) 1장 미분편 총 정리</a
+            >
+          </article>
+             
+          <article class="archive-item">
+            <a class="archive-item-link" href="/2021/12/20/%EB%93%B1%EC%B0%A8%EC%88%98%EC%97%B4-%EB%93%B1%EB%B9%84%EC%88%98%EC%97%B4%EC%9D%98-%EC%9D%BC%EB%B0%98%ED%95%AD-%EA%B3%B5%EC%8B%9D/"
+              >등차수열, 등비수열의 일반항 공식</a
+            >
+          </article>
+            
+        </div>
+      </div>
+        
+      <div class="card-item">
+        <div class="categories">
+          <a href="/categories/AI/">
+            <h3>
+              <i class="iconfont icon-category" style="padding-right: 3px"></i>
+              AI
+            </h3>
+          </a>
+            
+          <article class="archive-item">
+            <a class="archive-item-link" href="/2022/03/06/%EB%A8%B8%EC%8B%A0-%EB%9F%AC%EB%8B%9D%EC%9D%84-%ED%95%B4%EB%B3%B4%EC%9E%90-6%EC%9E%A5-%ED%85%90%EC%84%9C%ED%94%8C%EB%A1%9C%EC%9A%B0-%EA%B8%B0%EC%B4%88/"
+              >머신 러닝을 해보자 6장 - 텐서플로우 기초</a
+            >
+          </article>
+             
+          <article class="archive-item">
+            <a class="archive-item-link" href="/2022/02/26/%EC%98%A4%EC%B0%A8%EC%97%AD%EC%A0%84%ED%8C%8C-Back-Propagation-%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%98%EC%97%AC-Mnist-%EC%86%90%EA%B8%80%EC%94%A8-%ED%95%99%EC%8A%B5%ED%95%98%EA%B8%B0/"
+              >머신 러닝을 해보자 5장 - 오차역전파(Back-Propagation)를 이용하여 Mnist 손글씨 학습하기</a
+            >
+          </article>
+             
+          <article class="archive-item">
+            <a class="archive-item-link" href="/2022/02/18/%EB%A8%B8%EC%8B%A0-%EB%9F%AC%EB%8B%9D%EC%9D%84-%ED%95%B4%EB%B3%B4%EC%9E%90-4%EC%9E%A5-%EB%94%A5-%EB%9F%AC%EB%8B%9D/"
+              >머신 러닝을 해보자 4장 - 딥 러닝</a
+            >
+          </article>
+             
+          <article class="archive-item">
+            <a class="archive-item-link" href="/2022/02/15/%EB%A8%B8%EC%8B%A0-%EB%9F%AC%EB%8B%9D%EC%9D%84-%ED%95%B4%EB%B3%B4%EC%9E%90-3%EC%9E%A5-XOR-%EB%AC%B8%EC%A0%9C/"
+              >머신 러닝을 해보자 3장 - XOR 문제</a
+            >
+          </article>
+             
+          <article class="archive-item">
+            <a class="archive-item-link" href="/2022/02/15/%EB%A8%B8%EC%8B%A0-%EB%9F%AC%EB%8B%9D%EC%9D%84-%ED%95%B4%EB%B3%B4%EC%9E%90-2%EC%9E%A5-%EC%88%98%EC%B9%98-%EB%AF%B8%EB%B6%84/"
+              >머신 러닝을 해보자 2장 - 수치 미분</a
+            >
+          </article>
+             
+          <article class="archive-item">
+            <a class="archive-item-link" href="/2022/02/15/%EB%A8%B8%EC%8B%A0-%EB%9F%AC%EB%8B%9D%EC%9D%84-%ED%95%B4%EB%B3%B4%EC%9E%90-1%EC%9E%A5-%EB%A8%B8%EC%8B%A0-%EB%9F%AC%EB%8B%9D%EC%9D%B4%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80/"
+              >머신 러닝을 해보자 1장 - 머신 러닝이란 무엇인가?</a
+            >
+          </article>
+             
+          <article class="archive-item">
+            <a class="archive-item-link" href="/2022/01/24/%EC%9C%A0%EC%A0%84-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98-%EC%A7%84%ED%99%94%ED%95%98%EB%8A%94-%EB%AC%B8%EC%9E%90%EC%97%B4/"
+              >(유전 알고리즘) 진화하는 문자열</a
+            >
+          </article>
+            
+        </div>
+      </div>
+               
+    </div>
+  </div>
+</div>
+
+
+        </div>
+        <footer id="footer" class="footer">
+  <div class="copyright">
+    <span>
+      © JeHwanYoo | Powered by
+      <a href="https://hexo.io" target="_blank">Hexo</a> &
+      <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">
+        Chic
+      </a>
+    </span>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="JeHwanYoo" />
+ 
+<meta name="subtitle" content="유제환의 프로그래밍 노트" />
+ 
+<meta name="description" content="프로그래밍 노트, 팁, 강의등을 게시하는 블로그입니다." />
+ 
+<meta name="keywords" content="Programming, C, C++, Java, JavaScript, Node.js, Python, Rust, Go, ETC..." />
+ <meta name="description" content="문제 분류 탐욕법  문제 설명점심시간에 도둑이 들어, 일부 학생이 체육복을 도난당했습니다. 다행히 여벌 체육복이 있는 학생이 이들에게 체육복을 빌려주려 합니다. 학생들의 번호는 체격 순으로 매겨져 있어, 바로 앞번호의 학생이나 바로 뒷번호의 학생에게만 체육복을 빌려줄 수 있습니다. 예를 들어, 4번 학생은 3번 학생이나 5번 학생에게만 체육복을 빌려줄 수">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[프로그래머스] 체육복">
+<meta property="og:url" content="https://jehwanyoo.net/2022/01/04/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-%EC%B2%B4%EC%9C%A1%EB%B3%B5/index.html">
+<meta property="og:site_name" content="JeHwan PL Note">
+<meta property="og:description" content="문제 분류 탐욕법  문제 설명점심시간에 도둑이 들어, 일부 학생이 체육복을 도난당했습니다. 다행히 여벌 체육복이 있는 학생이 이들에게 체육복을 빌려주려 합니다. 학생들의 번호는 체격 순으로 매겨져 있어, 바로 앞번호의 학생이나 바로 뒷번호의 학생에게만 체육복을 빌려줄 수 있습니다. 예를 들어, 4번 학생은 3번 학생이나 5번 학생에게만 체육복을 빌려줄 수">
+<meta property="og:locale" content="ko_KR">
+<meta property="article:published_time" content="2022-01-04T12:00:17.000Z">
+<meta property="article:modified_time" content="2022-03-06T07:58:31.580Z">
+<meta property="article:author" content="JeHwanYoo">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Algorithms">
+<meta property="article:tag" content="Hash">
+<meta property="article:tag" content="Greedy">
+<meta name="twitter:card" content="summary"> <link rel="canonical" href="https://jehwanyoo.net/2022/01/04/프로그래머스-체육복/"/> 
+<title>[프로그래머스] 체육복 | JeHwan PL Note</title>
+
+ 
+<link rel="icon" href="/favicon.ico" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+     
+<!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  
+
+<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/rss2.xml" title="JeHwan PL Note" type="application/rss+xml">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">JeHwan PL Note</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">JeHwan PL Note</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>  
+  <article class="post-wrap">
+    <header class="post-header">
+      <h1 class="post-title">[프로그래머스] 체육복</h1>
+      
+      <div class="post-meta">
+         Author:
+        <a itemprop="author" rel="author" href="/">JeHwanYoo</a>
+         
+        <span class="post-time">
+          Date:
+          <a href="#"
+            >1월 4, 2022&nbsp;&nbsp;21:00:17</a
+          >
+        </span>
+         
+        <span class="post-category">
+          Category: 
+          <a href="/categories/Algorithms/">Algorithms</a>
+          
+        </span>
+        
+      </div>
+      
+    </header>
+
+    <div class="post-content"><h2 id="문제-분류"><a href="#문제-분류" class="headerlink" title="문제 분류"></a>문제 분류</h2><ul>
+<li>탐욕법</li>
+</ul>
+<h2 id="문제-설명"><a href="#문제-설명" class="headerlink" title="문제 설명"></a>문제 설명</h2><p>점심시간에 도둑이 들어, 일부 학생이 체육복을 도난당했습니다. 다행히 여벌 체육복이 있는 학생이 이들에게 체육복을 빌려주려 합니다. 학생들의 번호는 체격 순으로 매겨져 있어, 바로 앞번호의 학생이나 바로 뒷번호의 학생에게만 체육복을 빌려줄 수 있습니다. 예를 들어, 4번 학생은 3번 학생이나 5번 학생에게만 체육복을 빌려줄 수 있습니다. 체육복이 없으면 수업을 들을 수 없기 때문에 체육복을 적절히 빌려 최대한 많은 학생이 체육수업을 들어야 합니다.</p>
+<p>전체 학생의 수 n, 체육복을 도난당한 학생들의 번호가 담긴 배열 lost, 여벌의 체육복을 가져온 학생들의 번호가 담긴 배열 reserve가 매개변수로 주어질 때, 체육수업을 들을 수 있는 학생의 최댓값을 return 하도록 solution 함수를 작성해주세요.</p>
+<h2 id="제한-사항"><a href="#제한-사항" class="headerlink" title="제한 사항"></a>제한 사항</h2><ul>
+<li>전체 학생의 수는 2명 이상 30명 이하입니다.</li>
+<li>체육복을 도난당한 학생의 수는 1명 이상 n명 이하이고 중복되는 번호는 없습니다.</li>
+<li>여벌의 체육복을 가져온 학생의 수는 1명 이상 n명 이하이고 중복되는 번호는 없습니다.</li>
+<li>여벌 체육복이 있는 학생만 다른 학생에게 체육복을 빌려줄 수 있습니다.</li>
+<li>여벌 체육복을 가져온 학생이 체육복을 도난당했을 수 있습니다. 이때 이 학생은 체육복을 하나만 도난당했다고 가정하며, 남은 체육복이 하나이기에 다른 학생에게는 체육복을 빌려줄 수 없습니다.</li>
+</ul>
+<h2 id="알고리즘"><a href="#알고리즘" class="headerlink" title="알고리즘"></a>알고리즘</h2><ol>
+<li>우선 전부 체육복을 가지고 있다고 가정하고, 학생의 체육복 개수 배열 u를 1로 모두 초기화한다.</li>
+<li>여벌의 체육복(reserve)을 가지고 있는 학생을 조사하여 u 배열에 +1 해준다.</li>
+<li>체육복을 도난당한(lost) 학생을 조사하여 u 배열에 -1 해준다.</li>
+<li>학생들을 순서대로 조사하면서 빌려줄 수 있는지 보고, “규칙”과 “정해진 순서”에 따라 체육복을 빌려준다.<ol>
+<li>빌려줄 수 있는 경우 → 학생의 체육복 개수 == 2</li>
+<li>규칙 - 바로 앞번호 또는 바로 뒷번호에게만 빌려 줄 수 있음</li>
+<li>정해진 순서 - 낮은 번호부터 조사할 경우 왼쪽에게 먼저 빌려줘야 더 많이 빌려줄 수 있다.</li>
+</ol>
+</li>
+</ol>
+<h2 id="복잡도-분석"><a href="#복잡도-분석" class="headerlink" title="복잡도 분석"></a>복잡도 분석</h2><p>여벌의 체육복을 가진 학생의 수를 k, 체육복을 도난당한 학생의 수를 m이라고 했을 때</p>
+<p>(1) $O(n)$</p>
+<p>(2) $O(k) &lt;= O(n)$</p>
+<p>(3) $O(m) &lt;= O(n)$</p>
+<p>(4) $O(n)$</p>
+<p>→ $O(n)$ 만큼의 복잡도를 가진다.</p>
+<h2 id="방법-1-O-n"><a href="#방법-1-O-n" class="headerlink" title="방법 1 - $O(n)$"></a>방법 1 - $O(n)$</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">solution</span>(<span class="params">n, lost, reserve</span>):</span></span><br><span class="line">    <span class="comment"># 가장자리에 허수를 추가</span></span><br><span class="line">    u = [<span class="number">1</span>] * (n + <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># reserve에 존재할 경우 1을 더해줌</span></span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> reserve:</span><br><span class="line">        u[x] += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># lost에 존재할 경우 1을 빼줌</span></span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> lost:</span><br><span class="line">        u[x] -= <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 매칭</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, n + <span class="number">1</span>):</span><br><span class="line">        <span class="comment"># 왼쪽으로 건냄</span></span><br><span class="line">        <span class="keyword">if</span> u[i] == <span class="number">2</span> <span class="keyword">and</span> u[i-<span class="number">1</span>] == <span class="number">0</span>:</span><br><span class="line">            u[i-<span class="number">1</span>:i+<span class="number">1</span>] = [<span class="number">1</span>, <span class="number">1</span>]</span><br><span class="line">        <span class="comment"># 오른쪽으로 건냄</span></span><br><span class="line">        <span class="keyword">elif</span> u[i] == <span class="number">2</span> <span class="keyword">and</span> u[i+<span class="number">1</span>] == <span class="number">0</span>:</span><br><span class="line">                u[i:i+<span class="number">2</span>] = [<span class="number">1</span>, <span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 수업 참여 가능 인원을 구함</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">len</span>([x <span class="keyword">for</span> x <span class="keyword">in</span> u[<span class="number">1</span>:-<span class="number">1</span>] <span class="keyword">if</span> x &gt; <span class="number">0</span>])</span><br></pre></td></tr></table></figure>
+
+<h2 id="방법-2-O-klog-k"><a href="#방법-2-O-klog-k" class="headerlink" title="방법 2 - $O(klog{k})$"></a>방법 2 - $O(klog{k})$</h2><p>만약 여벌의 체육복을 가져온 학생이 매우 적다면? (또는 도난당한 학생이 매우 적다면?)</p>
+<ol>
+<li>불필요한 교집합(reverse에도 속하고 lost에도 속하는 원소)을 제거한다.</li>
+<li>reverse를 정렬(sort)하고 순서대로 조사하면서 빌려 줄 수 있는 다른 학생을 찾아(hash) 처리한다.</li>
+</ol>
+<aside>
+💡 python에서 set은 hash 알고리즘이 적용된다. → O(1)
+
+</aside>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">solution</span>(<span class="params">n, lost, reserve</span>):</span></span><br><span class="line">    <span class="comment"># 교집합 제거</span></span><br><span class="line">    s = <span class="built_in">set</span>(reserve) &amp; <span class="built_in">set</span>(lost)</span><br><span class="line">    l = <span class="built_in">set</span>(lost) - s</span><br><span class="line">    r = <span class="built_in">set</span>(reserve) - s</span><br><span class="line">    <span class="comment"># 정렬 및 해시</span></span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">sorted</span>(r):</span><br><span class="line">        <span class="keyword">if</span> x - <span class="number">1</span> <span class="keyword">in</span> l:</span><br><span class="line">            l.remove(x - <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">elif</span> x + <span class="number">1</span> <span class="keyword">in</span> l:</span><br><span class="line">            l.remove(x + <span class="number">1</span>)</span><br><span class="line">    <span class="comment"># 결과</span></span><br><span class="line">    <span class="keyword">return</span> n - <span class="built_in">len</span>(l)</span><br></pre></td></tr></table></figure>
+
+<h2 id="방법-2-복잡도-분석"><a href="#방법-2-복잡도-분석" class="headerlink" title="방법 2 복잡도 분석"></a>방법 2 복잡도 분석</h2><p>정렬을 했기 때문에 $O(klog{k})$ 이다.</p>
+<p>다음과 같은 성질 때문에 k와 n이 매우 큰 차이를 보일 때 효율적인 알고리즘이다.</p>
+<p>$O(klogk) &lt; O(n)$</p>
+</div>
+
+    
+    <section class="post-copyright">
+      
+      <p class="copyright-item">
+        <span>Author:</span>
+        <span>JeHwanYoo</span>
+      </p>
+        
+      <p class="copyright-item">
+        <span>License:</span>
+        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+      </p>
+       
+    </section>
+    
+    <section class="post-tags">
+      <div>
+        <span>Tag(s):</span>
+        <span class="tag">
+           
+          <a href="/tags/Python/"># Python</a>
+          
+          <a href="/tags/Algorithms/"># Algorithms</a>
+          
+          <a href="/tags/Hash/"># Hash</a>
+          
+          <a href="/tags/Greedy/"># Greedy</a>
+           
+        </span>
+      </div>
+      <div>
+        <a href="javascript:window.history.back();">back</a>
+        <span>· </span>
+        <a href="/">home</a>
+      </div>
+    </section>
+    <section class="post-nav">
+      
+      <a class="prev" rel="prev" href="/2022/01/05/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-%EA%B0%80%EC%9E%A5-%ED%81%B0-%EC%88%98/"
+        >[프로그래머스] 가장 큰 수</a
+      >
+       
+      <a class="next" rel="next" href="/2021/12/30/macOS-%ED%8C%8C%EC%9D%B4%EC%8D%AC-%EC%8B%A4%ED%96%89%ED%99%98%EA%B2%BD-%EA%B5%AC%EC%B6%95/"
+        >[macOS] 파이썬 실습 환경 완벽 구축 가이드 (python3, pyenv, virtualenv, autoenv)</a
+      >
+      
+    </section>
+    <section style="margin-top: 4rem">
+      <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jehwanyoo.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </section>
+  </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+  <div class="copyright">
+    <span>
+      © JeHwanYoo | Powered by
+      <a href="https://hexo.io" target="_blank">Hexo</a> &
+      <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">
+        Chic
+      </a>
+    </span>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

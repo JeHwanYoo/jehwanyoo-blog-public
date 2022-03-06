@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="JeHwanYoo" />
+ 
+<meta name="subtitle" content="유제환의 프로그래밍 노트" />
+ 
+<meta name="description" content="프로그래밍 노트, 팁, 강의등을 게시하는 블로그입니다." />
+ 
+<meta name="keywords" content="Programming, C, C++, Java, JavaScript, Node.js, Python, Rust, Go, ETC..." />
+ <meta name="description" content="목표디자인 패턴(Design Pattern)에서 가장 유명한 GoF의 디자인 패턴을 모두 JavaScript로 구현해보겠습니다. Abstract Factory추상 팩토리는 구체적인 클래스를 지정하지 않고 공통 주제를 가진 개별 팩토리 그룹을 캡슐화하는 방법을 제공합니다. 추상 팩토리는 다음과 같이 구성됩니다.  AbstractFactory ConcreteF">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript로 구현하는 GoF 디자인패턴 1 - Abstract Factory">
+<meta property="og:url" content="https://jehwanyoo.net/2021/10/23/JavaScript%EB%A1%9C-%EA%B5%AC%ED%98%84%ED%95%98%EB%8A%94-GoF-%EB%94%94%EC%9E%90%EC%9D%B8%ED%8C%A8%ED%84%B4-1-Abstract-Factory/index.html">
+<meta property="og:site_name" content="JeHwan PL Note">
+<meta property="og:description" content="목표디자인 패턴(Design Pattern)에서 가장 유명한 GoF의 디자인 패턴을 모두 JavaScript로 구현해보겠습니다. Abstract Factory추상 팩토리는 구체적인 클래스를 지정하지 않고 공통 주제를 가진 개별 팩토리 그룹을 캡슐화하는 방법을 제공합니다. 추상 팩토리는 다음과 같이 구성됩니다.  AbstractFactory ConcreteF">
+<meta property="og:locale" content="ko_KR">
+<meta property="article:published_time" content="2021-10-23T11:54:46.000Z">
+<meta property="article:modified_time" content="2022-03-06T07:58:31.580Z">
+<meta property="article:author" content="JeHwanYoo">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Design Pattern">
+<meta name="twitter:card" content="summary"> <link rel="canonical" href="https://jehwanyoo.net/2021/10/23/javascript로-구현하는-gof-디자인패턴-1-abstract-factory/"/> 
+<title>JavaScript로 구현하는 GoF 디자인패턴 1 - Abstract Factory | JeHwan PL Note</title>
+
+ 
+<link rel="icon" href="/favicon.ico" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+     
+<!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  
+
+<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/rss2.xml" title="JeHwan PL Note" type="application/rss+xml">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">JeHwan PL Note</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">JeHwan PL Note</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>  
+  <article class="post-wrap">
+    <header class="post-header">
+      <h1 class="post-title">JavaScript로 구현하는 GoF 디자인패턴 1 - Abstract Factory</h1>
+      
+      <div class="post-meta">
+         Author:
+        <a itemprop="author" rel="author" href="/">JeHwanYoo</a>
+         
+        <span class="post-time">
+          Date:
+          <a href="#"
+            >10월 23, 2021&nbsp;&nbsp;20:54:46</a
+          >
+        </span>
+         
+        <span class="post-category">
+          Category: 
+          <a href="/categories/Design-Pattern/">Design Pattern</a>
+          
+        </span>
+        
+      </div>
+      
+    </header>
+
+    <div class="post-content"><h2 id="목표"><a href="#목표" class="headerlink" title="목표"></a>목표</h2><p>디자인 패턴(Design Pattern)에서 가장 유명한 GoF의 디자인 패턴을 모두 JavaScript로 구현해보겠습니다.</p>
+<h2 id="Abstract-Factory"><a href="#Abstract-Factory" class="headerlink" title="Abstract Factory"></a>Abstract Factory</h2><p>추상 팩토리는 구체적인 클래스를 지정하지 않고 공통 주제를 가진 개별 팩토리 그룹을 캡슐화하는 방법을 제공합니다.</p>
+<p>추상 팩토리는 다음과 같이 구성됩니다.</p>
+<ul>
+<li>AbstractFactory</li>
+<li>ConcreteFactory</li>
+<li>AbstractProduct</li>
+<li>ConcreteProduct</li>
+<li>Client</li>
+</ul>
+<p><code>AbstractFactory</code>가 <code>ConcreteFactory</code>를 구현하고, <code>AbstractProduct</code>가 <code>ConcreteProduct</code>를 구현합니다.</p>
+<p><code>Factory</code>는 <code>Product</code>를 생산합니다. (추후, 팩토리 패턴에서 자세히 다루겠습니다.)</p>
+<h2 id="설계"><a href="#설계" class="headerlink" title="설계"></a>설계</h2><p>음식점(Factory)을 만드려고(create) 합니다.</p>
+<p>음식점(Abstract Factory)은 메인 메뉴(Abstract Product)와 사이드 메뉴(Abstract Product)를 판매합니다.</p>
+<p>음식점(Abstract Factory)은 일식집(Concrete Factory)과 국수집(Concrete Factory)이 있습니다.</p>
+<p>일식집(Concrete Factory)은 메인 메뉴로 초밥(Concrete Product)을, 사이드 메뉴로 튀김(Concrete Product)을 판매합니다.</p>
+<p>국수집(Concrete Factory)은 메인 메뉴로 우동(Concrete Product)을, 사이드 메뉴로 주먹밥(Concrete Product)을 판매합니다.</p>
+<p>손님(Client)는 메인 메뉴와 사이드 메뉴를 함께 주문합니다. 따라서, 메인 메뉴와 사이드 메뉴를 모두 만들어야 합니다.</p>
+<h2 id="구현"><a href="#구현" class="headerlink" title="구현"></a>구현</h2><h3 id="Abstract-Factory-amp-amp-Product-정의"><a href="#Abstract-Factory-amp-amp-Product-정의" class="headerlink" title="Abstract Factory &amp;&amp; Product 정의"></a>Abstract Factory &amp;&amp; Product 정의</h3><p>본래 추상 팩토리를 정의하려면 Java의 <code>interface</code> 같은 키워드가 필요합니다.</p>
+<p>하지만 JavaScript에는 존재하지 않기 때문에 최대한 유사하게 구현해보도록 하겠습니다.</p>
+<p><code>Duck Typing</code>의 성질을 이용하여 interface를 만들어봅시다.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> AbstractFactory = (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> restaurant = &#123;&#125;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">implement</span>: <span class="function">(<span class="params">type, Concrete</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (!Concrete.prototype) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">TypeError</span>(<span class="string">&#x27;factory must be a constructor.&#x27;</span>)</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (</span><br><span class="line">        !Concrete.prototype.createMain ||</span><br><span class="line">        !Concrete.prototype.createSide</span><br><span class="line">      ) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">TypeError</span>(</span><br><span class="line">          <span class="string">&#x27;factory must have methods: `createMain`, `createSide`.&#x27;</span></span><br><span class="line">        )</span><br><span class="line">      &#125;</span><br><span class="line">      restaurant[type] = Concrete</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="function"><span class="title">create</span>(<span class="params">type</span>)</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> restaurant[type] ? <span class="keyword">new</span> restaurant[type]() : <span class="literal">null</span></span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)()</span><br></pre></td></tr></table></figure>
+
+<p>추상 팩토리는 추상 클래스이기 때문에 구현이 존재하지 않습니다.</p>
+<p>인터페이스로써 활용하기 위해 멤버 체크 로직만 추가합니다.</p>
+<p>Concrete Factory마다 공통점이 있기 때문에,</p>
+<p>더 상위 개념인 Abstract Factory로 캡슐화 합니다. (이때 JavaScript Object를 이용합니다.)</p>
+<p>Java의 <code>implements</code> 키워드를 <code>implement()</code> 메소드로 대체 구현하였습니다.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> AbstractProduct = (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> menu = &#123;&#125;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">implement</span>: <span class="function">(<span class="params">type, name</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (!name || <span class="keyword">typeof</span> name !== <span class="string">&#x27;string&#x27;</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">TypeError</span>(<span class="string">&#x27;Menu name must be a string type.&#x27;</span>)</span><br><span class="line">      &#125;</span><br><span class="line">      menu[type] = name</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">create</span>: <span class="function"><span class="params">type</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">String</span>(menu[type])</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)()</span><br></pre></td></tr></table></figure>
+
+<p>Factory가 생산할 메뉴도 비슷하게 정의합니다.</p>
+<p>지금 구현할 사항으로는 이름만 가지고 있기 때문에 딱히 메인과 사이드를 다른 추상 클래스로 구분하지 않았습니다.</p>
+<p>하지만 완전히 다른 성질을 가지고 있다면 그에 맞게 추상 클래스를 만들어주시면 됩니다.</p>
+<blockquote>
+<p>(비고) new String(menu[type])으로 한 이유는 기본 스트링이 immutable 객체로 메모리를 공유하기 때문에 한번 더 래핑해서 새로운 객체로 만들어주기 위함입니다.</p>
+</blockquote>
+<h3 id="Concrete-Factory-amp-amp-Product-정의"><a href="#Concrete-Factory-amp-amp-Product-정의" class="headerlink" title="Concrete Factory &amp;&amp; Product 정의"></a>Concrete Factory &amp;&amp; Product 정의</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// concrete menu 등록</span></span><br><span class="line">AbstractProduct.implement(<span class="string">&#x27;sushi&#x27;</span>, <span class="string">&#x27;초밥&#x27;</span>)</span><br><span class="line">AbstractProduct.implement(<span class="string">&#x27;fries&#x27;</span>, <span class="string">&#x27;튀김&#x27;</span>)</span><br><span class="line">AbstractProduct.implement(<span class="string">&#x27;udon&#x27;</span>, <span class="string">&#x27;우동&#x27;</span>)</span><br><span class="line">AbstractProduct.implement(<span class="string">&#x27;rice balls&#x27;</span>, <span class="string">&#x27;주먹밥&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// concrete factory 정의</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SushiFactory</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">SushiFactory.prototype.createMain = <span class="function">() =&gt;</span> AbstractProduct.create(<span class="string">&#x27;sushi&#x27;</span>)</span><br><span class="line">SushiFactory.prototype.createSide = <span class="function">() =&gt;</span> AbstractProduct.create(<span class="string">&#x27;fries&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">NoodleFactory</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">NoodleFactory.prototype.createMain = <span class="function">() =&gt;</span> AbstractProduct.create(<span class="string">&#x27;udon&#x27;</span>)</span><br><span class="line">NoodleFactory.prototype.createSide = <span class="function">() =&gt;</span> AbstractProduct.create(<span class="string">&#x27;rice balls&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// concrete factory 등록</span></span><br><span class="line">AbstractFactory.implement(<span class="string">&#x27;SushiFactory&#x27;</span>, SushiFactory)</span><br><span class="line">AbstractFactory.implement(<span class="string">&#x27;NoodleFactory&#x27;</span>, NoodleFactory)</span><br></pre></td></tr></table></figure>
+
+<h3 id="Client"><a href="#Client" class="headerlink" title="Client"></a>Client</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">client</span>(<span class="params">clientName, factory</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> mainMenu = factory.createMain()</span><br><span class="line">  <span class="keyword">const</span> sideMenu = factory.createSide()</span><br><span class="line"></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;clientName&#125;</span>:: 요리가 준비중 입니다.`</span>)</span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(</span><br><span class="line">      <span class="string">`<span class="subst">$&#123;clientName&#125;</span>:: 메인 메뉴 <span class="subst">$&#123;mainMenu&#125;</span>(와)과 사이드 메뉴 <span class="subst">$&#123;sideMenu&#125;</span>(이)가 완성되었습니다.`</span></span><br><span class="line">    )</span><br><span class="line">  &#125;, <span class="number">1000</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">client(<span class="string">&#x27;A&#x27;</span>, AbstractFactory.create(<span class="string">&#x27;SushiFactory&#x27;</span>))</span><br><span class="line">client(<span class="string">&#x27;B&#x27;</span>, AbstractFactory.create(<span class="string">&#x27;NoodleFactory&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<p>클라이언트는 자신이 원하는 팩토리를 생성하여 함수를 호출하면 됩니다.</p>
+<h2 id="평가"><a href="#평가" class="headerlink" title="평가"></a>평가</h2><p>Java의 <code>interface</code>를 모방하다보니 비효율적인 구조라고 여겨질 수 있습니다.</p>
+<p>TypeScript를 이용한다면 더 효율적인 구현이 가능할 것 이라고 생각합니다.</p>
+<h2 id="Full-Source"><a href="#Full-Source" class="headerlink" title="Full Source"></a>Full Source</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// abstract factory 정의</span></span><br><span class="line"><span class="keyword">const</span> AbstractFactory = (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> restaurant = &#123;&#125;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">implement</span>: <span class="function">(<span class="params">type, Concrete</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (!Concrete.prototype) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">TypeError</span>(<span class="string">&#x27;factory must be a constructor.&#x27;</span>)</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (</span><br><span class="line">        !Concrete.prototype.createMain ||</span><br><span class="line">        !Concrete.prototype.createSide</span><br><span class="line">      ) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">TypeError</span>(</span><br><span class="line">          <span class="string">&#x27;factory must have methods: `createMain`, `createSide`.&#x27;</span></span><br><span class="line">        )</span><br><span class="line">      &#125;</span><br><span class="line">      restaurant[type] = Concrete</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="function"><span class="title">create</span>(<span class="params">type</span>)</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> restaurant[type] ? <span class="keyword">new</span> restaurant[type]() : <span class="literal">null</span></span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)()</span><br><span class="line"></span><br><span class="line"><span class="comment">// abstract product 정의</span></span><br><span class="line"><span class="keyword">const</span> AbstractProduct = (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> menu = &#123;&#125;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">implement</span>: <span class="function">(<span class="params">type, name</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (!name || <span class="keyword">typeof</span> name !== <span class="string">&#x27;string&#x27;</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">TypeError</span>(<span class="string">&#x27;Menu name must be a string type.&#x27;</span>)</span><br><span class="line">      &#125;</span><br><span class="line">      menu[type] = name</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">create</span>: <span class="function"><span class="params">type</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">String</span>(menu[type])</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)()</span><br><span class="line"></span><br><span class="line"><span class="comment">// concrete menu 등록</span></span><br><span class="line">AbstractProduct.implement(<span class="string">&#x27;sushi&#x27;</span>, <span class="string">&#x27;초밥&#x27;</span>)</span><br><span class="line">AbstractProduct.implement(<span class="string">&#x27;fries&#x27;</span>, <span class="string">&#x27;튀김&#x27;</span>)</span><br><span class="line">AbstractProduct.implement(<span class="string">&#x27;udon&#x27;</span>, <span class="string">&#x27;우동&#x27;</span>)</span><br><span class="line">AbstractProduct.implement(<span class="string">&#x27;rice balls&#x27;</span>, <span class="string">&#x27;주먹밥&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// concrete factory 정의</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SushiFactory</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">SushiFactory.prototype.createMain = <span class="function">() =&gt;</span> AbstractProduct.create(<span class="string">&#x27;sushi&#x27;</span>)</span><br><span class="line">SushiFactory.prototype.createSide = <span class="function">() =&gt;</span> AbstractProduct.create(<span class="string">&#x27;fries&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">NoodleFactory</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">NoodleFactory.prototype.createMain = <span class="function">() =&gt;</span> AbstractProduct.create(<span class="string">&#x27;udon&#x27;</span>)</span><br><span class="line">NoodleFactory.prototype.createSide = <span class="function">() =&gt;</span> AbstractProduct.create(<span class="string">&#x27;rice balls&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// concrete factory 등록</span></span><br><span class="line">AbstractFactory.implement(<span class="string">&#x27;SushiFactory&#x27;</span>, SushiFactory)</span><br><span class="line">AbstractFactory.implement(<span class="string">&#x27;NoodleFactory&#x27;</span>, NoodleFactory)</span><br><span class="line"></span><br><span class="line"><span class="comment">// client source</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">client</span>(<span class="params">clientName, factory</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> mainMenu = factory.createMain()</span><br><span class="line">  <span class="keyword">const</span> sideMenu = factory.createSide()</span><br><span class="line"></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;clientName&#125;</span>:: 요리가 준비중 입니다.`</span>)</span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(</span><br><span class="line">      <span class="string">`<span class="subst">$&#123;clientName&#125;</span>:: 메인 메뉴 <span class="subst">$&#123;mainMenu&#125;</span>(와)과 사이드 메뉴 <span class="subst">$&#123;sideMenu&#125;</span>(이)가 완성되었습니다.`</span></span><br><span class="line">    )</span><br><span class="line">  &#125;, <span class="number">1000</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">client(<span class="string">&#x27;A&#x27;</span>, AbstractFactory.create(<span class="string">&#x27;SushiFactory&#x27;</span>))</span><br><span class="line">client(<span class="string">&#x27;B&#x27;</span>, AbstractFactory.create(<span class="string">&#x27;NoodleFactory&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">A:: 요리가 준비중 입니다.</span><br><span class="line">B:: 요리가 준비중 입니다.</span><br><span class="line">A:: 메인 메뉴 초밥(와)과 사이드 메뉴 튀김(이)가 완성되었습니다.</span><br><span class="line">B:: 메인 메뉴 우동(와)과 사이드 메뉴 주먹밥(이)가 완성되었습니다.</span><br></pre></td></tr></table></figure>
+</div>
+
+    
+    <section class="post-copyright">
+      
+      <p class="copyright-item">
+        <span>Author:</span>
+        <span>JeHwanYoo</span>
+      </p>
+        
+      <p class="copyright-item">
+        <span>License:</span>
+        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+      </p>
+       
+    </section>
+    
+    <section class="post-tags">
+      <div>
+        <span>Tag(s):</span>
+        <span class="tag">
+           
+          <a href="/tags/JavaScript/"># JavaScript</a>
+          
+          <a href="/tags/Design-Pattern/"># Design Pattern</a>
+           
+        </span>
+      </div>
+      <div>
+        <a href="javascript:window.history.back();">back</a>
+        <span>· </span>
+        <a href="/">home</a>
+      </div>
+    </section>
+    <section class="post-nav">
+      
+      <a class="prev" rel="prev" href="/2021/10/24/JavaScript%EB%A1%9C-%EA%B5%AC%ED%98%84%ED%95%98%EB%8A%94-GoF-%EB%94%94%EC%9E%90%EC%9D%B8%ED%8C%A8%ED%84%B4-2-Factory-Method/"
+        >JavaScript로 구현하는 GoF 디자인패턴 2 - Factory Method</a
+      >
+       
+      <a class="next" rel="next" href="/2021/09/03/DOM-API-%ED%95%B5%EC%8B%AC-%EC%9A%94%EC%95%BD-%EC%A0%95%EB%A6%AC/"
+        >DOM API 핵심 요약 정리</a
+      >
+      
+    </section>
+    <section style="margin-top: 4rem">
+      <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jehwanyoo.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </section>
+  </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+  <div class="copyright">
+    <span>
+      © JeHwanYoo | Powered by
+      <a href="https://hexo.io" target="_blank">Hexo</a> &
+      <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">
+        Chic
+      </a>
+    </span>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

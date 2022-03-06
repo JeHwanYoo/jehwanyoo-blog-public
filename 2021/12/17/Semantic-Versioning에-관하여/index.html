@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="JeHwanYoo" />
+ 
+<meta name="subtitle" content="유제환의 프로그래밍 노트" />
+ 
+<meta name="description" content="프로그래밍 노트, 팁, 강의등을 게시하는 블로그입니다." />
+ 
+<meta name="keywords" content="Programming, C, C++, Java, JavaScript, Node.js, Python, Rust, Go, ETC..." />
+ <meta name="description" content="💡 공식 문서 - [https:&#x2F;&#x2F;semver.org&#x2F;lang&#x2F;ko&#x2F;](https:&#x2F;&#x2F;semver.org&#x2F;lang&#x2F;ko&#x2F;)    유의적 버전(Semantic Version) 형식   주 버전 (Major Version): 이전 버전과 호환되지 API 변화 부 버전 (Minor Version): 이전 버전과 호환되면서 새로운 기능을 추가 수 버전 (Pat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Semantic Versioning에 관하여">
+<meta property="og:url" content="https://jehwanyoo.net/2021/12/17/Semantic-Versioning%EC%97%90-%EA%B4%80%ED%95%98%EC%97%AC/index.html">
+<meta property="og:site_name" content="JeHwan PL Note">
+<meta property="og:description" content="💡 공식 문서 - [https:&#x2F;&#x2F;semver.org&#x2F;lang&#x2F;ko&#x2F;](https:&#x2F;&#x2F;semver.org&#x2F;lang&#x2F;ko&#x2F;)    유의적 버전(Semantic Version) 형식   주 버전 (Major Version): 이전 버전과 호환되지 API 변화 부 버전 (Minor Version): 이전 버전과 호환되면서 새로운 기능을 추가 수 버전 (Pat">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:image" content="https://i.ibb.co/8zG0FvX/Versioning-Format-1.png">
+<meta property="og:image" content="https://i.ibb.co/V3K3Jmg/image.png">
+<meta property="og:image" content="https://i.ibb.co/pPhmgmj/deprecated.png">
+<meta property="og:image" content="https://i.ibb.co/dMGYSB3/foo.png">
+<meta property="og:image" content="https://i.ibb.co/ZHJ5sjy/release-life-cycle.png">
+<meta property="article:published_time" content="2021-12-17T09:01:06.000Z">
+<meta property="article:modified_time" content="2022-03-06T07:58:31.580Z">
+<meta property="article:author" content="JeHwanYoo">
+<meta property="article:tag" content="Versioning">
+<meta property="article:tag" content="Software Engineering">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.ibb.co/8zG0FvX/Versioning-Format-1.png"> <link rel="canonical" href="https://jehwanyoo.net/2021/12/17/semantic-versioning에-관하여/"/> 
+<title>Semantic Versioning에 관하여 | JeHwan PL Note</title>
+
+ 
+<link rel="icon" href="/favicon.ico" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+     
+<!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  
+
+<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/rss2.xml" title="JeHwan PL Note" type="application/rss+xml">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">JeHwan PL Note</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">JeHwan PL Note</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>  
+  <article class="post-wrap">
+    <header class="post-header">
+      <h1 class="post-title">Semantic Versioning에 관하여</h1>
+      
+      <div class="post-meta">
+         Author:
+        <a itemprop="author" rel="author" href="/">JeHwanYoo</a>
+         
+        <span class="post-time">
+          Date:
+          <a href="#"
+            >12월 17, 2021&nbsp;&nbsp;18:01:06</a
+          >
+        </span>
+         
+        <span class="post-category">
+          Category: 
+          <a href="/categories/Software-Engineering/">Software Engineering</a>
+          
+        </span>
+        
+      </div>
+      
+    </header>
+
+    <div class="post-content"><aside>
+💡 공식 문서 - [https://semver.org/lang/ko/](https://semver.org/lang/ko/)
+
+</aside>
+
+<h2 id="유의적-버전-Semantic-Version-형식"><a href="#유의적-버전-Semantic-Version-형식" class="headerlink" title="유의적 버전(Semantic Version) 형식"></a>유의적 버전(Semantic Version) 형식</h2><hr>
+<p><img src="https://i.ibb.co/8zG0FvX/Versioning-Format-1.png" alt="버전 명칭"></p>
+<ul>
+<li>주 버전 (Major Version): 이전 버전과 호환되지 API 변화</li>
+<li>부 버전 (Minor Version): 이전 버전과 호환되면서 새로운 기능을 추가</li>
+<li>수 버전 (Patch Version): 이전 버전과 호환되면서 버그를 수정한 것</li>
+<li>사전 배포 (Pre-release): 시험판 및 빌드 메타데이터에 관한 레이블</li>
+</ul>
+<h2 id="호환성"><a href="#호환성" class="headerlink" title="호환성"></a>호환성</h2><hr>
+<p><img src="https://i.ibb.co/V3K3Jmg/image.png" alt="버전 호환성"></p>
+<p>만약 공개(Public) API를 사용하고 있다면, 주(Major) 버전을 올리는 것은 신중해야한다.</p>
+<p>주 버전이 달라지면, 하위 버전에 대해 호환성을 유지해야하는 의무가 없어진다.</p>
+<p>그러나, 부(Minor) 버전 다르다. 부 버전이 업그레이드 될 때는 하위 버전의 모든 내용을 포함하고 있아야한다.</p>
+<p><img src="https://i.ibb.co/pPhmgmj/deprecated.png" alt="deprecated"></p>
+<p>이전 버전에서 영 좋지 않은 함수가 있더라도, 부 버전을 업그레이드 할 때는 기능을 삭제하는 것이 아니라 deprecated 시켜야 한다.</p>
+<p>공개 API를 사용하는 유저가 해당 영 좋지 않은 함수를 차기 부 버전에서 호출하더라도 정상적으로 동작해야한다. 다만, 해당 함수를 사용하지 말라는 경고(Warning)을 콘솔등에 띄어주는게 좋다. 여기서 포인트는 ‘경고(Warning)’이지 ‘에러(Error)’가 아니다.</p>
+<p>만약 치명적인 결함이 존재한다면, 세가지 중에 하나를 고를 수 있는데,</p>
+<ol>
+<li>주 버전을 올리고 해당 기능을 삭제한다.</li>
+<li>원칙을 무시하고 부 버전을 올린 뒤 해당 기능을 삭제한다.</li>
+<li>경고를 아주 요란하게 띄우고 사용에 대한 책임은 유저에게 넘긴다.</li>
+</ol>
+<p>사실 위 3가지 모두 정말 골치 아픈 경우다. 해당 기능 하나 때문에 주 버전을 올리긴 좀 그렇고, 그렇다고 원칙을 무시하자니 찜찜하고, 세번째는 양심에 걸린다. 가장 좋은 방법은 영 좋지 않는 함수를 만들지 않는 것. 하지만 그게 말처럼 쉬울까.</p>
+<p>의외로 3번째 방법이 가장 흔하게 사용될 수 있다. 왜냐하면 라이센스 때문이다. 우리가 아무 생각 없이 이용하는 MIT LICENSE를 보자. MIT LICENSE에는 ‘보증(Warranty)’과 ‘책임(Liability)’이 없다.</p>
+<p><img src="https://i.ibb.co/dMGYSB3/foo.png" alt="Warranty"></p>
+<p>(권장하지 않음) 이 방법이 싫다면 원칙을 무시해보자. 유의적 버전 머리말에도 명세에 너무 매몰되지 말라고 한다. 다만, 부 버전 업데이트에서 API를 삭제할 생각이라면, 시스템에 악영향을 주거나 심각한 보안 문제 같은 경우에만 하자. API를 삭제한다는 것은 공개 API 사용자들에겐 충공깽 그 자체의 행동이다.</p>
+<h2 id="유의적-버전-명세-요약"><a href="#유의적-버전-명세-요약" class="headerlink" title="유의적 버전 명세 요약"></a>유의적 버전 명세 요약</h2><hr>
+<ul>
+<li>형식 X.Y.Z를 지킨다. (각각 자연수, 앞에 0이 붙으면 안됨)</li>
+<li>배포시 변경 금지 (일명 잠수함 패치)</li>
+<li>0.y.z = 초기 개발용 (0.1.0 부터 시작)</li>
+<li>1.0.0 = 정식 릴리즈</li>
+<li>부 버전, 수 버전을 올릴 때는 호환성 여부를 반드시 체크</li>
+<li>부 버전이 올라가면 수 버전 0으로 초기화, 주 버전이 올라가면 부, 수 버전 0으로 초기화</li>
+</ul>
+<h2 id="Pre-release-Lable"><a href="#Pre-release-Lable" class="headerlink" title="Pre-release Lable"></a>Pre-release Lable</h2><hr>
+<p>x.y.z 다음에 ‘-‘, ‘.’, ‘+’ 등을 붙여 lable을 표시할 수 있다.</p>
+<p>이 파트는 필수가 아니다.</p>
+<ul>
+<li>버전에 대해 명확하게 설명 하고 싶을 때</li>
+<li>소프트웨어 릴리즈 라이프 사이클 (Software Release Life Cycle)을 도입하고 싶을 때</li>
+</ul>
+<p>사용하면 된다.</p>
+<p>또, 일반적으로 통용되는 용어만 존재할 뿐 해석은 전적으로 API 설계자에게 있다.</p>
+<p><img src="https://i.ibb.co/ZHJ5sjy/release-life-cycle.png" alt="Release Life Cycle"></p>
+<ul>
+<li>pre-alpha: 테스트 이전 단계</li>
+<li>alpha: 주로 내부적으로 테스트할 때 사용. 매우 불안정함.</li>
+<li>beta: 주로 공개적으로 많은 사람들에게 테스트할 때 사용. 정식버전보다 불안정함.</li>
+<li>rc(릴리즈 후보): 치명적인 버그가 발견되지 않으면 출시할 준비가 되었음.</li>
+<li>release: 검증 / 테스트를 모두 통과한 마지막 rc. stable 버전과 <a target="_blank" rel="noopener" href="https://ko.wikipedia.org/wiki/%EC%9E%A5%EA%B8%B0_%EC%A7%80%EC%9B%90_%EB%B2%84%EC%A0%84">LTS(Long-term Support)</a>로 나뉨.</li>
+</ul>
+<p>순서와 표기법은 <a target="_blank" rel="noopener" href="https://semver.org/lang/ko/#spec-item-9">여기서</a> 확인하자.</p>
+<h2 id="CHANGELOG"><a href="#CHANGELOG" class="headerlink" title="CHANGELOG"></a>CHANGELOG</h2><hr>
+<p>버전 업그레이드시 변경 사항에 대해 꼼꼼하게 기록해줘야한다. 다음은 <a target="_blank" rel="noopener" href="https://github.com/nodejs/node/blob/master/doc/changelogs/CHANGELOG_V14.md#14.17.0">Node.js의 변경사항 기록</a>이다.</p>
+</div>
+
+    
+    <section class="post-copyright">
+      
+      <p class="copyright-item">
+        <span>Author:</span>
+        <span>JeHwanYoo</span>
+      </p>
+        
+      <p class="copyright-item">
+        <span>License:</span>
+        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+      </p>
+       
+    </section>
+    
+    <section class="post-tags">
+      <div>
+        <span>Tag(s):</span>
+        <span class="tag">
+           
+          <a href="/tags/Versioning/"># Versioning</a>
+          
+          <a href="/tags/Software-Engineering/"># Software Engineering</a>
+           
+        </span>
+      </div>
+      <div>
+        <a href="javascript:window.history.back();">back</a>
+        <span>· </span>
+        <a href="/">home</a>
+      </div>
+    </section>
+    <section class="post-nav">
+      
+      <a class="prev" rel="prev" href="/2021/12/20/%EB%93%B1%EC%B0%A8%EC%88%98%EC%97%B4-%EB%93%B1%EB%B9%84%EC%88%98%EC%97%B4%EC%9D%98-%EC%9D%BC%EB%B0%98%ED%95%AD-%EA%B3%B5%EC%8B%9D/"
+        >등차수열, 등비수열의 일반항 공식</a
+      >
+       
+      <a class="next" rel="next" href="/2021/12/17/%EB%8B%A8%EC%9C%84-%ED%85%8C%EC%8A%A4%ED%8A%B8-Unit-Test/"
+        >단위 테스트(Unit Test)</a
+      >
+      
+    </section>
+    <section style="margin-top: 4rem">
+      <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jehwanyoo.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </section>
+  </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+  <div class="copyright">
+    <span>
+      © JeHwanYoo | Powered by
+      <a href="https://hexo.io" target="_blank">Hexo</a> &
+      <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">
+        Chic
+      </a>
+    </span>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

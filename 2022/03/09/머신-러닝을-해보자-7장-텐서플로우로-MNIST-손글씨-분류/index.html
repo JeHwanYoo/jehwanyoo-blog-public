@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="JeHwanYoo" />
+ 
+<meta name="subtitle" content="유제환의 프로그래밍 노트" />
+ 
+<meta name="description" content="프로그래밍 노트, 팁, 강의등을 게시하는 블로그입니다." />
+ 
+<meta name="keywords" content="Programming, C, C++, Java, JavaScript, Node.js, Python, Rust, Go, ETC..." />
+ <meta name="description" content="딥러닝 아키텍처 교재(머신러닝을 위한 파이썬 한 조각)의 257 페이지 내용을 텐서플로우 2.0 버전으로 구현할 것임.   Relu 함수 (은닉층) Relu 함수는 x가 0보다 큰 경우에만 출력을 활성화한다. 123456789101112131415import numpy as npimport matplotlib.pyplot as pltdef relu(x):">
+<meta property="og:type" content="article">
+<meta property="og:title" content="머신 러닝을 해보자 7장 - 텐서플로우로 MNIST 손글씨 분류">
+<meta property="og:url" content="https://jehwanyoo.net/2022/03/09/%EB%A8%B8%EC%8B%A0-%EB%9F%AC%EB%8B%9D%EC%9D%84-%ED%95%B4%EB%B3%B4%EC%9E%90-7%EC%9E%A5-%ED%85%90%EC%84%9C%ED%94%8C%EB%A1%9C%EC%9A%B0%EB%A1%9C-MNIST-%EC%86%90%EA%B8%80%EC%94%A8-%EB%B6%84%EB%A5%98/index.html">
+<meta property="og:site_name" content="JeHwan PL Note">
+<meta property="og:description" content="딥러닝 아키텍처 교재(머신러닝을 위한 파이썬 한 조각)의 257 페이지 내용을 텐서플로우 2.0 버전으로 구현할 것임.   Relu 함수 (은닉층) Relu 함수는 x가 0보다 큰 경우에만 출력을 활성화한다. 123456789101112131415import numpy as npimport matplotlib.pyplot as pltdef relu(x):">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:image" content="https://i.ibb.co/Mckd5gt/Kakao-Talk-Photo-2022-03-07-20-32-08.jpg">
+<meta property="og:image" content="https://i.ibb.co/W6N7bc0/relu.png">
+<meta property="og:image" content="https://i.ibb.co/J394k62/softmax.png">
+<meta property="og:image" content="https://i.ibb.co/HNgBNzp/mnist1.png">
+<meta property="og:image" content="https://i.ibb.co/59HyHtQ/mnist2.png">
+<meta property="og:image" content="https://i.ibb.co/jDtspxD/predictions.png">
+<meta property="article:published_time" content="2022-03-09T06:02:36.000Z">
+<meta property="article:modified_time" content="2022-03-14T08:15:24.260Z">
+<meta property="article:author" content="JeHwanYoo">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Deep Learning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.ibb.co/Mckd5gt/Kakao-Talk-Photo-2022-03-07-20-32-08.jpg"> <link rel="canonical" href="https://jehwanyoo.net/2022/03/09/머신-러닝을-해보자-7장-텐서플로우로-mnist-손글씨-분류/"/> 
+<title>머신 러닝을 해보자 7장 - 텐서플로우로 MNIST 손글씨 분류 | JeHwan PL Note</title>
+
+ 
+<link rel="icon" href="/favicon.ico" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+     
+<!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  
+
+<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/rss2.xml" title="JeHwan PL Note" type="application/rss+xml">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">JeHwan PL Note</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">JeHwan PL Note</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>  
+  <article class="post-wrap">
+    <header class="post-header">
+      <h1 class="post-title">머신 러닝을 해보자 7장 - 텐서플로우로 MNIST 손글씨 분류</h1>
+      
+      <div class="post-meta">
+         Author:
+        <a itemprop="author" rel="author" href="/">JeHwanYoo</a>
+         
+        <span class="post-time">
+          Date:
+          <a href="#"
+            >3월 9, 2022&nbsp;&nbsp;15:02:36</a
+          >
+        </span>
+         
+        <span class="post-category">
+          Category: 
+          <a href="/categories/AI/">AI</a>
+          
+        </span>
+        
+      </div>
+      
+    </header>
+
+    <div class="post-content"><h2 id="딥러닝-아키텍처"><a href="#딥러닝-아키텍처" class="headerlink" title="딥러닝 아키텍처"></a>딥러닝 아키텍처</h2><hr>
+<p>교재(머신러닝을 위한 파이썬 한 조각)의 257 페이지 내용을 텐서플로우 2.0 버전으로 구현할 것임.</p>
+<img src="https://i.ibb.co/Mckd5gt/Kakao-Talk-Photo-2022-03-07-20-32-08.jpg" alt="deep learning architecture" width="600" />
+
+<h2 id="Relu-함수-은닉층"><a href="#Relu-함수-은닉층" class="headerlink" title="Relu 함수 (은닉층)"></a>Relu 함수 (은닉층)</h2><hr>
+<p>Relu 함수는 x가 0보다 큰 경우에만 출력을 활성화한다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">relu</span>(<span class="params">x</span>):</span></span><br><span class="line">    <span class="keyword">return</span> np.maximum(<span class="number">0</span>, x)</span><br><span class="line"></span><br><span class="line">x = np.arange(-<span class="number">5.0</span>, <span class="number">5.1</span>, <span class="number">0.1</span>)</span><br><span class="line">y = relu(x)</span><br><span class="line"></span><br><span class="line">plt.title(<span class="string">&#x27;relu&#x27;</span>, fontsize=<span class="number">25</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;x&#x27;</span>, fontsize=<span class="number">15</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;y&#x27;</span>, fontsize=<span class="number">15</span>, rotation=<span class="number">0</span>)</span><br><span class="line">plt.plot(x, y)</span><br><span class="line">plt.axvline(<span class="number">0.0</span>, color=<span class="string">&#x27;grey&#x27;</span>, linestyle=<span class="string">&#x27;--&#x27;</span>, alpha=<span class="number">0.8</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.ibb.co/W6N7bc0/relu.png" alt="relu function"></p>
+<h2 id="Softmax-함수-출력층"><a href="#Softmax-함수-출력층" class="headerlink" title="Softmax 함수 (출력층)"></a>Softmax 함수 (출력층)</h2><hr>
+<p>$\textrm{softmax}(Z_{i}) = \frac{e^{Z_{i}}}{\sum_{k=1}^{n}{e^{Z_{k}}}}$</p>
+<p>softmax 함수는 모든 결과의 합이 1이되는 함수이다. 즉, 활성화 값이 확률을 나타낸다고 해석할 수 있다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">softmax</span>(<span class="params">z</span>):</span></span><br><span class="line">    exp_z = np.exp(z)</span><br><span class="line">    <span class="keyword">return</span> exp_z / np.<span class="built_in">sum</span>(exp_z)</span><br><span class="line"></span><br><span class="line">x = np.random.randn(<span class="number">5</span>)</span><br><span class="line">y = softmax(x)</span><br><span class="line"></span><br><span class="line">plt.title(<span class="string">&#x27;softmax&#x27;</span>, fontsize=<span class="number">25</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;y&#x27;</span>, fontsize=<span class="number">15</span>, rotation=<span class="number">0</span>)</span><br><span class="line">plt.pie(y, labels=y)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.ibb.co/J394k62/softmax.png" alt="softmax"></p>
+<h2 id="MNIST-손글씨-데이터-불러오기"><a href="#MNIST-손글씨-데이터-불러오기" class="headerlink" title="MNIST 손글씨 데이터 불러오기"></a>MNIST 손글씨 데이터 불러오기</h2><hr>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> tensorflow.keras.datasets <span class="keyword">import</span> mnist</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">(x_train, t_train), (x_test, t_test) = mnist.load_data() </span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;x_train.shape=<span class="subst">&#123;x_train.shape&#125;</span>&#x27;</span>) </span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;y_train.shape=<span class="subst">&#123;t_train.shape&#125;</span>&#x27;</span>) </span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;x_test.shape=<span class="subst">&#123;x_test.shape&#125;</span>&#x27;</span>) </span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;y_test.shape=<span class="subst">&#123;t_test.shape&#125;</span>&#x27;</span>) </span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">plt.imshow(x_train[<span class="number">0</span>], cmap=plt.cm.binary)</span><br><span class="line">plt.colorbar()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">x_train.shape=(60000, 28, 28)</span><br><span class="line">y_train.shape=(60000,)</span><br><span class="line">x_test.shape=(10000, 28, 28)</span><br><span class="line">y_test.shape=(10000,)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.ibb.co/HNgBNzp/mnist1.png" alt="mnist1"></p>
+<p>mnist의 손글씨 데이터는 0에서 255의 밝기를 갖고 있는 28x28 이미지이다.</p>
+<p>학습용 데이터 6만개와 테스트용 데이터 1만개의 세트가 있다.</p>
+<h2 id="MNIST-정규화"><a href="#MNIST-정규화" class="headerlink" title="MNIST 정규화"></a>MNIST 정규화</h2><hr>
+<p>$x_{new} = \frac{x-x_{min}}{x_{max}-x_{min}}$</p>
+<p>예를 들어 0부터 255사이의 값을 정규화 한다면</p>
+<p>$x_{max} = 255,\ x_{min} = 0$</p>
+<p>$x_{new} = \frac{x}{255}$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> tensorflow.keras.datasets <span class="keyword">import</span> mnist</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">(x_train, t_train), (x_test, t_test) = mnist.load_data() </span><br><span class="line"></span><br><span class="line">x_train = x_train / <span class="number">255.</span></span><br><span class="line">x_test = x_test / <span class="number">255.</span></span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">plt.imshow(x_train[<span class="number">0</span>], cmap=plt.cm.binary)</span><br><span class="line">plt.colorbar()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.ibb.co/59HyHtQ/mnist2.png" alt="mnist2"></p>
+<p>밝기의 값이 0에서 1사이로 정규화 되었다.</p>
+<p>0에서 1사이로 정규화를 해야 cross-entropy 식에서 오버플로우가 발생하지 않는다.</p>
+<h2 id="손실-함수-선택"><a href="#손실-함수-선택" class="headerlink" title="손실 함수 선택"></a>손실 함수 선택</h2><hr>
+<h3 id="Classfication-문제의-손실-함수-종류"><a href="#Classfication-문제의-손실-함수-종류" class="headerlink" title="Classfication 문제의 손실 함수 종류"></a>Classfication 문제의 손실 함수 종류</h3><ul>
+<li><p>Binary Cross-Entropy Error</p>
+<ul>
+<li>정답 데이터가 0또는 1의 이진 값인 경우</li>
+</ul>
+</li>
+<li><p>Categorical Cross-Entropy Error</p>
+<ul>
+<li>정답 데이터가 one-hot encoding인 경우</li>
+</ul>
+</li>
+<li><p>Sparse Categorical Cross-Entropy Error</p>
+<ul>
+<li>정답 데이터가 정수인 경우</li>
+</ul>
+</li>
+</ul>
+<p>본 프로젝트에선 one-hot encoding으로 정답으로 치환하겠다.</p>
+<h3 id="one-hot-encoding"><a href="#one-hot-encoding" class="headerlink" title="one-hot encoding"></a>one-hot encoding</h3><p>0부터 9까지 총 10개의 분류 항목이 존재한다면</p>
+<p>ex) 5 → [0, 0, 0, 0, 0, 1, 0, 0, 0, 0]</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> tensorflow.keras.utils <span class="keyword">import</span> to_categorical</span><br><span class="line"></span><br><span class="line">t_train_categorical = to_categorical(t_train, <span class="number">10</span>)</span><br><span class="line">t_test_categorical = to_categorical(t_test, <span class="number">10</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Model-생성"><a href="#Model-생성" class="headerlink" title="Model 생성"></a>Model 생성</h2><hr>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> tensorflow.keras <span class="keyword">import</span> Sequential</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.layers <span class="keyword">import</span> Flatten</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.layers <span class="keyword">import</span> Dense</span><br><span class="line"></span><br><span class="line">model = Sequential([</span><br><span class="line">                    Flatten(input_shape=(<span class="number">28</span>, <span class="number">28</span>)),</span><br><span class="line">                    Dense(units=<span class="number">100</span>, activation=<span class="string">&#x27;relu&#x27;</span>),</span><br><span class="line">                    Dense(units=<span class="number">10</span>, activation=<span class="string">&#x27;softmax&#x27;</span>),</span><br><span class="line">                    ])</span><br></pre></td></tr></table></figure>
+
+<p>모델 생성 단계는 신경망 계층을 구성하는 단계이다.</p>
+<p>설계된 아키텍처에 맞춰 신경망 계층을 구성한다.</p>
+<h2 id="Model-컴파일"><a href="#Model-컴파일" class="headerlink" title="Model 컴파일"></a>Model 컴파일</h2><hr>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model.<span class="built_in">compile</span>(optimizer=<span class="string">&#x27;adam&#x27;</span>, loss=<span class="string">&#x27;categorical_crossentropy&#x27;</span>, metrics=[<span class="string">&#x27;accuracy&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
+<p>모델 컴파일 단계는 Hyper-Parameter나 손실 함수를 설정하고 신경망 계층이 구체화 되는 단계이다.</p>
+<p>Tensorflow에 따르면, optimizer는 모델이 인식하는 데이터와 해당 손실 함수를 기반으로 모델이 업데이트되는 방식이다.</p>
+<p>Adam Algorithm에 대한 정보는 <a target="_blank" rel="noopener" href="https://keras.io/api/optimizers/adam/">공식 문서</a>를 참고하라.</p>
+<p>loss는 말그대로 손실 함수를 설정한다.</p>
+<p>metrics은 학습 단계에서 학습에 대한 결과의 의미가 무엇인지 설정한다.</p>
+<p>손글씨 분류의 ‘정확도’를 알고 싶은 것이므로 accuracy로 설정한다.</p>
+<h2 id="Model-학습"><a href="#Model-학습" class="headerlink" title="Model 학습"></a>Model 학습</h2><hr>
+<p>모델 학습 단계는 컴파일된 모델을 바탕으로 입력 데이터와 정답데이터를 이용해 손실율을 낮추는 것이다.</p>
+<p>epochs는 전체 데이터셋을 몇 번 학습 시킬건지 설정한다.</p>
+<p>batch_size는 한번 feed forward를 진행할때 몇 개의 데이터셋을 입력으로 넣을건지 설정한다.</p>
+<p>1 epoch당 학습 횟수는 (전체 데이터셋 크기 / batch_size)가 된다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model.fit(x_train, t_train_categorical, epochs=<span class="number">10</span>, batch_size=<span class="number">100</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">Epoch 1/10</span><br><span class="line">600/600 [==============================] - 2s 3ms/step - loss: 0.3473 - accuracy: 0.9053</span><br><span class="line">Epoch 2/10</span><br><span class="line">600/600 [==============================] - 2s 3ms/step - loss: 0.1675 - accuracy: 0.9524</span><br><span class="line">Epoch 3/10</span><br><span class="line">600/600 [==============================] - 2s 3ms/step - loss: 0.1219 - accuracy: 0.9649</span><br><span class="line">Epoch 4/10</span><br><span class="line">600/600 [==============================] - 2s 3ms/step - loss: 0.0958 - accuracy: 0.9728</span><br><span class="line">Epoch 5/10</span><br><span class="line">600/600 [==============================] - 2s 3ms/step - loss: 0.0772 - accuracy: 0.9777</span><br><span class="line">Epoch 6/10</span><br><span class="line">600/600 [==============================] - 2s 3ms/step - loss: 0.0639 - accuracy: 0.9813</span><br><span class="line">Epoch 7/10</span><br><span class="line">600/600 [==============================] - 2s 3ms/step - loss: 0.0532 - accuracy: 0.9843</span><br><span class="line">Epoch 8/10</span><br><span class="line">600/600 [==============================] - 2s 3ms/step - loss: 0.0449 - accuracy: 0.9872</span><br><span class="line">Epoch 9/10</span><br><span class="line">600/600 [==============================] - 2s 3ms/step - loss: 0.0384 - accuracy: 0.9890</span><br><span class="line">Epoch 10/10</span><br><span class="line">600/600 [==============================] - 2s 3ms/step - loss: 0.0324 - accuracy: 0.9904</span><br><span class="line">&lt;keras.callbacks.History at 0x7f6f42307d10&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="정확도-검증"><a href="#정확도-검증" class="headerlink" title="정확도 검증"></a>정확도 검증</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">test_loss, test_acc = model.evaluate(x_test,  t_test_categorical, verbose=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;\nTest accuracy:&#x27;</span>, test_acc)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">313/313 - 0s - loss: 0.0725 - accuracy: 0.9773 - 474ms/epoch - 2ms/step</span><br><span class="line"></span><br><span class="line">Test accuracy: 0.9772999882698059</span><br></pre></td></tr></table></figure>
+
+<p>테스트 데이터를 이용해 정확도를 측정한다.</p>
+<p>이 모델의 경우 테스트 데이터에서 약 98%의 정확도를 보인다.</p>
+<h2 id="예측하기"><a href="#예측하기" class="headerlink" title="예측하기"></a>예측하기</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">predictions = model.predict(x_test)</span><br><span class="line"></span><br><span class="line">plt.figure(figsize=(<span class="number">6</span>,<span class="number">3</span>))</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">image</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line">plt.subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>)</span><br><span class="line">plt.imshow(x_test[<span class="number">0</span>], cmap=plt.cm.binary)</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">histogram</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line">plt.subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>)</span><br><span class="line">plt.xticks(<span class="built_in">range</span>(<span class="number">10</span>))</span><br><span class="line">plt.yticks(np.arange(<span class="number">0</span>, <span class="number">1.1</span>, <span class="number">0.1</span>))</span><br><span class="line">thisplot = plt.bar(<span class="built_in">range</span>(<span class="number">10</span>), predictions[<span class="number">0</span>], color=<span class="string">&quot;#777777&quot;</span>)</span><br><span class="line">plt.ylim([<span class="number">0</span>, <span class="number">1</span>])</span><br><span class="line">predicted_label = np.argmax(predictions[<span class="number">0</span>])</span><br><span class="line">thisplot[predicted_label].set_color(<span class="string">&#x27;red&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.ibb.co/jDtspxD/predictions.png" alt="predictions"></p>
+<p>softmax 함수의 값 중 index=7의 값이 가장 높은 것을 알수 있다.</p>
+<h2 id="학습-코드-전문"><a href="#학습-코드-전문" class="headerlink" title="학습 코드 전문"></a>학습 코드 전문</h2><hr>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> tensorflow.keras <span class="keyword">import</span> Sequential</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.layers <span class="keyword">import</span> Flatten</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.layers <span class="keyword">import</span> Dense</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.datasets <span class="keyword">import</span> mnist</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.utils <span class="keyword">import</span> to_categorical</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">(x_train, t_train), (x_test, t_test) = mnist.load_data() </span><br><span class="line"></span><br><span class="line">x_train = x_train / <span class="number">255.</span></span><br><span class="line">x_test = x_test / <span class="number">255.</span></span><br><span class="line"></span><br><span class="line">t_train_categorical = to_categorical(t_train, <span class="number">10</span>)</span><br><span class="line">t_test_categorical = to_categorical(t_test, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">model = Sequential([</span><br><span class="line">                    Flatten(input_shape=(<span class="number">28</span>, <span class="number">28</span>)),</span><br><span class="line">                    Dense(units=<span class="number">100</span>, activation=<span class="string">&#x27;relu&#x27;</span>),</span><br><span class="line">                    Dense(units=<span class="number">10</span>, activation=<span class="string">&#x27;softmax&#x27;</span>),</span><br><span class="line">                    ])</span><br><span class="line"></span><br><span class="line">model.<span class="built_in">compile</span>(optimizer=<span class="string">&#x27;adam&#x27;</span>, loss=<span class="string">&#x27;categorical_crossentropy&#x27;</span>, metrics=[<span class="string">&#x27;accuracy&#x27;</span>])</span><br><span class="line"></span><br><span class="line">model.fit(x_train, t_train_categorical, epochs=<span class="number">10</span>, batch_size=<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line">test_loss, test_acc = model.evaluate(x_test,  t_test_categorical, verbose=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;\nTest accuracy:&#x27;</span>, test_acc)</span><br></pre></td></tr></table></figure>
+</div>
+
+    
+    <section class="post-copyright">
+      
+      <p class="copyright-item">
+        <span>Author:</span>
+        <span>JeHwanYoo</span>
+      </p>
+        
+      <p class="copyright-item">
+        <span>License:</span>
+        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+      </p>
+       
+    </section>
+    
+    <section class="post-tags">
+      <div>
+        <span>Tag(s):</span>
+        <span class="tag">
+           
+          <a href="/tags/Machine-Learning/"># Machine Learning</a>
+          
+          <a href="/tags/AI/"># AI</a>
+          
+          <a href="/tags/Deep-Learning/"># Deep Learning</a>
+           
+        </span>
+      </div>
+      <div>
+        <a href="javascript:window.history.back();">back</a>
+        <span>· </span>
+        <a href="/">home</a>
+      </div>
+    </section>
+    <section class="post-nav">
+      
+      <a class="prev" rel="prev" href="/2022/03/11/%EB%A8%B8%EC%8B%A0-%EB%9F%AC%EB%8B%9D%EC%9D%84-%ED%95%B4%EB%B3%B4%EC%9E%90-8%EC%9E%A5-Keras-Layer-%EB%B6%84%EC%84%9D/"
+        >머신 러닝을 해보자 8장 - Keras의 Layers API와 Model API에 대하여</a
+      >
+       
+      <a class="next" rel="next" href="/2022/03/07/%ED%94%84%EB%A1%A0%ED%8A%B8%EC%97%94%EB%93%9C-%ED%85%8C%EC%8A%A4%ED%8A%B8%EB%A5%BC-%EC%9C%84%ED%95%9C-%ED%95%84%EC%88%98-API-%EC%B4%9D-%EC%A0%95%EB%A6%AC-1-0-ESM-Fetch-DOM-API/"
+        >프론트엔드 테스트를 위한 필수 API 총 정리 (ESM, Fetch, DOM, Event, Scroll, Lazy Load)</a
+      >
+      
+    </section>
+    <section style="margin-top: 4rem">
+      <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jehwanyoo.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </section>
+  </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+  <div class="copyright">
+    <span>
+      © JeHwanYoo | Powered by
+      <a href="https://hexo.io" target="_blank">Hexo</a> &
+      <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">
+        Chic
+      </a>
+    </span>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="JeHwanYoo" />
+ 
+<meta name="subtitle" content="유제환의 프로그래밍 노트" />
+ 
+<meta name="description" content="프로그래밍 노트, 팁, 강의등을 게시하는 블로그입니다." />
+ 
+<meta name="keywords" content="Programming, C, C++, Java, JavaScript, Node.js, Python, Rust, Go, ETC..." />
+ <meta name="description" content="Keras API Document Link Keras 주요 포인트  Layers API (Base Layer Class, Core Layer Class) Model API (Sequential Class)  Base Layer Class 123tf.keras.layers.Layer(    trainable&#x3D;True, name&#x3D;None, dtype&#x3D;None,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="머신 러닝을 해보자 8장 - Keras의 Layers API와 Model API에 대하여">
+<meta property="og:url" content="https://jehwanyoo.net/2022/03/11/%EB%A8%B8%EC%8B%A0-%EB%9F%AC%EB%8B%9D%EC%9D%84-%ED%95%B4%EB%B3%B4%EC%9E%90-8%EC%9E%A5-Keras-Layer-%EB%B6%84%EC%84%9D/index.html">
+<meta property="og:site_name" content="JeHwan PL Note">
+<meta property="og:description" content="Keras API Document Link Keras 주요 포인트  Layers API (Base Layer Class, Core Layer Class) Model API (Sequential Class)  Base Layer Class 123tf.keras.layers.Layer(    trainable&#x3D;True, name&#x3D;None, dtype&#x3D;None,">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:image" content="https://i.ibb.co/CwZTyTt/2022-03-11-3-43-27.png">
+<meta property="og:image" content="https://i.ibb.co/D1nvcQT/001.jpg">
+<meta property="og:image" content="https://i.ibb.co/GRb0RmD/2022-03-11-3-57-42.png">
+<meta property="og:image" content="https://i.ibb.co/mSSZYGz/001.jpg">
+<meta property="article:published_time" content="2022-03-11T04:15:42.000Z">
+<meta property="article:modified_time" content="2022-03-14T08:13:21.230Z">
+<meta property="article:author" content="JeHwanYoo">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Deep Learning">
+<meta property="article:tag" content="Keras">
+<meta property="article:tag" content="Layers API">
+<meta property="article:tag" content="Model API">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.ibb.co/CwZTyTt/2022-03-11-3-43-27.png"> <link rel="canonical" href="https://jehwanyoo.net/2022/03/11/머신-러닝을-해보자-8장-keras-layer-분석/"/> 
+<title>머신 러닝을 해보자 8장 - Keras의 Layers API와 Model API에 대하여 | JeHwan PL Note</title>
+
+ 
+<link rel="icon" href="/favicon.ico" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+     
+<!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  
+
+<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/rss2.xml" title="JeHwan PL Note" type="application/rss+xml">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">JeHwan PL Note</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">JeHwan PL Note</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>  
+  <article class="post-wrap">
+    <header class="post-header">
+      <h1 class="post-title">머신 러닝을 해보자 8장 - Keras의 Layers API와 Model API에 대하여</h1>
+      
+      <div class="post-meta">
+         Author:
+        <a itemprop="author" rel="author" href="/">JeHwanYoo</a>
+         
+        <span class="post-time">
+          Date:
+          <a href="#"
+            >3월 11, 2022&nbsp;&nbsp;13:15:42</a
+          >
+        </span>
+         
+        <span class="post-category">
+          Category: 
+          <a href="/categories/AI/">AI</a>
+          
+        </span>
+        
+      </div>
+      
+    </header>
+
+    <div class="post-content"><h2 id="Keras-API"><a href="#Keras-API" class="headerlink" title="Keras API"></a>Keras API</h2><hr>
+<p><a target="_blank" rel="noopener" href="https://keras.io/api/">Document Link</a></p>
+<h2 id="Keras-주요-포인트"><a href="#Keras-주요-포인트" class="headerlink" title="Keras 주요 포인트"></a>Keras 주요 포인트</h2><hr>
+<ol>
+<li>Layers API (Base Layer Class, Core Layer Class)</li>
+<li>Model API (Sequential Class)</li>
+</ol>
+<h2 id="Base-Layer-Class"><a href="#Base-Layer-Class" class="headerlink" title="Base Layer Class"></a><a target="_blank" rel="noopener" href="https://keras.io/api/layers/base_layer/#layer-class">Base Layer Class</a></h2><hr>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tf.keras.layers.Layer(</span><br><span class="line">    trainable=<span class="literal">True</span>, name=<span class="literal">None</span>, dtype=<span class="literal">None</span>, dynamic=<span class="literal">False</span>, **kwargs</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>가중치(Weight)와 바이어스(Bias)를 가지고 있는 신경망 계층 클래스이다.</p>
+<p>Keras의 다양한 신경망 계층들은 모두 이 Layer 클래스를 상속한다.</p>
+<p>가중치와 바이어스는 입력 값이 들어왔을 때 제약사항에 따라 초기화 된다. (<code>kernel_intializer</code>, <code>bias_initializer</code>, … 등등)</p>
+<img src='https://i.ibb.co/CwZTyTt/2022-03-11-3-43-27.png' width='600px' alt='keras layer' />
+
+<h2 id="Core-Layers"><a href="#Core-Layers" class="headerlink" title="Core Layers"></a><a target="_blank" rel="noopener" href="https://keras.io/api/layers/core_layers/">Core Layers</a></h2><hr>
+<h3 id="Input-Object"><a href="#Input-Object" class="headerlink" title="Input Object"></a><a target="_blank" rel="noopener" href="https://keras.io/api/layers/core_layers/input/">Input Object</a></h3><p>입력 객체(Input Object)는 텐서 타입을 갖는 추상 객체이다.</p>
+<p>실제 입력 데이터는 아니며, 입력 데이터가 형태가 이렇다라는 것을 의미한다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> tensorflow.keras.layers <span class="keyword">import</span> Dense, Input</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">weights = [</span><br><span class="line">           np.array([[-<span class="number">0.43890882</span>],[ <span class="number">0.23219848</span>]]), <span class="comment"># Weight</span></span><br><span class="line">           np.array([<span class="number">1.</span>]), <span class="comment"># Bias</span></span><br><span class="line">           ]</span><br><span class="line"></span><br><span class="line">dense = Dense(units=<span class="number">1</span>, input_shape=(<span class="number">1</span>, <span class="number">2</span>), weights=weights)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;before passing x: &#x27;</span>, dense.get_weights()) <span class="comment"># 입력 값이 넘어오기 전까지 가중치가 초기화되지 않는다.</span></span><br><span class="line"></span><br><span class="line">x = Input(shape=(<span class="number">1</span>, <span class="number">2</span>))</span><br><span class="line">y = dense(x)</span><br><span class="line"></span><br><span class="line">W, b = dense.get_weights()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;y = &#x27;</span>, y)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;after passing x: &#x27;</span>, W.shape, b.shape)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">before passing x:  []</span><br><span class="line">y =  KerasTensor(type_spec=TensorSpec(shape=(None, 1, 1), dtype=tf.float32, name=None), name=&#x27;dense_158/BiasAdd:0&#x27;, description=&quot;created by layer &#x27;dense_158&#x27;&quot;)</span><br><span class="line">after passing x:  (2, 1) (1,)</span><br></pre></td></tr></table></figure>
+
+<p>Input Object는 추상 데이터이기 때문에 y값이 구체화 되지 않는다.</p>
+<p>가중치와 바이어스가 입력 값이 들어왔을 때 초기화되는데, 실제로 Input Object를 넣으면 초기화되는 것을 볼 수 있다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> tensorflow.keras.layers <span class="keyword">import</span> Dense, Input</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras <span class="keyword">import</span> Model</span><br><span class="line"></span><br><span class="line">x = Input(shape=(<span class="number">32</span>,))</span><br><span class="line">y = Dense(<span class="number">16</span>, activation=<span class="string">&#x27;softmax&#x27;</span>)(x)</span><br><span class="line">model = Model(x, y)</span><br><span class="line"></span><br><span class="line">model.summary()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Model: &quot;model_3&quot;</span><br><span class="line">_________________________________________________________________</span><br><span class="line"> Layer (type)                Output Shape              Param #   </span><br><span class="line">=================================================================</span><br><span class="line"> input_15 (InputLayer)       [(None, 32)]              0         </span><br><span class="line">                                                                 </span><br><span class="line"> dense_152 (Dense)           (None, 16)                528       </span><br><span class="line">                                                                 </span><br><span class="line">=================================================================</span><br><span class="line">Total params: 528</span><br><span class="line">Trainable params: 528</span><br><span class="line">Non-trainable params: 0</span><br><span class="line">_________________________________________________________________</span><br></pre></td></tr></table></figure>
+
+<p>Input Object를 이용하면 구체적인 데이터 없어도 신경망을 설계할 수 있다.</p>
+<h3 id="Dense-Layer"><a href="#Dense-Layer" class="headerlink" title="Dense Layer"></a><a target="_blank" rel="noopener" href="https://keras.io/api/layers/core_layers/dense/">Dense Layer</a></h3><p>완전 연결 계층(Fully Connected Layer)</p>
+<img src='https://i.ibb.co/D1nvcQT/001.jpg' width='600px' alt='Dense Layer' />
+
+<h3 id="Activation-Layer"><a href="#Activation-Layer" class="headerlink" title="Activation Layer"></a><a target="_blank" rel="noopener" href="https://keras.io/api/layers/core_layers/activation/">Activation Layer</a></h3><p>활성화 계층(Activation Layer)</p>
+<ul>
+<li>Activation Class를 이용한 방법</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.layers <span class="keyword">import</span> Activation</span><br><span class="line"></span><br><span class="line">x = tf.random.normal(shape=(<span class="number">1</span>, <span class="number">5</span>))</span><br><span class="line"></span><br><span class="line">sigmoid = Activation(<span class="string">&#x27;sigmoid&#x27;</span>)</span><br><span class="line">tanh = Activation(<span class="string">&#x27;tanh&#x27;</span>)</span><br><span class="line">relu = Activation(<span class="string">&#x27;relu&#x27;</span>)</span><br><span class="line">softmax = Activation(<span class="string">&#x27;softmax&#x27;</span>)</span><br><span class="line"></span><br><span class="line">y_sigmoid_tf = sigmoid(x)</span><br><span class="line">y_tanh_tf = tanh(x)</span><br><span class="line">y_relu_tf = relu(x)</span><br><span class="line">y_softmax_tf = softmax(x)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;x = <span class="subst">&#123;x&#125;</span>&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;simoid(x)= &#x27;</span>, y_sigmoid_tf)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;tanh(x)= &#x27;</span>, y_tanh_tf)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;relu(x)= &#x27;</span>, y_relu_tf)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;softmax(x)= &#x27;</span>, y_softmax_tf)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">x = [[-0.51983726  0.292437    0.27465725  0.9531079   1.0535461 ]]</span><br><span class="line">simoid(x)=  tf.Tensor([[0.3728903  0.5725926  0.5682359  0.72173977 0.74145526]], shape=(1, 5), dtype=float32)</span><br><span class="line">tanh(x)=  tf.Tensor([[-0.47757438  0.28437626  0.26795304  0.74118686  0.7831812 ]], shape=(1, 5), dtype=float32)</span><br><span class="line">relu(x)=  tf.Tensor([[0.         0.292437   0.27465725 0.9531079  1.0535461 ]], shape=(1, 5), dtype=float32)</span><br><span class="line">softmax(x)=  tf.Tensor([[0.06825311 0.15377602 0.1510661  0.29772434 0.3291805 ]], shape=(1, 5), dtype=float32)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>ReLU, Softmax 등 구체화된 클래스를 이용하는 방법</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.layers <span class="keyword">import</span> ReLU, Softmax</span><br><span class="line"></span><br><span class="line">x = tf.random.normal(shape=(<span class="number">1</span>, <span class="number">5</span>))</span><br><span class="line"></span><br><span class="line">relu = ReLU()</span><br><span class="line">softmax = Softmax()</span><br><span class="line"></span><br><span class="line">y_relu_tf = softmax(x)</span><br><span class="line">y_softmax_tf = relu(x)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;relu(x)= &#x27;</span>, y_relu_tf)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;softmax(x)= &#x27;</span>, y_softmax_tf)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">relu(x)=  tf.Tensor([[0.08697527 0.3341398  0.5049807  0.01408062 0.05982368]], shape=(1, 5), dtype=float32)</span><br><span class="line">softmax(x)=  tf.Tensor([[0.        1.1802413 1.5932021 0.        0.       ]], shape=(1, 5), dtype=float32)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Dense Layer와 함께 사용</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> tensorflow.keras.layers <span class="keyword">import</span> Dense</span><br><span class="line"></span><br><span class="line">x = tf.random.normal(shape=(<span class="number">1</span>, <span class="number">5</span>))</span><br><span class="line">dense = Dense(units=<span class="number">3</span>, activation=<span class="string">&#x27;softmax&#x27;</span>)</span><br><span class="line">y = dense(x)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(y)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tf.Tensor([[0.17379178 0.4849285  0.34127975]], shape=(1, 3), dtype=float32)</span><br></pre></td></tr></table></figure>
+
+<img src='https://i.ibb.co/GRb0RmD/2022-03-11-3-57-42.png' width='600px' alt='Dense With Activation' />
+
+<h3 id="Embedding-Layer"><a href="#Embedding-Layer" class="headerlink" title="Embedding Layer"></a><a target="_blank" rel="noopener" href="https://keras.io/ko/layers/embeddings/">Embedding Layer</a></h3><p>양의 정수(인덱스)가 주어졌을 때 고정된 크기의 Dense 벡터로 전환하는 계층</p>
+<p>e.g. <code>[[4], [20]] -&gt; [[0.25, 0.1], [0.6, -0.2]]</code></p>
+<p>단어 사전이라고도 불리며 텍스트 분류에서 많이 사용된다.</p>
+<img src='https://i.ibb.co/mSSZYGz/001.jpg' width='600px' alt='embeddings' />
+
+<h3 id="Masking-Layer"><a href="#Masking-Layer" class="headerlink" title="Masking Layer"></a><a target="_blank" rel="noopener" href="https://keras.io/api/layers/core_layers/masking/">Masking Layer</a></h3><p>특정 단계(timestamp)의 텐서 값을 모두 mask_value로 설정한 뒤, Masking Layer를 통과하면 그 단계는 건너뛴다.</p>
+<h3 id="Lambda-Layer"><a href="#Lambda-Layer" class="headerlink" title="Lambda Layer"></a><a target="_blank" rel="noopener" href="https://keras.io/api/layers/core_layers/lambda/">Lambda Layer</a></h3><p>Lambda 식을 이용해 수학적 함수를 직접 지정할 수 있는 계층</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">square = keras.layers.Lambda(<span class="keyword">lambda</span> x: x ** <span class="number">2</span>)</span><br><span class="line">y = square(tf.constant(<span class="number">4</span>))</span><br><span class="line"><span class="built_in">print</span>(y)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tf.Tensor(16, shape=(), dtype=int32)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Model-Class"><a href="#Model-Class" class="headerlink" title="Model Class"></a><a target="_blank" rel="noopener" href="https://keras.io/api/models/model/">Model Class</a></h2><hr>
+<p>모델은 학습을 위한 레이어들을 그룹화한 클래스이다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.layers <span class="keyword">import</span> Input, Dense</span><br><span class="line"></span><br><span class="line">x = Input(shape=(<span class="number">3</span>,))</span><br><span class="line">a = Dense(<span class="number">4</span>, activation=tf.nn.relu)(x)</span><br><span class="line">y = Dense(<span class="number">5</span>, activation=tf.nn.softmax)(a)</span><br><span class="line">model = tf.keras.Model(inputs=x, outputs=y)</span><br><span class="line"></span><br><span class="line">model.summary()</span><br><span class="line"></span><br><span class="line">predicted = model.predict(np.array([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]]))</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(predicted)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Model: &quot;model_7&quot;</span><br><span class="line">_________________________________________________________________</span><br><span class="line"> Layer (type)                Output Shape              Param #   </span><br><span class="line">=================================================================</span><br><span class="line"> input_8 (InputLayer)        [(None, 3)]               0         </span><br><span class="line">                                                                 </span><br><span class="line"> dense_24 (Dense)            (None, 4)                 16        </span><br><span class="line">                                                                 </span><br><span class="line"> dense_25 (Dense)            (None, 5)                 25        </span><br><span class="line">                                                                 </span><br><span class="line">=================================================================</span><br><span class="line">Total params: 41</span><br><span class="line">Trainable params: 41</span><br><span class="line">Non-trainable params: 0</span><br><span class="line">_________________________________________________________________</span><br><span class="line">[[0.20138083 0.05447086 0.62297124 0.04173229 0.07944483]]</span><br></pre></td></tr></table></figure>
+
+<p>흔히 사용하는 모델 클래스 중에는 Sequential 모델이 있다.</p>
+<p>텐서플로우 문서에 따르면 다음과 같은 경우엔 Sequential이 부적합하다.</p>
+<blockquote>
+<p>Sequential 모델은 다음의 경우에 적합하지 않습니다.</p>
+<p>모델에 다중 입력 또는 다중 출력이 있습니다</p>
+<p>레이어에 다중 입력 또는 다중 출력이 있습니다</p>
+<p>레이어 공유를 해야 합니다</p>
+<p>비선형 토폴로지를 원합니다(예: 잔류 연결, 다중 분기 모델)</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras <span class="keyword">import</span> Sequential</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.layers <span class="keyword">import</span> Dense, Input</span><br><span class="line"></span><br><span class="line">model = Sequential(</span><br><span class="line">    [</span><br><span class="line">        Input(shape=(<span class="number">2</span>, <span class="number">2</span>)),</span><br><span class="line">        Dense(units=<span class="number">2</span>, activation=<span class="string">&quot;relu&quot;</span>),</span><br><span class="line">        Dense(units=<span class="number">2</span>, activation=<span class="string">&quot;softmax&quot;</span>),</span><br><span class="line">    ]</span><br><span class="line">)</span><br><span class="line">x = tf.random.normal((<span class="number">5</span>, <span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line">predicited = model.predict(x)</span><br><span class="line"><span class="built_in">print</span>(predicited)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[[[0.68282527 0.31717473]</span><br><span class="line">  [0.53100306 0.46899694]]</span><br><span class="line"></span><br><span class="line"> [[0.86712956 0.13287047]</span><br><span class="line">  [0.72597367 0.27402633]]</span><br><span class="line"></span><br><span class="line"> [[0.55213726 0.44786274]</span><br><span class="line">  [0.9673605  0.0326395 ]]</span><br><span class="line"></span><br><span class="line"> [[0.5482915  0.45170853]</span><br><span class="line">  [0.9302453  0.06975465]]</span><br><span class="line"></span><br><span class="line"> [[0.6118701  0.38812986]</span><br><span class="line">  [0.9730487  0.02695133]]]</span><br></pre></td></tr></table></figure>
+</div>
+
+    
+    <section class="post-copyright">
+      
+      <p class="copyright-item">
+        <span>Author:</span>
+        <span>JeHwanYoo</span>
+      </p>
+        
+      <p class="copyright-item">
+        <span>License:</span>
+        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+      </p>
+       
+    </section>
+    
+    <section class="post-tags">
+      <div>
+        <span>Tag(s):</span>
+        <span class="tag">
+           
+          <a href="/tags/Machine-Learning/"># Machine Learning</a>
+          
+          <a href="/tags/AI/"># AI</a>
+          
+          <a href="/tags/Deep-Learning/"># Deep Learning</a>
+          
+          <a href="/tags/Keras/"># Keras</a>
+          
+          <a href="/tags/Layers-API/"># Layers API</a>
+          
+          <a href="/tags/Model-API/"># Model API</a>
+           
+        </span>
+      </div>
+      <div>
+        <a href="javascript:window.history.back();">back</a>
+        <span>· </span>
+        <a href="/">home</a>
+      </div>
+    </section>
+    <section class="post-nav">
+       
+      <a class="next" rel="next" href="/2022/03/09/%EB%A8%B8%EC%8B%A0-%EB%9F%AC%EB%8B%9D%EC%9D%84-%ED%95%B4%EB%B3%B4%EC%9E%90-7%EC%9E%A5-%ED%85%90%EC%84%9C%ED%94%8C%EB%A1%9C%EC%9A%B0%EB%A1%9C-MNIST-%EC%86%90%EA%B8%80%EC%94%A8-%EB%B6%84%EB%A5%98/"
+        >머신 러닝을 해보자 7장 - 텐서플로우로 MNIST 손글씨 분류</a
+      >
+      
+    </section>
+    <section style="margin-top: 4rem">
+      <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jehwanyoo.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </section>
+  </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+  <div class="copyright">
+    <span>
+      © JeHwanYoo | Powered by
+      <a href="https://hexo.io" target="_blank">Hexo</a> &
+      <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">
+        Chic
+      </a>
+    </span>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

@@ -15,24 +15,22 @@
 <meta name="description" content="프로그래밍 노트, 팁, 강의등을 게시하는 블로그입니다." />
  
 <meta name="keywords" content="Programming, C, C++, Java, JavaScript, Node.js, Python, Rust, Go, ETC..." />
- <meta name="description" content="지난 포스팅 웹 프로그래밍 with Golang 1 - Hello, World! 웹 프로그래밍 with Golang 2 - 템플릿 문법 정적 파일 (Static File) 정적 파일은 원본이 수정되지 않고 그대로 클라이언트에게 제공하는 파일을 의미합니다. 주로 html, css, js를 정적 파일로 사용합니다. 간단한 구조의 CSR 애플리케이션 이라면 정적">
+ <meta name="description" content="지난 포스팅 웹 프로그래밍 with Golang 1 - Hello, World! 웹 프로그래밍 with Golang 2 - 템플릿 문법 웹 프로그래밍 with Golang 3 - 정적 파일 라우팅 (Routing) 라우팅은 Restful API를 구축하기 위해 필수적인 기능이라고 할 수 있습니다. 라우트(route)는 사전적 의미로 (특정한 루트를 따라 무">
 <meta property="og:type" content="article">
-<meta property="og:title" content="웹 프로그래밍 with Golang 3 - 정적 파일">
-<meta property="og:url" content="https://jehwanyoo.net/2022/04/05/%EC%9B%B9-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D-with-Golang-3-%EC%A0%95%EC%A0%81-%ED%8C%8C%EC%9D%BC/index.html">
+<meta property="og:title" content="웹 프로그래밍 with Golang 4 - 라우팅">
+<meta property="og:url" content="https://jehwanyoo.net/2022/04/05/%EC%9B%B9-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D-with-Golang-4-%EB%9D%BC%EC%9A%B0%ED%8C%85/index.html">
 <meta property="og:site_name" content="JeHwan PL Note">
-<meta property="og:description" content="지난 포스팅 웹 프로그래밍 with Golang 1 - Hello, World! 웹 프로그래밍 with Golang 2 - 템플릿 문법 정적 파일 (Static File) 정적 파일은 원본이 수정되지 않고 그대로 클라이언트에게 제공하는 파일을 의미합니다. 주로 html, css, js를 정적 파일로 사용합니다. 간단한 구조의 CSR 애플리케이션 이라면 정적">
+<meta property="og:description" content="지난 포스팅 웹 프로그래밍 with Golang 1 - Hello, World! 웹 프로그래밍 with Golang 2 - 템플릿 문법 웹 프로그래밍 with Golang 3 - 정적 파일 라우팅 (Routing) 라우팅은 Restful API를 구축하기 위해 필수적인 기능이라고 할 수 있습니다. 라우트(route)는 사전적 의미로 (특정한 루트를 따라 무">
 <meta property="og:locale" content="ko_KR">
-<meta property="og:image" content="https://i.ibb.co/QvJSWJm/image.png">
-<meta property="og:image" content="https://i.ibb.co/xYJSGyq/image.png">
-<meta property="og:image" content="https://i.ibb.co/5Ywqkf8/image.png">
-<meta property="article:published_time" content="2022-04-05T12:55:33.000Z">
-<meta property="article:modified_time" content="2022-04-05T13:18:08.280Z">
+<meta property="og:image" content="https://i.ibb.co/NTvcHmP/image.png">
+<meta property="article:published_time" content="2022-04-05T13:48:21.000Z">
+<meta property="article:modified_time" content="2022-04-05T13:51:46.680Z">
 <meta property="article:author" content="JeHwanYoo">
 <meta property="article:tag" content="Golang">
-<meta property="article:tag" content="Static File">
+<meta property="article:tag" content="Routing">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.ibb.co/QvJSWJm/image.png"> <link rel="canonical" href="https://jehwanyoo.net/2022/04/05/웹-프로그래밍-with-golang-3-정적-파일/"/> 
-<title>웹 프로그래밍 with Golang 3 - 정적 파일 | JeHwan PL Note</title>
+<meta name="twitter:image" content="https://i.ibb.co/NTvcHmP/image.png"> <link rel="canonical" href="https://jehwanyoo.net/2022/04/05/웹-프로그래밍-with-golang-4-라우팅/"/> 
+<title>웹 프로그래밍 with Golang 4 - 라우팅 | JeHwan PL Note</title>
 
  
 <link rel="icon" href="/favicon.ico" />
@@ -220,7 +218,7 @@
 </script>  
   <article class="post-wrap">
     <header class="post-header">
-      <h1 class="post-title">웹 프로그래밍 with Golang 3 - 정적 파일</h1>
+      <h1 class="post-title">웹 프로그래밍 with Golang 4 - 라우팅</h1>
       
       <div class="post-meta">
          Author:
@@ -229,7 +227,7 @@
         <span class="post-time">
           Date:
           <a href="#"
-            >4월 5, 2022&nbsp;&nbsp;21:55:33</a
+            >4월 5, 2022&nbsp;&nbsp;22:48:21</a
           >
         </span>
          
@@ -246,29 +244,51 @@
     <div class="post-content"><h2 id="지난-포스팅"><a href="#지난-포스팅" class="headerlink" title="지난 포스팅"></a>지난 포스팅</h2><hr>
 <p><a href="https://jehwanyoo.net/2022/03/31/%EC%9B%B9-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D-with-Golang-1-Hello-World/">웹 프로그래밍 with Golang 1 - Hello, World!</a></p>
 <p><a href="https://jehwanyoo.net/2022/04/02/%EC%9B%B9-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D-with-Golang-2-%ED%85%9C%ED%94%8C%EB%A6%BF-%EB%AC%B8%EB%B2%95/">웹 프로그래밍 with Golang 2 - 템플릿 문법</a></p>
-<h2 id="정적-파일-Static-File"><a href="#정적-파일-Static-File" class="headerlink" title="정적 파일 (Static File)"></a>정적 파일 (Static File)</h2><hr>
-<p>정적 파일은 원본이 수정되지 않고 그대로 클라이언트에게 제공하는 파일을 의미합니다.</p>
-<p>주로 <code>html, css, js</code>를 정적 파일로 사용합니다. 간단한 구조의 CSR 애플리케이션 이라면 정적 호스팅 서버만 있어도 상관 없습니다. (예) github pages</p>
-<h2 id="디렉토리-구조"><a href="#디렉토리-구조" class="headerlink" title="디렉토리 구조"></a>디렉토리 구조</h2><hr>
-<p><img src="https://i.ibb.co/QvJSWJm/image.png" alt="https://i.ibb.co/QvJSWJm/image.png"></p>
-<p><code>assets</code> 디렉터리에 있는 파일들을 사용자에게 제공해보겠습니다.</p>
-<p><code>assets</code> 디렉터리에 존재하지만, 사용자는 <code>/static</code>으로 리소스를 요청하게 만들겠습니다.</p>
-<p>이처럼 실제 경로와는 다르게 리소스 위치를 설정할 수 있습니다.</p>
-<h2 id="소스코드"><a href="#소스코드" class="headerlink" title="소스코드"></a>소스코드</h2><hr>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;net/http&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function">func <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  fs := http.<span class="built_in">FileServer</span>(http.<span class="built_in">Dir</span>(<span class="string">&quot;assets/&quot;</span>))</span><br><span class="line">  http.<span class="built_in">Handle</span>(<span class="string">&quot;/static/&quot;</span>, http.<span class="built_in">StripPrefix</span>(<span class="string">&quot;/static/&quot;</span>, fs))</span><br><span class="line"></span><br><span class="line">  http.<span class="built_in">ListenAndServe</span>(<span class="string">&quot;:8080&quot;</span>, nil)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a href="https://jehwanyoo.net/2022/04/05/%EC%9B%B9-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D-with-Golang-3-%EC%A0%95%EC%A0%81-%ED%8C%8C%EC%9D%BC/">웹 프로그래밍 with Golang 3 - 정적 파일</a></p>
+<h2 id="라우팅-Routing"><a href="#라우팅-Routing" class="headerlink" title="라우팅 (Routing)"></a>라우팅 (Routing)</h2><hr>
+<p>라우팅은 Restful API를 구축하기 위해 필수적인 기능이라고 할 수 있습니다.</p>
+<p>라우트(route)는 사전적 의미로 <code>(특정한 루트를 따라 무엇을) 보내다[전송하다]</code>라는 의미를 가지고 있습니다.</p>
+<p>즉, 라우팅은 사용자 요청이 들어왔을 때 해당 요청을 처리할 수 있는 서비스로 보내는 것을 의미합니다.</p>
+<h2 id="라우터-패키지"><a href="#라우터-패키지" class="headerlink" title="라우터 패키지"></a>라우터 패키지</h2><hr>
+<p>라우터를 만들기 위해서는 <code>http.ServeMux</code>를 사용하면 됩니다.</p>
+<p>하지만 편리한 방법이 아니기 때문에 서드파티 패키지를 주로 사용합니다.</p>
+<p>유명한 패키지로는</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/gin-gonic/gin">gin</a>  (Star: 57.2k)</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/gorilla/mux">gorilla/mux</a> (Star: 16.3k)</li>
+</ul>
+<p>가 있습니다.</p>
+<p><code>gin</code>은 Node.js의 <a target="_blank" rel="noopener" href="https://expressjs.com/ko/">Express</a> 수준의 프레임워크로 내장 패키지인 <code>net/http</code>를 대체합니다.</p>
+<p>반면에 <code>gorilla/mux</code>는 라우터 기능이 중점이며 <code>net/http</code> 모듈과 함께 사용됩니다.</p>
+<p>라우팅에 대해 이해하기 위하여 이번 튜토리얼에서는 <code>gorilla/mux</code>를 사용하겠습니다.</p>
+<p><code>gin</code>은 추후 챕터에서 다루겠습니다.</p>
+<h2 id="Gorilla-Mux-설치"><a href="#Gorilla-Mux-설치" class="headerlink" title="Gorilla Mux 설치"></a>Gorilla Mux 설치</h2><hr>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go get -u github.com/gorilla/mux</span><br></pre></td></tr></table></figure>
 
-<p><code>assets</code> 디렉토리를 읽어온 뒤 <code>http.FileServer</code> 메서드를 이용하여 정적 폴더로 지정합니다.</p>
-<p><code>http.Handle</code> 메서드를 이용하여 <code>/static</code>으로 요청하는 경우에 fs에 접근하도록 설정합니다.</p>
-<p>이때 <code>http.StripPrefix</code>를 반드시 해야하는데, 만약 그렇지 않으면<code>/static/assets/</code>에서 파일을 찾기 때문에 요청을 수행할 수 없습니다.</p>
-<p><code>http.StripPrefix</code>를 수행한 하고나면 <code>/assets/*</code>에서 파일을 찾아 사용자에게 제공합니다.</p>
-<img src='https://i.ibb.co/xYJSGyq/image.png' width='600' alt='index page' />
+<p><code>go get</code>으로 패키지를 설치합니다.</p>
+<h2 id="라우터-코드"><a href="#라우터-코드" class="headerlink" title="라우터 코드"></a>라우터 코드</h2><hr>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;net/http&quot;</span></span><br><span class="line">    <span class="string">&quot;github.com/gorilla/mux&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    r := mux.NewRouter()</span><br><span class="line"></span><br><span class="line">    r.HandleFunc(<span class="string">&quot;/books/&#123;title&#125;/page/&#123;page&#125;&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">        vars := mux.Vars(r)</span><br><span class="line">        title := vars[<span class="string">&quot;title&quot;</span>]</span><br><span class="line">        page := vars[<span class="string">&quot;page&quot;</span>]</span><br><span class="line"></span><br><span class="line">        fmt.Fprintf(w, <span class="string">&quot;You&#x27;ve requested the book: %s on page %s\n&quot;</span>, title, page)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    http.ListenAndServe(<span class="string">&quot;:8080&quot;</span>, r)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><code>&#123;주소&#125;/static</code>에 접속해보면 index 페이지가 출력됩니다.</p>
-<img src='https://i.ibb.co/5Ywqkf8/image.png' width='600' alt='memo1.txt' />
+<p>라우터는 기존에 알고있던 <code>http.HandleFunc</code>와 유사합니다.</p>
+<p><code>mux.Vars</code> 메서드를 이용하여 URL의 Path Parameter를 가져올 수 있습니다.</p>
+<p>이밖에도 정규식을 활용하여 다양한 형태의 URL을 파싱할 수 있습니다.</p>
+<h2 id="라우터-테스트"><a href="#라우터-테스트" class="headerlink" title="라우터 테스트"></a>라우터 테스트</h2><hr>
+<p>{title}과 {page}를 임의로 설정하여 요청을 보내겠습니다.</p>
+<p><code>주소/books/Harry Poter/page/5</code></p>
+<img src='https://i.ibb.co/NTvcHmP/image.png' width='600' alt='Parameter Path' />
 
-<p><code>&#123;주소&#125;/static/memo1.txt</code>에 접속하면 작성한 텍스트 파일이 그대로 출력됩니다.</p>
+<h2 id="메서드-제한하기"><a href="#메서드-제한하기" class="headerlink" title="메서드 제한하기"></a>메서드 제한하기</h2><hr>
+<p>별도로 메서드(Method)를 제한하지 않으면 패턴이 일치하는 모든 요청에 대해 응답할 것입니다.</p>
+<p>Restful API에는 4가지의 메서드를 사용합니다. (GET, POST, DELETE, PATCH)</p>
+<p>용도에 맞게 메서드를 다음과 같이 제한시킬 필요가 있습니다.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">r.HandleFunc(<span class="string">&quot;/books/&#123;title&#125;&quot;</span>, CreateBook).Methods(<span class="string">&quot;POST&quot;</span>)</span><br><span class="line">r.HandleFunc(<span class="string">&quot;/books/&#123;title&#125;&quot;</span>, ReadBook).Methods(<span class="string">&quot;GET&quot;</span>)</span><br><span class="line">r.HandleFunc(<span class="string">&quot;/books/&#123;title&#125;&quot;</span>, UpdateBook).Methods(<span class="string">&quot;PUT&quot;</span>)</span><br><span class="line">r.HandleFunc(<span class="string">&quot;/books/&#123;title&#125;&quot;</span>, DeleteBook).Methods(<span class="string">&quot;DELETE&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Restful API에 대한 이해가 부족하다면 <a href="https://jehwanyoo.net/2021/05/19/%EC%A2%8B%EC%9D%80-REST-API-%EC%84%A4%EA%B3%84-%EB%B0%A9%EB%B2%95%EC%97%90-%EB%8C%80%ED%95%9C-%EA%B3%A0%EC%B0%B0/">좋은 REST API 설계 방법에 대한 고찰</a>이라는 포스팅을 한번 보시길 바랍니다.</p>
+</blockquote>
+<p>다음 시간에는 구조화된 Data를 주고 받기 위해 Form Value &amp; JSON을 활용하는 법에 대해 배워보겠습니다.</p>
 <h2 id="참고"><a href="#참고" class="headerlink" title="참고"></a>참고</h2><hr>
-<p><a target="_blank" rel="noopener" href="https://gowebexamples.com/static-files/">https://gowebexamples.com/static-files/</a></p>
+<p><a target="_blank" rel="noopener" href="https://gowebexamples.com/routes-using-gorilla-mux/">https://gowebexamples.com/routes-using-gorilla-mux/</a></p>
 </div>
 
     
@@ -293,7 +313,7 @@
            
           <a href="/tags/Golang/"># Golang</a>
           
-          <a href="/tags/Static-File/"># Static File</a>
+          <a href="/tags/Routing/"># Routing</a>
            
         </span>
       </div>
@@ -304,13 +324,9 @@
       </div>
     </section>
     <section class="post-nav">
-      
-      <a class="prev" rel="prev" href="/2022/04/05/%EC%9B%B9-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D-with-Golang-4-%EB%9D%BC%EC%9A%B0%ED%8C%85/"
-        >웹 프로그래밍 with Golang 4 - 라우팅</a
-      >
        
-      <a class="next" rel="next" href="/2022/04/02/%EC%9B%B9-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D-with-Golang-2-%ED%85%9C%ED%94%8C%EB%A6%BF-%EB%AC%B8%EB%B2%95/"
-        >웹 프로그래밍 with Golang 2 - 템플릿 문법</a
+      <a class="next" rel="next" href="/2022/04/05/%EC%9B%B9-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D-with-Golang-3-%EC%A0%95%EC%A0%81-%ED%8C%8C%EC%9D%BC/"
+        >웹 프로그래밍 with Golang 3 - 정적 파일</a
       >
       
     </section>

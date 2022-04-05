@@ -1,0 +1,11 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.main .container {
+  padding: 2rem;
+}
+.intro {
+  transform: none;
+}

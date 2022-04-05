@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="JeHwanYoo" />
+ 
+<meta name="subtitle" content="유제환의 프로그래밍 노트" />
+ 
+<meta name="description" content="프로그래밍 노트, 팁, 강의등을 게시하는 블로그입니다." />
+ 
+<meta name="keywords" content="Programming, C, C++, Java, JavaScript, Node.js, Python, Rust, Go, ETC..." />
+ <meta name="description" content="지난 포스팅 웹 프로그래밍 with Golang 1 - Hello, World! 1. 템플릿이란? Go의 템플릿(Template)은 Express의 템플릿 엔진과 비슷합니다. 보간 문법(Interpolation Syntax)를 이용하여 서버사이드 렌더링을 수행합니다. 12345678910&lt;h1&gt;&amp;#123;&amp;#123;.PageTitle&amp;#125;&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="웹 프로그래밍 with Golang 2 - 템플릿 문법">
+<meta property="og:url" content="https://jehwanyoo.net/2022/04/02/%EC%9B%B9-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D-with-Golang-2-%ED%85%9C%ED%94%8C%EB%A6%BF-%EB%AC%B8%EB%B2%95/index.html">
+<meta property="og:site_name" content="JeHwan PL Note">
+<meta property="og:description" content="지난 포스팅 웹 프로그래밍 with Golang 1 - Hello, World! 1. 템플릿이란? Go의 템플릿(Template)은 Express의 템플릿 엔진과 비슷합니다. 보간 문법(Interpolation Syntax)를 이용하여 서버사이드 렌더링을 수행합니다. 12345678910&lt;h1&gt;&amp;#123;&amp;#123;.PageTitle&amp;#125;&amp;">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:image" content="https://i.ibb.co/StgnZd5/2022-04-02-7-11-15.png">
+<meta property="article:published_time" content="2022-04-02T10:29:04.000Z">
+<meta property="article:modified_time" content="2022-04-05T12:54:13.730Z">
+<meta property="article:author" content="JeHwanYoo">
+<meta property="article:tag" content="Golang">
+<meta property="article:tag" content="Template">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.ibb.co/StgnZd5/2022-04-02-7-11-15.png"> <link rel="canonical" href="https://jehwanyoo.net/2022/04/02/웹-프로그래밍-with-golang-2-템플릿-문법/"/> 
+<title>웹 프로그래밍 with Golang 2 - 템플릿 문법 | JeHwan PL Note</title>
+
+ 
+<link rel="icon" href="/favicon.ico" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+     
+<!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  
+
+<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/rss2.xml" title="JeHwan PL Note" type="application/rss+xml">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">JeHwan PL Note</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">JeHwan PL Note</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>  
+  <article class="post-wrap">
+    <header class="post-header">
+      <h1 class="post-title">웹 프로그래밍 with Golang 2 - 템플릿 문법</h1>
+      
+      <div class="post-meta">
+         Author:
+        <a itemprop="author" rel="author" href="/">JeHwanYoo</a>
+         
+        <span class="post-time">
+          Date:
+          <a href="#"
+            >4월 2, 2022&nbsp;&nbsp;19:29:04</a
+          >
+        </span>
+         
+        <span class="post-category">
+          Category: 
+          <a href="/categories/Golang/">Golang</a>
+          
+        </span>
+        
+      </div>
+      
+    </header>
+
+    <div class="post-content"><h2 id="지난-포스팅"><a href="#지난-포스팅" class="headerlink" title="지난 포스팅"></a>지난 포스팅</h2><hr>
+<p><a href="https://jehwanyoo.net/2022/03/31/%EC%9B%B9-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D-with-Golang-1-Hello-World/">웹 프로그래밍 with Golang 1 - Hello, World!</a></p>
+<h2 id="1-템플릿이란"><a href="#1-템플릿이란" class="headerlink" title="1. 템플릿이란?"></a>1. 템플릿이란?</h2><hr>
+<p>Go의 템플릿(Template)은 <a target="_blank" rel="noopener" href="https://expressjs.com/ko/guide/using-template-engines.html">Express</a>의 템플릿 엔진과 비슷합니다.</p>
+<p>보간 문법(Interpolation Syntax)를 이용하여 서버사이드 렌더링을 수행합니다.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>&#123;&#123;.PageTitle&#125;&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">    &#123;&#123;range .Todos&#125;&#125;</span><br><span class="line">        &#123;&#123;if .Done&#125;&#125;</span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">&quot;done&quot;</span>&gt;</span>&#123;&#123;.Title&#125;&#125;<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">        &#123;&#123;else&#125;&#125;</span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span>&gt;</span>&#123;&#123;.Title&#125;&#125;<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">        &#123;&#123;end&#125;&#125;</span><br><span class="line">    &#123;&#123;end&#125;&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>보간 문법은 중괄호(<code>&#123;&#125;</code>) 두개를 사용하며 구문(statement)의 끝에는 <code>&#123;&#123;end&#125;&#125;</code>가 사용됩니다.</p>
+<h2 id="2-템플릿-작성"><a href="#2-템플릿-작성" class="headerlink" title="2. 템플릿 작성"></a>2. 템플릿 작성</h2><hr>
+<h3 id="main-go"><a href="#main-go" class="headerlink" title="main.go"></a>main.go</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;html/template&quot;</span></span><br><span class="line">    <span class="string">&quot;net/http&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Todo <span class="keyword">struct</span> &#123;</span><br><span class="line">    Title <span class="keyword">string</span></span><br><span class="line">    Done  <span class="keyword">bool</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> TodoPageData <span class="keyword">struct</span> &#123;</span><br><span class="line">    PageTitle <span class="keyword">string</span></span><br><span class="line">    Todos     []Todo</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    tmpl := template.Must(template.ParseFiles(<span class="string">&quot;layout.html&quot;</span>))</span><br><span class="line">    http.HandleFunc(<span class="string">&quot;/&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">        data := TodoPageData&#123;</span><br><span class="line">            PageTitle: <span class="string">&quot;My TODO list&quot;</span>,</span><br><span class="line">            Todos: []Todo&#123;</span><br><span class="line">                &#123;Title: <span class="string">&quot;Task 1&quot;</span>, Done: <span class="literal">false</span>&#125;,</span><br><span class="line">                &#123;Title: <span class="string">&quot;Task 2&quot;</span>, Done: <span class="literal">true</span>&#125;,</span><br><span class="line">                &#123;Title: <span class="string">&quot;Task 3&quot;</span>, Done: <span class="literal">true</span>&#125;,</span><br><span class="line">            &#125;,</span><br><span class="line">        &#125;</span><br><span class="line">        tmpl.Execute(w, data)</span><br><span class="line">    &#125;)</span><br><span class="line">    http.ListenAndServe(<span class="string">&quot;:80&quot;</span>, <span class="literal">nil</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>템플릿 문법을 사용하기 위해서는 <code>html/template</code> 패키지가 필요합니다.</p>
+<p><code>template.ParseFiles(&quot;layout.html&quot;)</code>은 템플릿 문법이 포함된 html을 파싱합니다.</p>
+<p><code>template.Must()</code>는 파싱된 html을 <code>(*Template, error)</code> 객체의 쌍으로 만들어주는 헬퍼입니다.</p>
+<p>에러가 발생하지 않은 경우 <code>error</code>는 <code>nil</code> 값을 같습니다.</p>
+<p><code>tmpl.Execute(w, data)</code>는 <code>data</code>를 이용하여 페이지를 렌더링하고 출력물을 writer에 씁니다.</p>
+<h3 id="layout-html"><a href="#layout-html" class="headerlink" title="layout.html"></a>layout.html</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>&#123;&#123;.PageTitle&#125;&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">    &#123;&#123;range .Todos&#125;&#125;</span><br><span class="line">        &#123;&#123;if .Done&#125;&#125;</span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">&quot;done&quot;</span>&gt;</span>&#123;&#123;.Title&#125;&#125;<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">        &#123;&#123;else&#125;&#125;</span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span>&gt;</span>&#123;&#123;.Title&#125;&#125;<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">        &#123;&#123;end&#125;&#125;</span><br><span class="line">    &#123;&#123;end&#125;&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="css"></span></span><br><span class="line"><span class="css">	<span class="selector-tag">li</span><span class="selector-class">.done</span> &#123;</span></span><br><span class="line"><span class="css">    <span class="attribute">text-decoration</span> : line-through;</span></span><br><span class="line"><span class="css">    <span class="attribute">font-weight</span>: <span class="number">100</span>;</span></span><br><span class="line"><span class="css">	&#125;</span></span><br><span class="line"><span class="css"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<img src='https://i.ibb.co/StgnZd5/2022-04-02-7-11-15.png' width='400' alt='example' />
+
+<h2 id="참고"><a href="#참고" class="headerlink" title="참고"></a>참고</h2><hr>
+<p><a target="_blank" rel="noopener" href="https://gowebexamples.com/templates/">https://gowebexamples.com/templates/</a></p>
+</div>
+
+    
+    <section class="post-copyright">
+      
+      <p class="copyright-item">
+        <span>Author:</span>
+        <span>JeHwanYoo</span>
+      </p>
+        
+      <p class="copyright-item">
+        <span>License:</span>
+        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+      </p>
+       
+    </section>
+    
+    <section class="post-tags">
+      <div>
+        <span>Tag(s):</span>
+        <span class="tag">
+           
+          <a href="/tags/Golang/"># Golang</a>
+          
+          <a href="/tags/Template/"># Template</a>
+           
+        </span>
+      </div>
+      <div>
+        <a href="javascript:window.history.back();">back</a>
+        <span>· </span>
+        <a href="/">home</a>
+      </div>
+    </section>
+    <section class="post-nav">
+      
+      <a class="prev" rel="prev" href="/2022/04/05/%EC%9B%B9-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D-with-Golang-3-%EC%A0%95%EC%A0%81-%ED%8C%8C%EC%9D%BC/"
+        >웹 프로그래밍 with Golang 3 - 정적 파일</a
+      >
+       
+      <a class="next" rel="next" href="/2022/03/31/%EC%9B%B9-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D-with-Golang-1-Hello-World/"
+        >웹 프로그래밍 with Golang 1 - Hello World</a
+      >
+      
+    </section>
+    <section style="margin-top: 4rem">
+      <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jehwanyoo.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </section>
+  </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+  <div class="copyright">
+    <span>
+      © JeHwanYoo | Powered by
+      <a href="https://hexo.io" target="_blank">Hexo</a> &
+      <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">
+        Chic
+      </a>
+    </span>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

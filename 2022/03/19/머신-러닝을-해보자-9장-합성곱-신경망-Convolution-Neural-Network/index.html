@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+/>
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<meta name="author" content="JeHwanYoo" />
+ 
+<meta name="subtitle" content="유제환의 프로그래밍 노트" />
+ 
+<meta name="description" content="프로그래밍 노트, 팁, 강의등을 게시하는 블로그입니다." />
+ 
+<meta name="keywords" content="Programming, C, C++, Java, JavaScript, Node.js, Python, Rust, Go, ETC..." />
+ <meta name="description" content="합성곱 딥러닝 아키텍처   합성곱(Convolution) 이란?   합성곱(Convolution)은 행렬의 합, 곱 연산을 하는데 사용되며, 다시말해 선형 함수(Linear Function)이다. (머신 러닝에 필요한 선형대수 기초 지식) 합성곱은 딥러닝에서 주로 픽셀 이미지(행렬)의 특징 맵(feature map)을 만드는데 사용된다. 합성곱 예시 각종">
+<meta property="og:type" content="article">
+<meta property="og:title" content="머신 러닝을 해보자 9장 - 합성곱 신경망 (Convolution Neural Network)">
+<meta property="og:url" content="https://jehwanyoo.net/2022/03/19/%EB%A8%B8%EC%8B%A0-%EB%9F%AC%EB%8B%9D%EC%9D%84-%ED%95%B4%EB%B3%B4%EC%9E%90-9%EC%9E%A5-%ED%95%A9%EC%84%B1%EA%B3%B1-%EC%8B%A0%EA%B2%BD%EB%A7%9D-Convolution-Neural-Network/index.html">
+<meta property="og:site_name" content="JeHwan PL Note">
+<meta property="og:description" content="합성곱 딥러닝 아키텍처   합성곱(Convolution) 이란?   합성곱(Convolution)은 행렬의 합, 곱 연산을 하는데 사용되며, 다시말해 선형 함수(Linear Function)이다. (머신 러닝에 필요한 선형대수 기초 지식) 합성곱은 딥러닝에서 주로 픽셀 이미지(행렬)의 특징 맵(feature map)을 만드는데 사용된다. 합성곱 예시 각종">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:image" content="https://i.ibb.co/72DmWtY/Kakao-Talk-Photo-2022-03-16-19-12-07.jpg">
+<meta property="og:image" content="https://i.ibb.co/pRvC90x/Kakao-Talk-Photo-2022-03-16-19-43-32.jpg">
+<meta property="og:image" content="https://i.ibb.co/Cz2dhff/2022-03-16-7-56-31.png">
+<meta property="og:image" content="https://i.ibb.co/gTRxtqY/2022-03-16-7-56-36.png">
+<meta property="og:image" content="https://i.ibb.co/Z20m9y8/2022-03-16-7-51-24.png">
+<meta property="og:image" content="https://i.ibb.co/n0FnBQj/2022-03-16-7-52-50.png">
+<meta property="og:image" content="https://i.ibb.co/k3pm4cF/Kakao-Talk-Photo-2022-03-18-18-11-51.jpg">
+<meta property="og:image" content="https://i.ibb.co/P1SvnqV/Kakao-Talk-Photo-2022-03-16-20-25-48.jpg">
+<meta property="og:image" content="https://i.ibb.co/ccNk7hY/Kakao-Talk-Photo-2022-03-19-18-47-52.jpg">
+<meta property="og:image" content="https://i.ibb.co/jMjnL5C/Kakao-Talk-20220317-232115469.jpg">
+<meta property="og:image" content="https://i.ibb.co/C8JctnP/Kakao-Talk-Photo-2022-03-16-20-42-29.jpg">
+<meta property="og:image" content="https://i.ibb.co/TMdVGLG/graph.png">
+<meta property="og:image" content="https://i.ibb.co/6DfPkp2/predicted.png">
+<meta property="article:published_time" content="2022-03-19T09:42:46.000Z">
+<meta property="article:modified_time" content="2022-04-05T12:54:13.730Z">
+<meta property="article:author" content="JeHwanYoo">
+<meta property="article:tag" content="Machine Learning">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Deep Learning">
+<meta property="article:tag" content="CNN">
+<meta property="article:tag" content="Dropout">
+<meta property="article:tag" content="Pooling">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.ibb.co/72DmWtY/Kakao-Talk-Photo-2022-03-16-19-12-07.jpg"> <link rel="canonical" href="https://jehwanyoo.net/2022/03/19/머신-러닝을-해보자-9장-합성곱-신경망-convolution-neural-network/"/> 
+<title>머신 러닝을 해보자 9장 - 합성곱 신경망 (Convolution Neural Network) | JeHwan PL Note</title>
+
+ 
+<link rel="icon" href="/favicon.ico" />
+  
+<!-- stylesheets list from _config.yml -->
+
+<link rel="stylesheet" href="/css/style.css" />
+   
+<!-- scripts list from _config.yml -->
+
+<script src="/js/script.js"></script>
+
+<script src="/js/tocbot.min.js"></script>
+     
+<!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  
+
+<meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/rss2.xml" title="JeHwan PL Note" type="application/rss+xml">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">JeHwan PL Note</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">JeHwan PL Note</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                    <a class="menu-item" href="/ai-study">AI Study</a>
+                
+                    <a class="menu-item" href="/algorithms">Algorithms</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>  
+  <article class="post-wrap">
+    <header class="post-header">
+      <h1 class="post-title">머신 러닝을 해보자 9장 - 합성곱 신경망 (Convolution Neural Network)</h1>
+      
+      <div class="post-meta">
+         Author:
+        <a itemprop="author" rel="author" href="/">JeHwanYoo</a>
+         
+        <span class="post-time">
+          Date:
+          <a href="#"
+            >3월 19, 2022&nbsp;&nbsp;18:42:46</a
+          >
+        </span>
+         
+        <span class="post-category">
+          Category: 
+          <a href="/categories/AI/">AI</a>
+          
+        </span>
+        
+      </div>
+      
+    </header>
+
+    <div class="post-content"><h2 id="합성곱-딥러닝-아키텍처"><a href="#합성곱-딥러닝-아키텍처" class="headerlink" title="합성곱 딥러닝 아키텍처"></a>합성곱 딥러닝 아키텍처</h2><hr>
+<img src="https://i.ibb.co/72DmWtY/Kakao-Talk-Photo-2022-03-16-19-12-07.jpg" width="600" alt="합성곱 신경망"/>
+
+<h2 id="합성곱-Convolution-이란"><a href="#합성곱-Convolution-이란" class="headerlink" title="합성곱(Convolution) 이란?"></a>합성곱(Convolution) 이란?</h2><hr>
+<img src="https://i.ibb.co/pRvC90x/Kakao-Talk-Photo-2022-03-16-19-43-32.jpg" width="600" alt="콘볼루션 연산 과정"/>
+
+<p>합성곱(Convolution)은 행렬의 합, 곱 연산을 하는데 사용되며, 다시말해 선형 함수(Linear Function)이다. <a href="https://jehwanyoo.net/2022/02/17/%EB%A8%B8%EC%8B%A0-%EB%9F%AC%EB%8B%9D%EC%97%90-%ED%95%84%EC%9A%94%ED%95%9C-%EC%84%A0%ED%98%95%EB%8C%80%EC%88%98-%EA%B8%B0%EC%B4%88-%EC%A7%80%EC%8B%9D/">(머신 러닝에 필요한 선형대수 기초 지식)</a></p>
+<p>합성곱은 딥러닝에서 주로 픽셀 이미지(행렬)의 특징 맵(feature map)을 만드는데 사용된다.</p>
+<h2 id="합성곱-예시"><a href="#합성곱-예시" class="headerlink" title="합성곱 예시"></a>합성곱 예시</h2><hr>
+<h3 id="각종-이미지-프로그램들의-필터링-기능들"><a href="#각종-이미지-프로그램들의-필터링-기능들" class="headerlink" title="각종 이미지 프로그램들의 필터링 기능들"></a>각종 이미지 프로그램들의 필터링 기능들</h3><img src="https://i.ibb.co/Cz2dhff/2022-03-16-7-56-31.png" alt="경계선 검출" width="600" />
+
+<img src="https://i.ibb.co/gTRxtqY/2022-03-16-7-56-36.png" alt="소벨 알고리즘" width="600" />
+
+<h3 id="경계-검출-필터-미분-원리"><a href="#경계-검출-필터-미분-원리" class="headerlink" title="경계 검출 필터 (미분 원리)"></a>경계 검출 필터 (미분 원리)</h3><img src="https://i.ibb.co/Z20m9y8/2022-03-16-7-51-24.png" alt="경계선 검출" width="600" />
+
+<img src="https://i.ibb.co/n0FnBQj/2022-03-16-7-52-50.png" alt="소벨 알고리즘" width="600" />
+
+<h2 id="패딩-Padding"><a href="#패딩-Padding" class="headerlink" title="패딩(Padding)"></a>패딩(Padding)</h2><hr>
+<img src="https://i.ibb.co/k3pm4cF/Kakao-Talk-Photo-2022-03-18-18-11-51.jpg" alt="padding" width="600" />
+
+<p>패딩 사이즈가 1인 경우 콘볼루션 연산을 하더라도 원본 행렬의 크기를 유지한다.</p>
+<h2 id="합성곱을-딥러닝에-왜-사용하는가"><a href="#합성곱을-딥러닝에-왜-사용하는가" class="headerlink" title="합성곱을 딥러닝에 왜 사용하는가?"></a>합성곱을 딥러닝에 왜 사용하는가?</h2><hr>
+<p>합성곱은 선형 함수이기 때문에 이미지 본래의 성질을 유지한 채 중요한 부분(특징)만 찾아낼 수 있어 학습의 정확도를 높일 수 있다.</p>
+<h2 id="합성곱-신경망에-활성화-함수-activation-function-를-왜-사용하는가"><a href="#합성곱-신경망에-활성화-함수-activation-function-를-왜-사용하는가" class="headerlink" title="합성곱 신경망에 활성화 함수(activation function)를 왜 사용하는가?"></a>합성곱 신경망에 활성화 함수(activation function)를 왜 사용하는가?</h2><hr>
+<p>선형 함수나 아핀 함수는 활성화 함수를 사용하지 않으면 다층 신경망을 구성하는 의미가 없다.</p>
+<p>선형 레이어는 아무리 중첩해도 선형 레이어가 되기 때문이다.</p>
+<h2 id="풀링-pooling"><a href="#풀링-pooling" class="headerlink" title="풀링 (pooling)"></a>풀링 (pooling)</h2><hr>
+<p>풀링은 입력 데이터를 압축하여 연산량을 줄이는 작업이다.</p>
+<p>최대 풀링(max pooling)은 가장 큰 값을 선택하는 것이다.</p>
+<img src="https://i.ibb.co/P1SvnqV/Kakao-Talk-Photo-2022-03-16-20-25-48.jpg" alt="맥스 풀링" width="600" />
+
+<h2 id="콘볼루션-연산-출력-데이터-크기"><a href="#콘볼루션-연산-출력-데이터-크기" class="headerlink" title="콘볼루션 연산 출력 데이터 크기"></a>콘볼루션 연산 출력 데이터 크기</h2><hr>
+<h3 id="피처-맵-높이"><a href="#피처-맵-높이" class="headerlink" title="피처 맵 높이"></a>피처 맵 높이</h3><p>H: 입력 높이, W: 입력 폭, P: 패딩 폭, 스트라이드: S</p>
+<p>$$<br>OH = \frac{H+2P-FH}{S} + 1<br>$$</p>
+<h3 id="피처-맵-폭"><a href="#피처-맵-폭" class="headerlink" title="피처 맵 폭"></a>피처 맵 폭</h3><p>$$<br>OW = \frac{W+2P-FW}{S} + 1<br>$$</p>
+<h2 id="풀링-Pooling-을-이용한-서브-샘플링"><a href="#풀링-Pooling-을-이용한-서브-샘플링" class="headerlink" title="풀링(Pooling)을 이용한 서브 샘플링"></a>풀링(Pooling)을 이용한 서브 샘플링</h2><hr>
+<img src="https://i.ibb.co/ccNk7hY/Kakao-Talk-Photo-2022-03-19-18-47-52.jpg" alt="pooling" width="600" />
+
+<p>풀링은 샘플의 크기를 줄이기 위하여 사용하는 방식이다.</p>
+<ul>
+<li><p>최대 풀링 (max-pooling) - 이웃한 픽셀에서 가장 큰 값을 취한다.</p>
+</li>
+<li><p>평균 풀링 (menn-pooling) - 이웃한 픽셀의 평균 값을 취한다.</p>
+</li>
+</ul>
+<h2 id="드롭아웃-dropout-으로-신경망-규제"><a href="#드롭아웃-dropout-으로-신경망-규제" class="headerlink" title="드롭아웃(dropout)으로 신경망 규제"></a>드롭아웃(dropout)으로 신경망 규제</h2><hr>
+<p>크기가 큰 네트워크에서 ‘과대적합’을 피하기 위해 일부 데이터 셋을 일부러 버리는 것이다.</p>
+<p>과대적합(overfitting)이란 모델을 학습할 때 학습 데이터셋에 지나치게 최적화하여 발생하는 문제이다.</p>
+<img src="https://i.ibb.co/jMjnL5C/Kakao-Talk-20220317-232115469.jpg" alt="dropout" width="600" />
+
+<h2 id="CNN을-이용한-MNIST-손글씨-검증"><a href="#CNN을-이용한-MNIST-손글씨-검증" class="headerlink" title="CNN을 이용한 MNIST 손글씨 검증"></a>CNN을 이용한 MNIST 손글씨 검증</h2><hr>
+<img src="https://i.ibb.co/C8JctnP/Kakao-Talk-Photo-2022-03-16-20-42-29.jpg" alt="cnn-mnist" width="600" />
+
+<h3 id="텐서-차원"><a href="#텐서-차원" class="headerlink" title="텐서 차원"></a>텐서 차원</h3><ul>
+<li><p>입력: [batchsize x 28 x 28 x 1]</p>
+</li>
+<li><p>합성곱 1: [batchsize x 28 x 28 x 32]</p>
+</li>
+<li><p>풀링 1: [batchsize x 14 x 14 x 32]</p>
+</li>
+<li><p>합성곱 2: [batchsize x 14 x 14 x 64]</p>
+</li>
+<li><p>풀링 2: [batchsize x 7 x 7 x 46]</p>
+</li>
+<li><p>완전 연결 1: [batchsize x 1024]</p>
+</li>
+<li><p>완전 연결과 소프트맥스 층: [batchsize x 10]</p>
+</li>
+</ul>
+<h3 id="합성곱-포맷"><a href="#합성곱-포맷" class="headerlink" title="합성곱 포맷"></a>합성곱 포맷</h3><ul>
+<li><p>batch N, channels C, depth D, height H, width W</p>
+</li>
+<li><p>NHWC Format (batch, height, width, channels)</p>
+</li>
+<li><p>NCHW Format (batch, channels, height, width)</p>
+</li>
+</ul>
+<p>이번 네트워크에서는 <code>NHWC</code> 포맷을 사용할 것이다. (data_format=’channel_last’)</p>
+<h2 id="학습-코드"><a href="#학습-코드" class="headerlink" title="학습 코드"></a>학습 코드</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.datasets <span class="keyword">import</span> mnist</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras <span class="keyword">import</span> Sequential</span><br><span class="line"><span class="keyword">from</span> tensorflow.keras.layers <span class="keyword">import</span> Flatten, Dense, Conv2D, MaxPool2D, Dropout</span><br><span class="line"></span><br><span class="line"><span class="comment"># 데이터 로드</span></span><br><span class="line">(x_train_orig, y_train_orig), (x_test, y_test) = mnist.load_data()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 데이터 정규화</span></span><br><span class="line">x_train_orig = x_train_orig / <span class="number">255.</span></span><br><span class="line">x_test = x_test / <span class="number">255.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 학습용 데이터 (3만개)</span></span><br><span class="line">x_train = x_train_orig[:<span class="number">30000</span>]</span><br><span class="line">y_train = y_train_orig[:<span class="number">30000</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 검증용 데이터 (3만개)</span></span><br><span class="line">x_valid = x_train_orig[<span class="number">30000</span>:]</span><br><span class="line">y_valid = y_train_orig[<span class="number">30000</span>:]</span><br><span class="line"></span><br><span class="line">tf.random.set_seed(<span class="number">1</span>) <span class="comment"># 난수 생성 방식 고정</span></span><br><span class="line"></span><br><span class="line">model = Sequential() <span class="comment"># 시퀀셜 모델</span></span><br><span class="line"></span><br><span class="line">model.add(Conv2D(</span><br><span class="line">    input_shape=(<span class="number">28</span>, <span class="number">28</span>, <span class="number">1</span>), <span class="comment"># 입력층 출력 모양 (None, 28, 28, 1)</span></span><br><span class="line">    filters=<span class="number">32</span>, <span class="comment"># 콘벌루션 필터 개수</span></span><br><span class="line">    kernel_size=(<span class="number">5</span>,<span class="number">5</span>), <span class="comment"># 콘벌루션 필터 사이즈</span></span><br><span class="line">    strides=(<span class="number">1</span>,<span class="number">1</span>), <span class="comment"># 스트라이드 크기</span></span><br><span class="line">    padding=<span class="string">&#x27;same&#x27;</span>, <span class="comment"># 패딩 사이즈 = 1</span></span><br><span class="line">    data_format=<span class="string">&#x27;channels_last&#x27;</span>, <span class="comment"># NHWC 포맷</span></span><br><span class="line">    activation=<span class="string">&#x27;relu&#x27;</span>,</span><br><span class="line">    name=<span class="string">&#x27;conv_1&#x27;</span></span><br><span class="line">    ))</span><br><span class="line"></span><br><span class="line">model.add(MaxPool2D(</span><br><span class="line">    pool_size=(<span class="number">2</span>,<span class="number">2</span>),</span><br><span class="line">    name=<span class="string">&#x27;pool_1&#x27;</span></span><br><span class="line">    ))</span><br><span class="line"></span><br><span class="line">model.add(Conv2D(</span><br><span class="line">    filters=<span class="number">64</span>,</span><br><span class="line">    kernel_size=(<span class="number">5</span>,<span class="number">5</span>),</span><br><span class="line">    strides=(<span class="number">1</span>,<span class="number">1</span>),</span><br><span class="line">    padding=<span class="string">&#x27;same&#x27;</span>,</span><br><span class="line">    activation=<span class="string">&#x27;relu&#x27;</span>,</span><br><span class="line">    name=<span class="string">&#x27;conv_2&#x27;</span></span><br><span class="line">    ))</span><br><span class="line"></span><br><span class="line">model.add(MaxPool2D(</span><br><span class="line">    pool_size=(<span class="number">2</span>,<span class="number">2</span>),</span><br><span class="line">    name=<span class="string">&#x27;pool_2&#x27;</span></span><br><span class="line">    ))</span><br><span class="line"></span><br><span class="line">model.add(Flatten())</span><br><span class="line"></span><br><span class="line">model.add(Dense(</span><br><span class="line">    units=<span class="number">1024</span>,</span><br><span class="line">    activation=<span class="string">&#x27;relu&#x27;</span>,</span><br><span class="line">    name=<span class="string">&#x27;fc_1&#x27;</span></span><br><span class="line">    ))</span><br><span class="line"></span><br><span class="line">model.add(Dropout(</span><br><span class="line">    rate=<span class="number">0.5</span></span><br><span class="line">    ))</span><br><span class="line"></span><br><span class="line">model.add(Dense(</span><br><span class="line">    units=<span class="number">10</span>,</span><br><span class="line">    activation=<span class="string">&#x27;softmax&#x27;</span>,</span><br><span class="line">    name=<span class="string">&#x27;fc_2&#x27;</span></span><br><span class="line">    ))</span><br><span class="line"></span><br><span class="line">model.<span class="built_in">compile</span>(</span><br><span class="line">    optimizer=<span class="string">&#x27;adam&#x27;</span>,</span><br><span class="line">    loss=<span class="string">&#x27;SparseCategoricalCrossentropy&#x27;</span>,</span><br><span class="line">    metrics=[<span class="string">&#x27;accuracy&#x27;</span>]</span><br><span class="line">) <span class="comment"># 모델 컴파일</span></span><br><span class="line"></span><br><span class="line">history = model.fit(x_train, y_train, epochs=<span class="number">10</span>, batch_size=<span class="number">64</span>, validation_data=(x_valid, y_valid))</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Epoch 1/10</span><br><span class="line">469/469 [==============================] - 106s 224ms/step - loss: 0.1883 - accuracy: 0.9422 - val_loss: 0.0629 - val_accuracy: 0.9809</span><br><span class="line">Epoch 2/10</span><br><span class="line">469/469 [==============================] - 105s 224ms/step - loss: 0.0571 - accuracy: 0.9820 - val_loss: 0.0518 - val_accuracy: 0.9842</span><br><span class="line">Epoch 3/10</span><br><span class="line">469/469 [==============================] - 105s 224ms/step - loss: 0.0384 - accuracy: 0.9871 - val_loss: 0.0410 - val_accuracy: 0.9874</span><br><span class="line">Epoch 4/10</span><br><span class="line">469/469 [==============================] - 105s 224ms/step - loss: 0.0249 - accuracy: 0.9923 - val_loss: 0.0419 - val_accuracy: 0.9887</span><br><span class="line">Epoch 5/10</span><br><span class="line">469/469 [==============================] - 105s 224ms/step - loss: 0.0200 - accuracy: 0.9933 - val_loss: 0.0469 - val_accuracy: 0.9876</span><br><span class="line">Epoch 6/10</span><br><span class="line">469/469 [==============================] - 105s 224ms/step - loss: 0.0192 - accuracy: 0.9935 - val_loss: 0.0438 - val_accuracy: 0.9880</span><br><span class="line">Epoch 7/10</span><br><span class="line">469/469 [==============================] - 105s 223ms/step - loss: 0.0173 - accuracy: 0.9943 - val_loss: 0.0395 - val_accuracy: 0.9893</span><br><span class="line">Epoch 8/10</span><br><span class="line">469/469 [==============================] - 105s 224ms/step - loss: 0.0106 - accuracy: 0.9964 - val_loss: 0.0539 - val_accuracy: 0.9865</span><br><span class="line">Epoch 9/10</span><br><span class="line">469/469 [==============================] - 105s 223ms/step - loss: 0.0114 - accuracy: 0.9965 - val_loss: 0.0442 - val_accuracy: 0.9894</span><br><span class="line">Epoch 10/10</span><br><span class="line">469/469 [==============================] - 104s 222ms/step - loss: 0.0099 - accuracy: 0.9966 - val_loss: 0.0475 - val_accuracy: 0.9898</span><br></pre></td></tr></table></figure>
+
+<h2 id="히스토리-분석"><a href="#히스토리-분석" class="headerlink" title="히스토리 분석"></a>히스토리 분석</h2><hr>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">draw_history</span>(<span class="params">hist, figsize=<span class="literal">None</span></span>):</span></span><br><span class="line">  <span class="keyword">if</span> figsize:</span><br><span class="line">    fig = plt.figure(figsize=figsize)</span><br><span class="line">  <span class="keyword">else</span>:</span><br><span class="line">    fig = plt.figure()</span><br><span class="line"></span><br><span class="line">  x_arr = np.arange(<span class="built_in">len</span>(hist[<span class="string">&#x27;loss&#x27;</span>])) + <span class="number">1</span></span><br><span class="line">  </span><br><span class="line">  loss_ax = fig.add_subplot(<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>)</span><br><span class="line">  acc_ax = fig.add_subplot(<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">  loss_ax.plot(x_arr, hist[<span class="string">&#x27;loss&#x27;</span>], <span class="string">&#x27;-o&#x27;</span>, label=<span class="string">&#x27;Train Loss&#x27;</span>)</span><br><span class="line">  loss_ax.plot(x_arr, hist[<span class="string">&#x27;val_loss&#x27;</span>], <span class="string">&#x27;--&lt;&#x27;</span>, label=<span class="string">&#x27;Validation Loss&#x27;</span>)</span><br><span class="line">  acc_ax.plot(x_arr, hist[<span class="string">&#x27;accuracy&#x27;</span>], <span class="string">&#x27;-o&#x27;</span>, label=<span class="string">&#x27;Train acc.&#x27;</span>)</span><br><span class="line">  acc_ax.plot(x_arr, hist[<span class="string">&#x27;val_accuracy&#x27;</span>], <span class="string">&#x27;--&lt;&#x27;</span>, label=<span class="string">&#x27;Validation acc.&#x27;</span>)</span><br><span class="line"></span><br><span class="line">  loss_ax.legend(fontsize=<span class="number">15</span>)</span><br><span class="line">  acc_ax.legend(fontsize=<span class="number">15</span>)</span><br><span class="line"></span><br><span class="line">draw_history(history.history, figsize=(<span class="number">12</span>, <span class="number">4</span>))</span><br></pre></td></tr></table></figure>
+
+<img src="https://i.ibb.co/TMdVGLG/graph.png" alt="history" width="600" >
+
+<h2 id="테스트-데이터-예측-결과-시각화"><a href="#테스트-데이터-예측-결과-시각화" class="headerlink" title="테스트 데이터 예측 결과 시각화"></a>테스트 데이터 예측 결과 시각화</h2><hr>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">test_loss, test_acc = model.evaluate(x_test, y_test, verbose=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">predicted = model.predict(x_test)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">313/313 - 8s - loss: 0.0318 - accuracy: 0.9903 - 8s/epoch - 24ms/step</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show_predicted_with_img</span>(<span class="params">predicted, x_img, y_label, grid, figsize=<span class="literal">None</span></span>):</span></span><br><span class="line">  <span class="keyword">if</span> figsize:</span><br><span class="line">    fig = plt.figure(figsize=figsize)</span><br><span class="line">  <span class="keyword">else</span>:</span><br><span class="line">    fig = plt.figure()</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> i, pred <span class="keyword">in</span> <span class="built_in">enumerate</span>(predicted):</span><br><span class="line">    p_label = np.argmax(pred)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> p_label == y_label[i]:</span><br><span class="line">      color = <span class="string">&#x27;green&#x27;</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">      color = <span class="string">&#x27;red&#x27;</span></span><br><span class="line">    </span><br><span class="line">    ax = fig.add_subplot(grid[<span class="number">0</span>], grid[<span class="number">1</span>], i+<span class="number">1</span>)</span><br><span class="line">    ax.set_xticks([])</span><br><span class="line">    ax.set_yticks([])</span><br><span class="line">    ax.text(<span class="number">0.85</span>, <span class="number">0.1</span>, <span class="string">f&#x27;<span class="subst">&#123;p_label&#125;</span>(<span class="subst">&#123;y_label[i]&#125;</span>)&#x27;</span>, size=<span class="number">15</span>, color=color, </span><br><span class="line">            horizontalalignment=<span class="string">&#x27;center&#x27;</span>, verticalalignment=<span class="string">&#x27;center&#x27;</span>, </span><br><span class="line">            transform=ax.transAxes)</span><br><span class="line">    ax.imshow(x_img[i], cmap=<span class="string">&#x27;gray_r&#x27;</span>)</span><br><span class="line"></span><br><span class="line">  plt.show()</span><br><span class="line"></span><br><span class="line">show_predicted_with_img(predicted[:<span class="number">18</span>], x_test[:<span class="number">18</span>], y_test[:<span class="number">18</span>], grid=(<span class="number">3</span>, <span class="number">6</span>), figsize=(<span class="number">12</span>, <span class="number">6</span>))</span><br></pre></td></tr></table></figure>
+
+<img src="https://i.ibb.co/6DfPkp2/predicted.png" alt="predicted" width="600" />
+
+<h2 id="참고-사항"><a href="#참고-사항" class="headerlink" title="참고 사항"></a>참고 사항</h2><hr>
+<p><a target="_blank" rel="noopener" href="http://www.yes24.com/Product/Goods/87663679">머신 러닝을 위한 파이썬 한조각</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.kyobobook.co.kr/product/detailViewKor.laf?mallGb=KOR&ejkGb=KOR&barcode=9791165215187">머신 러닝 교과서 with 파이썬, 사이킷런, 텐서플로</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.kmooc.kr/courses/course-v1:SoongsilUnivK+ACE_soongsilmooc03K+2018_1/about">바이오메디컬비전 및 응용 (숭실대학교)</a></p>
+</div>
+
+    
+    <section class="post-copyright">
+      
+      <p class="copyright-item">
+        <span>Author:</span>
+        <span>JeHwanYoo</span>
+      </p>
+        
+      <p class="copyright-item">
+        <span>License:</span>
+        <span>Copyright (c) 2022 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+      </p>
+       
+    </section>
+    
+    <section class="post-tags">
+      <div>
+        <span>Tag(s):</span>
+        <span class="tag">
+           
+          <a href="/tags/Machine-Learning/"># Machine Learning</a>
+          
+          <a href="/tags/AI/"># AI</a>
+          
+          <a href="/tags/Deep-Learning/"># Deep Learning</a>
+          
+          <a href="/tags/CNN/"># CNN</a>
+          
+          <a href="/tags/Dropout/"># Dropout</a>
+          
+          <a href="/tags/Pooling/"># Pooling</a>
+           
+        </span>
+      </div>
+      <div>
+        <a href="javascript:window.history.back();">back</a>
+        <span>· </span>
+        <a href="/">home</a>
+      </div>
+    </section>
+    <section class="post-nav">
+      
+      <a class="prev" rel="prev" href="/2022/03/26/Svelte-%EA%B8%B0%EB%B3%B8-%EA%B0%9C%EB%85%90%EA%B3%BC-%EC%82%AC%EC%9A%A9-%EB%B0%A9%EB%B2%95/"
+        >Svelte 기본 개념과 사용 방법</a
+      >
+       
+      <a class="next" rel="next" href="/2022/03/11/%EB%A8%B8%EC%8B%A0-%EB%9F%AC%EB%8B%9D%EC%9D%84-%ED%95%B4%EB%B3%B4%EC%9E%90-8%EC%9E%A5-Keras-Layer-%EB%B6%84%EC%84%9D/"
+        >머신 러닝을 해보자 8장 - Keras의 Layers API와 Model API에 대하여</a
+      >
+      
+    </section>
+    <section style="margin-top: 4rem">
+      <div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jehwanyoo.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </section>
+  </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+  <div class="copyright">
+    <span>
+      © JeHwanYoo | Powered by
+      <a href="https://hexo.io" target="_blank">Hexo</a> &
+      <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">
+        Chic
+      </a>
+    </span>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>

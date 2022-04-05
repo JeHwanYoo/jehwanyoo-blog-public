@@ -23,7 +23,7 @@
 <meta property="og:description" content="1. 서론몇 달전 서점에서 “웹 API 디자인” 이라는 책을 구매해서 열심히 읽어봤다. 이 책을 읽고나서 OAS에 대해 알게 되었다. 백엔드 프로그래밍을 주로 하겠다는 사람이 아직도 이걸 몰랐다니, 역시 사람은 아는 만큼 보이나보다. 아무튼, 이번 학기 프로젝트를 진행하면서 API를 설계하는데 이 책의 내용과 내 나름대로의 원칙을 결합하여 좋은 REST A">
 <meta property="og:locale" content="ko_KR">
 <meta property="article:published_time" content="2021-05-18T19:52:14.000Z">
-<meta property="article:modified_time" content="2022-03-06T07:58:31.580Z">
+<meta property="article:modified_time" content="2022-04-05T13:34:16.410Z">
 <meta property="article:author" content="JeHwanYoo">
 <meta property="article:tag" content="REST API">
 <meta name="twitter:card" content="summary"> <link rel="canonical" href="https://jehwanyoo.net/2021/05/19/좋은-rest-api-설계-방법에-대한-고찰/"/> 
@@ -257,9 +257,9 @@
 </ul>
 <p>리소스가 명사여야 하는 이유는 HTTP Methods가 이미 동사이기 때문이다.</p>
 <p>의외로 아무 생각 없이 짜다보면 지키지 않는 경우가 많다!</p>
-<h3 id="2-3-Query-String-vs-Parameter-String"><a href="#2-3-Query-String-vs-Parameter-String" class="headerlink" title="2.3 Query String vs Parameter String"></a>2.3 Query String vs Parameter String</h3><hr>
-<p>URL을 구성할 때, Query String과 Parameter Path가 뭔지 또 어떨때 사용해야하는지 구분 못하는 사람들이 은근히 많다.</p>
-<p>우선 Parameter Path은 가변 경로라고 보면 된다.</p>
+<h3 id="2-3-Query-String-vs-Path-Parameter"><a href="#2-3-Query-String-vs-Path-Parameter" class="headerlink" title="2.3 Query String vs Path Parameter"></a>2.3 Query String vs Path Parameter</h3><hr>
+<p>URL을 구성할 때, Query String과 Path Parameter가 뭔지 또 어떨때 사용해야하는지 구분 못하는 사람들이 은근히 많다.</p>
+<p>우선 Path Parameter은 가변 경로라고 보면 된다.</p>
 <p><code>/students/:student_id</code> 라는 경로는 <code>/students/20152399</code> 또는 <code>students/20172499</code> 이런 식으로 변할 수 있다. 즉, <code>:student_id</code> 이 부분이 가변이라는 것이다.</p>
 <p>Query String은 path 뒤에 <code>?</code> 부터 시작하여 <code>key=value</code> 쌍을 갖는다.</p>
 <p>다음 API를 생각해보자.</p>
@@ -299,7 +299,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /students/:student_id</span><br></pre></td></tr></table></figure>
 
 <ul>
-<li><p>Parameter Path</p>
+<li><p>Path Parameter</p>
 <ul>
 <li><code>:student_id</code> 학번</li>
 </ul>
@@ -325,10 +325,10 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  name,</span><br><span class="line">  gender,</span><br><span class="line">  department</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h3 id="2-7-삭제-API"><a href="#2-7-삭제-API" class="headerlink" title="2.7 삭제 API"></a>2.7 삭제 API</h3><hr>
-<p>parameter path(primary key)를 이용해 삭제한다.</p>
+<p>Path Parameter(primary key)를 이용해 삭제한다.</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DELETE /students/:studnet_id</span><br></pre></td></tr></table></figure>
 
-<h3 id="2-8-수정-API"><a href="#2-8-수정-API" class="headerlink" title="2.8 수정 API"></a>2.8 수정 API</h3><p>parameter path(primary key)와 request body를 동시에 이용한다.</p>
+<h3 id="2-8-수정-API"><a href="#2-8-수정-API" class="headerlink" title="2.8 수정 API"></a>2.8 수정 API</h3><p>Path Parameter(primary key)와 request body를 동시에 이용한다.</p>
 <p>원소를 식별하기 위해, student_id를 제발 request body에 넣지말자!!</p>
 <hr>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PATCH /students/:student_id</span><br></pre></td></tr></table></figure>
@@ -352,7 +352,7 @@
 </ul>
 <p>이를 API로 나타내면 <code>GET /students/:student_id/pencils</code>일 것이다.</p>
 <p>만약에 어떤 학생에게 새로운 연필을 추가한다고 하면 어떻게 해야할까?</p>
-<p>역시 parameter path를 이용한 설계가 필요하다.</p>
+<p>역시 Path Parameter를 이용한 설계가 필요하다.</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">POST /students/:student_id/pencils</span><br></pre></td></tr></table></figure>
 
 <h2 id="3-결론"><a href="#3-결론" class="headerlink" title="3. 결론"></a>3. 결론</h2><hr>

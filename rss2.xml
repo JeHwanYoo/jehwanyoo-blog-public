@@ -9,7 +9,7 @@
     <atom:link href="https://jehwanyoo.net/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description>프로그래밍 노트, 팁, 강의등을 게시하는 블로그입니다.</description>
-    <pubDate>Thu, 07 Apr 2022 02:20:35 GMT</pubDate>
+    <pubDate>Thu, 07 Apr 2022 02:23:21 GMT</pubDate>
     <generator>http://hexo.io/</generator>
     
     <item>
@@ -37,6 +37,8 @@
       <category domain="https://jehwanyoo.net/tags/Golang/">Golang</category>
       
       <category domain="https://jehwanyoo.net/tags/SQLite/">SQLite</category>
+      
+      <category domain="https://jehwanyoo.net/tags/Web-Programming-With-Golang/">Web Programming With Golang</category>
       
       
       <comments>https://jehwanyoo.net/2022/04/07/%EC%9B%B9-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D-with-Golang-6-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%B2%A0%EC%9D%B4%EC%8A%A4/#disqus_thread</comments>
@@ -92,6 +94,8 @@
       
       <category domain="https://jehwanyoo.net/tags/JSON/">JSON</category>
       
+      <category domain="https://jehwanyoo.net/tags/Web-Programming-With-Golang/">Web Programming With Golang</category>
+      
       
       <comments>https://jehwanyoo.net/2022/04/06/%EC%9B%B9-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D-with-Golang-5-Form-JSON/#disqus_thread</comments>
       
@@ -121,6 +125,8 @@
       
       <category domain="https://jehwanyoo.net/tags/Routing/">Routing</category>
       
+      <category domain="https://jehwanyoo.net/tags/Web-Programming-With-Golang/">Web Programming With Golang</category>
+      
       
       <comments>https://jehwanyoo.net/2022/04/05/%EC%9B%B9-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D-with-Golang-4-%EB%9D%BC%EC%9A%B0%ED%8C%85/#disqus_thread</comments>
       
@@ -149,6 +155,8 @@
       <category domain="https://jehwanyoo.net/tags/Golang/">Golang</category>
       
       <category domain="https://jehwanyoo.net/tags/Static-File/">Static File</category>
+      
+      <category domain="https://jehwanyoo.net/tags/Web-Programming-With-Golang/">Web Programming With Golang</category>
       
       
       <comments>https://jehwanyoo.net/2022/04/05/%EC%9B%B9-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D-with-Golang-3-%EC%A0%95%EC%A0%81-%ED%8C%8C%EC%9D%BC/#disqus_thread</comments>
